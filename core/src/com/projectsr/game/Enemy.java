@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.viewport.Viewport;
+
 
 /**
  * Represents an enemy character in the game.
@@ -38,16 +38,16 @@ public abstract class Enemy {
     // Collision
     Rectangle bounds = new Rectangle();
     protected AssetManager assetManager;
-    protected Viewport viewport;
 
     /**
      * Initialises the enemy character, setting its initial position and movement speed.
+     *
+     * @param assetManager manages assets and loads assets used.
      */
-    public Enemy(AssetManager assetManager, Viewport viewport) {
-        position = new Vector2(viewport.getWorldWidth(), viewport.getWorldHeight());
+    public Enemy(AssetManager assetManager) {
+        position = new Vector2(0, 0);
         speed = -200; // Change value as needed
         this.assetManager = assetManager; // Needs to be initialised
-        this.viewport = viewport;
     }
 
     /**
