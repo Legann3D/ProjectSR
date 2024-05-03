@@ -14,6 +14,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 public abstract class Enemy {
 
+    public enum STATE {
+        CHASING,
+        ATTACKING
+    }
+
+    STATE currentState;
+
     // Animations
     protected Animation<TextureRegion> animation;
 
@@ -50,11 +57,22 @@ public abstract class Enemy {
 
     /**
      * Renders the enemy on the screen with updated animation frames.
-     * @param batch The SpriteBatch used for drawing the enemy's current frame. Passed from GameScreen.
+     * @param batch The SpriteBatch used for drawing the enemy's current frame.
      */
     public void render(SpriteBatch batch) {
 
         stateTime += Gdx.graphics.getDeltaTime();
+
+        switch(this.currentState) {
+            case CHASING:
+                // TODO: Implement chasing
+                break;
+            case ATTACKING:
+                // TODO: Implement attacking
+                break;
+            default:
+                // code block
+        }
 
         currentFrame = animation.getKeyFrame(stateTime, true);
         batch.draw(currentFrame, enemyWidth, enemyHeight);
