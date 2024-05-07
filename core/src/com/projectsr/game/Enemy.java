@@ -25,7 +25,8 @@ public abstract class Enemy {
     protected Animation<TextureRegion> animation;
 
     // Rendering
-    protected TextureRegion[] frames;
+    protected TextureRegion[] walkFrames;
+    protected TextureRegion[] deathFrames;
     protected TextureRegion currentFrame;
     Vector2 position;
     float enemyHeight;
