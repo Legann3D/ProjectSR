@@ -74,7 +74,6 @@ public abstract class Enemy {
 
         switch(this.currentState) {
             case CHASING:
-                // TODO: Implement chasing
                 // Check if the player is higher or lower than the enemy
                 if (this.getPosition().y < player.getPosition().y)
                     // Move down
@@ -98,7 +97,15 @@ public abstract class Enemy {
                 break;
 
             case ATTACKING:
-                // TODO: Implement attacking
+                // TODO: Check for collision overlapping
+                if () {
+                    player.loseLife(); // TODO: Need method to remove a life from player
+                }
+                // Check if the enemy is not in reach to attack
+                if (distanceFrom(player) > 200) {
+                    // Set state to chasing
+                    currentState = STATE.CHASING;
+                }
                 break;
             default:
                 // code block
