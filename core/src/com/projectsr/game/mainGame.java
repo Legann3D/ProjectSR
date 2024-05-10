@@ -8,21 +8,26 @@ import com.badlogic.gdx.Game;
 
 public class mainGame extends Game implements ApplicationListener  {
 
-	AssetManager assetManager;
+	private AssetManager assetManager;
 	public static GameScreen gameScreen;
 	public static MenuScreen menuScreen;
 
 	@Override
 	public void create () {
-		gameScreen = new GameScreen(this);
+		assetManager = new AssetManager();
+
+		// Load enemy assets
+		// Skeleton
+		assetManager.load("Enemy/Skeleton/Walk.png", Texture.class);
+		assetManager.load("Attack1.png", Texture.class);
+		assetManager.load("Attack2.png", Texture.class);
+		assetManager.load("Death.png", Texture.class);
+
+		assetManager.finishLoading(); // Blocks until all assets are loaded
+
+		gameScreen = new GameScreen(this, assetManager);
 		menuScreen = new MenuScreen(this);
 
-        // Load enemy assets
-        // Skeleton
-        assetManager.load("Walk.png", Texture.class);
-        assetManager.load("Attack1.png", Texture.class);
-        assetManager.load("Attack2.png", Texture.class);
-        assetManager.load("Death.png", Texture.class);
 		//Uncomment this code once the Main Menu class has been implemented
 		//setScreen(menuScreen);
 		setScreen(gameScreen);

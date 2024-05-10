@@ -19,10 +19,11 @@ public abstract class Enemy {
         ATTACKING
     }
 
-    STATE currentState;
+    private STATE currentState = STATE.CHASING;
 
     // Animations
-    protected Animation<TextureRegion> animation;
+    protected Animation<TextureRegion> walkAnimation;
+    protected Animation<TextureRegion> deathAnimation;
 
     // Rendering
     protected TextureRegion[] walkFrames;
@@ -63,7 +64,7 @@ public abstract class Enemy {
     public void render(SpriteBatch batch) {
 
         stateTime += Gdx.graphics.getDeltaTime();
-        currentFrame = animation.getKeyFrame(stateTime, true);
+        currentFrame = walkAnimation.getKeyFrame(stateTime, true);
         batch.draw(currentFrame, enemyWidth, enemyHeight);
     }
 
@@ -76,17 +77,17 @@ public abstract class Enemy {
         switch(this.currentState) {
             case CHASING:
                 // Check if the player is higher or lower than the enemy
-                if (this.getPosition().y < player.getPosition().y)
+                if (this.position.y < player.position.y)
                     // Move down
                     this.position.y += this.speed * f * 4;
-                if (this.getPosition().y > player.getPosition().y)
+                if (this.position.y > player.position.y)
                     // Move up
                     this.position.y -= this.speed * f * 4;
                 // Check if the player is left or right of the enemy
-                if (this.getPosition().x < player.getPosition().x)
+                if (this.position.x < player.position.x)
                     // Move right
                     this.position.x += this.speed * f * 4;
-                if (this.getPosition().x > player.getPosition().x)
+                if (this.position.x > player.position.x)
                     // Move left
                     this.position.x -= this.speed * f * 4;
 
@@ -99,9 +100,9 @@ public abstract class Enemy {
 
             case ATTACKING:
                 // TODO: Check for collision overlapping
-                if () {
-                    player.loseLife(); // TODO: Need method to remove a life from player
-                }
+//                if () {
+//                    player.loseLife(); // TODO: Need method to remove a life from player
+//                }
                 // Check if the enemy is not in reach to attack
                 if (distanceFrom(player) > 200) {
                     // Set state to chasing
@@ -128,12 +129,13 @@ public abstract class Enemy {
     }
 
     public float distanceFrom(Player player) {
-        return this.getPosition().dst(player.getPosition()); // TODO: Need player class and methods
+        return 0;
+        //return this.getPosition().dst(player.getPosition()); // TODO: Need player class and methods
     }
 
-    public Vector2 getPosition() {
-        float currentX = this.position.x + (this.currentFrame.getWidth()  / 2.0f);
-        float currentY = this.position.y + (this.currentFrame.getHeight() / 2.0f);
-        return new Vector2(currentX, currentY);
-    }
+//    public Vector2 getPosition() {
+//        float currentX = this.position.x + (this.currentFrame.getWidth()  / 2.0f);
+//        float currentY = this.position.y + (this.currentFrame.getHeight() / 2.0f);
+//        return new Vector2(currentX, currentY);
+//    }
 }
