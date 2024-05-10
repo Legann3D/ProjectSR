@@ -1,42 +1,56 @@
 package com.projectsr.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 
-public class mainGame extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
+public class mainGame extends Game implements ApplicationListener  {
 
 	AssetManager assetManager;
-	
+	public static GameScreen gameScreen;
+	public static MenuScreen menuScreen;
+
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		gameScreen = new GameScreen(this);
+		menuScreen = new MenuScreen(this);
 
-		// Load enemy assets
-		// Skeleton
-		assetManager.load("Walk.png", Texture.class);
-		assetManager.load("Attack1.png", Texture.class);
-		assetManager.load("Attack2.png", Texture.class);
-		assetManager.load("Death.png", Texture.class);
+        // Load enemy assets
+        // Skeleton
+        assetManager.load("Walk.png", Texture.class);
+        assetManager.load("Attack1.png", Texture.class);
+        assetManager.load("Attack2.png", Texture.class);
+        assetManager.load("Death.png", Texture.class);
+		//Uncomment this code once the Main Menu class has been implemented
+		//setScreen(menuScreen);
+		setScreen(gameScreen);
 	}
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+		super.render();
 	}
 	
 	@Override
 	public void dispose () {
-		batch.dispose();
-		img.dispose();
+		super.dispose();
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+	}
+
+	@Override
+	public void pause() {
+		super.pause();
+	}
+
+	@Override
+	public void resume() {
+		super.resume();
 	}
 }
