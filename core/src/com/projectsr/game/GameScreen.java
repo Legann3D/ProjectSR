@@ -11,7 +11,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,9 +37,10 @@ public class GameScreen implements Screen {
     private Enemy skeletonEnemy;
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private float timeSinceEnemyWave = 10;
-    private float enemySpawnCount = 5;
+    private int enemySpawnCount = 5;
+    private float spawnDistance = 500;
 
-    public GameScreen(mainGame game, AssetManager assetManager){
+    public GameScreen(mainGame game, AssetManager assetManager) {
         this.assetManager = assetManager;
     }
 
@@ -81,6 +85,18 @@ public class GameScreen implements Screen {
         batch.end();
     }
 
+    public Vector2 calculateSpawnPosition() {
+
+        // Calculate the random angle
+        float angle = (float) (Math.random() * 2 * Math.PI);
+
+        // Calculate the spawn position
+        float spawnX = playerCharacter.position.x + spawnDistance * (float) Math.cos(angle);
+        float spawnY = playerCharacter.position.y + spawnDistance * (float) Math.sin(angle);
+
+        return new Vector2(spawnX, spawnY);
+    }
+
     public void spawnEnemies(float f) {
 
         // Update the time since the last enemy wave
@@ -89,8 +105,16 @@ public class GameScreen implements Screen {
         // Check the time since the last enemy spawned
         if (timeSinceEnemyWave >= 10) {
             for (int i = 0; i < enemySpawnCount; i++) {
-                // Create flying enemy
-                skeletonEnemy = new SkeletonEnemy(this.assetManager);
+                // Calculate the spawn position
+                Vector2 enemySpawnPos = calculateSpawnPosition();
+
+                // For debugging
+                System.out.println("Enemy Spawn Position: " + enemySpawnPos);
+                System.out.println("Player Spawn Position: " + playerCharacter.position);
+
+                // Create skeleton enemy
+                skeletonEnemy = new SkeletonEnemy(this.assetManager, enemySpawnPos);
+
                 skeletonEnemy.create();
                 // Add the enemy to the enemies array
                 enemies.add(skeletonEnemy);

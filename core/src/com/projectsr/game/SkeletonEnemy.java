@@ -4,6 +4,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 
 public class SkeletonEnemy extends Enemy {
@@ -18,8 +19,8 @@ public class SkeletonEnemy extends Enemy {
      *
      * @param assetManager manages assets and loads assets used.
      */
-    public SkeletonEnemy(AssetManager assetManager) {
-        super(assetManager);
+    public SkeletonEnemy(AssetManager assetManager, Vector2 enemySpawnPos) {
+        super(assetManager, enemySpawnPos);
     }
 
     /**

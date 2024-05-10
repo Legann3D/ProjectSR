@@ -46,9 +46,9 @@ public abstract class Enemy {
      *
      * @param assetManager manages assets and loads assets used.
      */
-    public Enemy(AssetManager assetManager) {
-        position = new Vector2(0, 0);
-        speed = -200; // Change value as needed
+    public Enemy(AssetManager assetManager, Vector2 enemySpawnPos) {
+        position = enemySpawnPos;
+        speed = 6; // Change value as needed
         this.assetManager = assetManager; // Needs to be initialised
     }
 
@@ -65,7 +65,7 @@ public abstract class Enemy {
 
         stateTime += Gdx.graphics.getDeltaTime();
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);
-        batch.draw(currentFrame, enemyWidth, enemyHeight);
+        batch.draw(currentFrame, position.x, position.y);
     }
 
     /**
@@ -92,10 +92,10 @@ public abstract class Enemy {
                     this.position.x -= this.speed * f * 4;
 
                 // Check if the enemy is close enough to attack
-                if (distanceFrom(player) < 200) {
-                    // Set state to attacking
-                    currentState = STATE.ATTACKING;
-                }
+//                if (distanceFrom(player) < 200) {
+//                    // Set state to attacking
+//                    currentState = STATE.ATTACKING;
+//                }
                 break;
 
             case ATTACKING:
@@ -112,7 +112,6 @@ public abstract class Enemy {
             default:
                 // code block
         }
-        position.x += speed * f;
         updateCollision();
     }
 
