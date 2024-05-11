@@ -79,6 +79,25 @@ public abstract class Enemy {
         currentState = state;
     }
 
+    public void flipEnemy(Player player) {
+
+        float PosX = (player.position.x + (player.width / 2)) - (this.position.x + (this.enemyWidth / 2));
+        boolean shouldFaceLeft = PosX < -7;
+        boolean shouldFaceRight = PosX > 7;
+
+        // TODO: Fix flutter effect when flipping
+        // Ensure a frame exists
+        if (currentFrame != null) {
+            // Check if the texture needs to be flipped
+            if (currentFrame.isFlipX() && shouldFaceRight) {
+                currentFrame.flip(true, false);
+            }
+            else if (!currentFrame.isFlipX() && shouldFaceLeft) {
+                currentFrame.flip(true, false);
+            }
+        }
+    }
+
     public void chasePlayer(float f, Player player) {
 
         // Calculate the direction vector from enemy to player

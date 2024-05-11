@@ -94,6 +94,7 @@ public class SkeletonEnemy extends Enemy {
             case CHASING:
                 currentAnimation = walkAnimation;
 
+                flipEnemy(player);
                 chasePlayer(f, player);
 
                 // Check if the enemy is close enough to attack
