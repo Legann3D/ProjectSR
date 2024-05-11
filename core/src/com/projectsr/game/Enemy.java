@@ -48,7 +48,7 @@ public abstract class Enemy {
      */
     public Enemy(AssetManager assetManager, Vector2 enemySpawnPos) {
         position = enemySpawnPos;
-        speed = 6; // Change value as needed
+        speed = 50; // Change value as needed
         this.assetManager = assetManager; // Needs to be initialised
     }
 
@@ -76,20 +76,20 @@ public abstract class Enemy {
 
         switch(this.currentState) {
             case CHASING:
-                // Check if the player is higher or lower than the enemy
-                if (this.position.y < player.position.y)
-                    // Move down
-                    this.position.y += this.speed * f * 4;
-                if (this.position.y > player.position.y)
-                    // Move up
-                    this.position.y -= this.speed * f * 4;
-                // Check if the player is left or right of the enemy
-                if (this.position.x < player.position.x)
-                    // Move right
-                    this.position.x += this.speed * f * 4;
-                if (this.position.x > player.position.x)
-                    // Move left
-                    this.position.x -= this.speed * f * 4;
+                // Calculate the direction vector from enemy to player
+                float directionX = (player.position.x - (player.width / 2 - 20)) - this.position.x;
+                float directionY = (player.position.y - (player.height / 2 + 10)) - this.position.y;
+
+                // Calculate the distance
+                float distance = (float) Math.sqrt(directionX * directionX + directionY * directionY);
+
+                // Normalise the vector (convert to length of 1)
+                float normalisedX = directionX / distance;
+                float normalisedY = directionY / distance;
+
+                // Scale the normalised vector by the speed
+                this.position.x += normalisedX * this.speed * f;
+                this.position.y += normalisedY * this.speed * f;
 
                 // Check if the enemy is close enough to attack
 //                if (distanceFrom(player) < 200) {
