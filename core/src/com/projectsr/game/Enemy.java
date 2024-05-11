@@ -20,26 +20,27 @@ public abstract class Enemy {
     }
 
     protected STATE currentState = STATE.CHASING;
+    protected AssetManager assetManager;
 
     // Animations
     protected Animation<TextureRegion> walkAnimation;
     protected Animation<TextureRegion> deathAnimation;
+    protected Animation<TextureRegion> currentAnimation;
 
     // Rendering
     protected TextureRegion[] walkFrames;
     protected TextureRegion[] deathFrames;
     protected TextureRegion currentFrame;
     Vector2 position;
-    float enemyHeight;
-    float enemyWidth;
-    float speed;
+    private float enemyHeight = 150;
+    private float enemyWidth = 150;
+    private float speed;
 
     // Game clock
     protected float stateTime;
 
     // Collision
     Rectangle bounds = new Rectangle();
-    protected AssetManager assetManager;
 
     /**
      * Initialises the enemy character, setting its initial position and movement speed.
@@ -64,7 +65,7 @@ public abstract class Enemy {
     public void render(SpriteBatch batch) {
 
         stateTime += Gdx.graphics.getDeltaTime();
-        currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+        currentFrame =  currentAnimation.getKeyFrame(stateTime, true);
         batch.draw(currentFrame, position.x, position.y);
     }
 
@@ -109,7 +110,17 @@ public abstract class Enemy {
     }
 
     public float distanceFrom(Player player) {
-        return this.position.dst(player.position);
+        // Get the centre of the player
+        Vector2 playerPos = new Vector2(
+                player.position.x + (player.width / 2),
+                player.position.y + (player.height / 2)
+        );
+        // Get the centre of the enemy
+        Vector2 enemyPos = new Vector2(
+                this.position.x + (this.enemyWidth / 2),
+                this.position.y + (this.enemyHeight / 2)
+        );
+        return enemyPos.dst(playerPos);
     }
 
 //    public Vector2 getPosition() {

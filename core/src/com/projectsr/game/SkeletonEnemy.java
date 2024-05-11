@@ -31,7 +31,7 @@ public class SkeletonEnemy extends Enemy {
 
         // Get the skeleton assets
         Texture walkSheet = assetManager.get("Enemy/Skeleton/Walk.png", Texture.class);
-        //Texture attack1Sheet = assetManager.get("Attack1.png", Texture.class);
+        Texture attack1Sheet = assetManager.get("Enemy/Skeleton/Attack.png", Texture.class);
         //Texture attack2Sheet = assetManager.get("Attack2.png", Texture.class);
         //Texture deathSheet = assetManager.get("Death.png", Texture.class);
 
@@ -49,14 +49,14 @@ public class SkeletonEnemy extends Enemy {
         // Set up attack 1 frames
         attack1Frames = new TextureRegion[8];
 
-        //attack1Frames[0] = new TextureRegion(attack1Sheet,0,0,150,150);
-        //attack1Frames[1] = new TextureRegion(attack1Sheet,150,0,150,150);
-        //attack1Frames[2] = new TextureRegion(attack1Sheet,300,0,150,150);
-        //attack1Frames[3] = new TextureRegion(attack1Sheet,450,0,150,150);
-        //attack1Frames[4] = new TextureRegion(attack1Sheet,600,0,150,150);
-        //attack1Frames[5] = new TextureRegion(attack1Sheet,750,0,150,150);
-        //attack1Frames[6] = new TextureRegion(attack1Sheet,900,0,150,150);
-        //attack1Frames[7] = new TextureRegion(attack1Sheet,1050,0,150,150);
+        attack1Frames[0] = new TextureRegion(attack1Sheet,0,0,150,150);
+        attack1Frames[1] = new TextureRegion(attack1Sheet,150,0,150,150);
+        attack1Frames[2] = new TextureRegion(attack1Sheet,300,0,150,150);
+        attack1Frames[3] = new TextureRegion(attack1Sheet,450,0,150,150);
+        attack1Frames[4] = new TextureRegion(attack1Sheet,600,0,150,150);
+        attack1Frames[5] = new TextureRegion(attack1Sheet,750,0,150,150);
+        attack1Frames[6] = new TextureRegion(attack1Sheet,900,0,150,150);
+        attack1Frames[7] = new TextureRegion(attack1Sheet,1050,0,150,150);
 
         // Create the attack1 animation at 30 FPS
         attack1Animation = new Animation<>(0.133f, attack1Frames);
@@ -92,27 +92,31 @@ public class SkeletonEnemy extends Enemy {
 
         switch (this.currentState) {
             case CHASING:
+                currentAnimation = walkAnimation;
+
                 chasePlayer(f, player);
 
                 // Check if the enemy is close enough to attack
-                if (distanceFrom(player) < 20) {
+                if (distanceFrom(player) < 50) {
                     // Set state to attacking
                     setState(STATE.ATTACKING);
                 }
                 break;
             case ATTACKING:
+                currentAnimation = attack1Animation;
+
                 // TODO: Check for collision overlapping
 //              if () {
 //                  player.loseLife(); // TODO: Need method to remove a life from player
 //              }
                 // Check if the enemy is not in reach to attack
-                if (distanceFrom(player) > 20) {
+                if (distanceFrom(player) > 50) {
                     // Set state to chasing
                     setState(STATE.CHASING);
                 }
                 break;
             default:
-            // code block
+                // code block
         }
         updateCollision();
     }

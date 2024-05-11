@@ -19,7 +19,7 @@ public class mainGame extends Game implements ApplicationListener  {
 		// Load enemy assets
 		// Skeleton
 		assetManager.load("Enemy/Skeleton/Walk.png", Texture.class);
-		//assetManager.load("Attack1.png", Texture.class);
+		assetManager.load("Enemy/Skeleton/Attack.png", Texture.class);
 		//assetManager.load("Attack2.png", Texture.class);
 		//assetManager.load("Death.png", Texture.class);
 
