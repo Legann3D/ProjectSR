@@ -15,7 +15,7 @@ public class Player {
 
     public Player() {
         texture = new Texture("Character/HeroKnight/Idle/HeroKnight_Idle_0.png");
-        position = new Vector2(100, 100);
+        position = new Vector2(880, 500);
         velocity = new Vector2(0,0);
     }
 
