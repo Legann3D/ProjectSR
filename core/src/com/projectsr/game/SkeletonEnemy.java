@@ -38,10 +38,10 @@ public class SkeletonEnemy extends Enemy {
         // Set up the walking frames
         walkFrames = new TextureRegion[4];
 
-        walkFrames[0] = new TextureRegion(walkSheet,0,0,150,150);
-        walkFrames[1] = new TextureRegion(walkSheet,150,0,150,150);
-        walkFrames[2] = new TextureRegion(walkSheet,300,0,150,150);
-        walkFrames[3] = new TextureRegion(walkSheet,450,0,150,150);
+        walkFrames[0] = new TextureRegion(walkSheet, 0, 0, 150, 150);
+        walkFrames[1] = new TextureRegion(walkSheet, 150, 0, 150, 150);
+        walkFrames[2] = new TextureRegion(walkSheet, 300, 0, 150, 150);
+        walkFrames[3] = new TextureRegion(walkSheet, 450, 0, 150, 150);
 
         // Create the walking animation at 30 FPS
         walkAnimation = new Animation<>(0.133f, walkFrames);
@@ -86,6 +86,35 @@ public class SkeletonEnemy extends Enemy {
 
         // Create the walking animation at 30 FPS
         deathAnimation = new Animation<>(0.133f, deathFrames);
+    }
+
+    public void update(float f, Player player) {
+
+        switch (this.currentState) {
+            case CHASING:
+                chasePlayer(f, player);
+
+                // Check if the enemy is close enough to attack
+                if (distanceFrom(player) < 20) {
+                    // Set state to attacking
+                    setState(STATE.ATTACKING);
+                }
+                break;
+            case ATTACKING:
+                // TODO: Check for collision overlapping
+//              if () {
+//                  player.loseLife(); // TODO: Need method to remove a life from player
+//              }
+                // Check if the enemy is not in reach to attack
+                if (distanceFrom(player) > 20) {
+                    // Set state to chasing
+                    setState(STATE.CHASING);
+                }
+                break;
+            default:
+            // code block
+        }
+        updateCollision();
     }
 
     /**

@@ -19,7 +19,7 @@ public abstract class Enemy {
         ATTACKING
     }
 
-    private STATE currentState = STATE.CHASING;
+    protected STATE currentState = STATE.CHASING;
 
     // Animations
     protected Animation<TextureRegion> walkAnimation;
@@ -72,47 +72,28 @@ public abstract class Enemy {
      * Updates the enemy's position based on its speed and the elapsed time since the last frame.
      * @param f The time in seconds since the last update.
      */
-    public void update(float f, Player player) {
+    public abstract void update(float f, Player player);
 
-        switch(this.currentState) {
-            case CHASING:
-                // Calculate the direction vector from enemy to player
-                float directionX = (player.position.x - (player.width / 2 - 20)) - this.position.x;
-                float directionY = (player.position.y - (player.height / 2 + 10)) - this.position.y;
+    public void setState(STATE state) {
+        currentState = state;
+    }
 
-                // Calculate the distance
-                float distance = (float) Math.sqrt(directionX * directionX + directionY * directionY);
+    public void chasePlayer(float f, Player player) {
 
-                // Normalise the vector (convert to length of 1)
-                float normalisedX = directionX / distance;
-                float normalisedY = directionY / distance;
+        // Calculate the direction vector from enemy to player
+        float directionX = (player.position.x - (player.width / 2 - 20)) - this.position.x;
+        float directionY = (player.position.y - (player.height / 2 + 10)) - this.position.y;
 
-                // Scale the normalised vector by the speed
-                this.position.x += normalisedX * this.speed * f;
-                this.position.y += normalisedY * this.speed * f;
+        // Calculate the distance
+        float distance = (float) Math.sqrt(directionX * directionX + directionY * directionY);
 
-                // Check if the enemy is close enough to attack
-//                if (distanceFrom(player) < 200) {
-//                    // Set state to attacking
-//                    currentState = STATE.ATTACKING;
-//                }
-                break;
+        // Normalise the vector (convert to length of 1)
+        float normalisedX = directionX / distance;
+        float normalisedY = directionY / distance;
 
-            case ATTACKING:
-                // TODO: Check for collision overlapping
-//                if () {
-//                    player.loseLife(); // TODO: Need method to remove a life from player
-//                }
-                // Check if the enemy is not in reach to attack
-                if (distanceFrom(player) > 200) {
-                    // Set state to chasing
-                    currentState = STATE.CHASING;
-                }
-                break;
-            default:
-                // code block
-        }
-        updateCollision();
+        // Scale the normalised vector by the speed
+        this.position.x += normalisedX * this.speed * f;
+        this.position.y += normalisedY * this.speed * f;
     }
 
     /**
@@ -128,8 +109,7 @@ public abstract class Enemy {
     }
 
     public float distanceFrom(Player player) {
-        return 0;
-        //return this.getPosition().dst(player.getPosition()); // TODO: Need player class and methods
+        return this.position.dst(player.position);
     }
 
 //    public Vector2 getPosition() {
