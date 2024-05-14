@@ -90,6 +90,8 @@ public class SkeletonEnemy extends Enemy {
 
     public void update(float f, Player player) {
 
+        // Check if the enemy still has health
+
         switch (this.currentState) {
             case CHASING:
                 currentAnimation = walkAnimation;
@@ -117,6 +119,11 @@ public class SkeletonEnemy extends Enemy {
                     // Set state to chasing
                     setState(STATE.CHASING);
                 }
+                break;
+            case DEATH:
+                // CurrentAnimation = deathAnimation;
+
+                enemyDeath(gameScreen.getEnemyArray());
                 break;
             default:
                 // code block

@@ -138,7 +138,15 @@ public class GameScreen implements Screen {
 
             Enemy enemy = enemyIter.next();
             enemy.update(f, playerCharacter);
+
+            if (enemy.getHealth() <= 0) {
+                enemy.setCurrentState("DEATH");
+            }
         }
+    }
+
+    public ArrayList<Enemy> getEnemyArray() {
+        return enemies;
     }
 
     @Override

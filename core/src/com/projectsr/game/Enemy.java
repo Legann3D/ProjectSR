@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 
 /**
  * Represents an enemy character in the game.
@@ -16,8 +19,11 @@ public abstract class Enemy {
 
     public enum STATE {
         CHASING,
-        ATTACKING
+        ATTACKING,
+        DEATH
     }
+
+    protected GameScreen gameScreen;
 
     protected STATE currentState = STATE.CHASING;
     protected AssetManager assetManager;
@@ -160,5 +166,21 @@ public abstract class Enemy {
 
     public void takeDamage(float damage) {
         health -= damage;
+    }
+
+    public void setCurrentState(String state) {
+        if (state == "CHASING") {
+            currentState = STATE.CHASING;
+        }
+        else if (state == "ATTACKING") {
+            currentState = STATE.ATTACKING;
+        }
+        else if (state == "DEATH") {
+            currentState = STATE.DEATH;
+        }
+    }
+
+    public void enemyDeath(ArrayList<Enemy> enemies) {
+        enemies.remove(this);
     }
 }
