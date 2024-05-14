@@ -120,6 +120,11 @@ public class GameScreen implements Screen {
                 enemies.add(skeletonEnemy);
                 timeSinceEnemyWave = 0; // Reset the timer
             }
+            // Check the spawn count, it should not exceed the maximum
+            if (enemySpawnCount < 50) {
+                // Add slightly more enemies each wave that spawns
+                enemySpawnCount = Math.round(enemySpawnCount * 1.25f);
+            }
         }
 
         // Create enemy iterator array
