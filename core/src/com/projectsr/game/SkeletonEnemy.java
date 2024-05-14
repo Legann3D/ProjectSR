@@ -19,8 +19,8 @@ public class SkeletonEnemy extends Enemy {
      *
      * @param assetManager manages assets and loads assets used.
      */
-    public SkeletonEnemy(AssetManager assetManager, Vector2 enemySpawnPos) {
-        super(assetManager, enemySpawnPos);
+    public SkeletonEnemy(AssetManager assetManager, Vector2 enemySpawnPos, float health) {
+        super(assetManager, enemySpawnPos, health);
     }
 
     /**
@@ -108,6 +108,8 @@ public class SkeletonEnemy extends Enemy {
 
                 // TODO: Check for collision overlapping
 //              if () {
+                    // Might be a good idea to have a counter of 3 in the player before taking a life
+                    // Overlap should not be checked here - maybe in GameScreen or Player class
 //                  player.loseLife(); // TODO: Need method to remove a life from player
 //              }
                 // Check if the enemy is not in reach to attack

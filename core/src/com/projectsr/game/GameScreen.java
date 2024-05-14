@@ -39,6 +39,7 @@ public class GameScreen implements Screen {
     private float timeSinceEnemyWave = 10;
     private int enemySpawnCount = 5;
     private float spawnDistance = 500;
+    private float enemyHealth = 50;
 
     public GameScreen(mainGame game, AssetManager assetManager) {
         this.assetManager = assetManager;
@@ -113,7 +114,7 @@ public class GameScreen implements Screen {
                 System.out.println("Player Spawn Position: " + playerCharacter.position);
 
                 // Create skeleton enemy
-                skeletonEnemy = new SkeletonEnemy(this.assetManager, enemySpawnPos);
+                skeletonEnemy = new SkeletonEnemy(this.assetManager, enemySpawnPos, enemyHealth);
 
                 skeletonEnemy.create();
                 // Add the enemy to the enemies array
@@ -125,6 +126,8 @@ public class GameScreen implements Screen {
                 // Add slightly more enemies each wave that spawns
                 enemySpawnCount = Math.round(enemySpawnCount * 1.25f);
             }
+            // Increase enemy health each wave
+            enemyHealth *= 1.25f; // Change value as needed
         }
 
         // Create enemy iterator array

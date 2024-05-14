@@ -39,6 +39,9 @@ public abstract class Enemy {
     // Game clock
     protected float stateTime;
 
+    // Stats
+    protected float health;
+
     // Collision
     Rectangle bounds = new Rectangle();
 
@@ -47,10 +50,11 @@ public abstract class Enemy {
      *
      * @param assetManager manages assets and loads assets used.
      */
-    public Enemy(AssetManager assetManager, Vector2 enemySpawnPos) {
+    public Enemy(AssetManager assetManager, Vector2 enemySpawnPos, float health) {
         position = enemySpawnPos;
         speed = 50; // Change value as needed
-        this.assetManager = assetManager; // Needs to be initialised
+        this.assetManager = assetManager;
+        this.health = health;
     }
 
     /**
@@ -126,8 +130,16 @@ public abstract class Enemy {
      */
     public void dispose() {
         // Dispose of resources
+        assetManager.dispose();
     }
 
+    /**
+     * Gets the distance from the player to the enemy using vector2 positions.
+     * Position is calculated from the centre of the sprite.
+     *
+     * @param player The player character
+     * @return A float value of the distance between the enemy and player.
+     */
     public float distanceFrom(Player player) {
         // Get the centre of the player
         Vector2 playerPos = new Vector2(
@@ -142,9 +154,11 @@ public abstract class Enemy {
         return enemyPos.dst(playerPos);
     }
 
-//    public Vector2 getPosition() {
-//        float currentX = this.position.x + (this.currentFrame.getWidth()  / 2.0f);
-//        float currentY = this.position.y + (this.currentFrame.getHeight() / 2.0f);
-//        return new Vector2(currentX, currentY);
-//    }
+    public float getHealth() {
+        return health;
+    }
+
+    public void takeDamage(float damage) {
+        health -= damage;
+    }
 }
