@@ -75,7 +75,13 @@ public abstract class Enemy {
     public void render(SpriteBatch batch) {
 
         stateTime += Gdx.graphics.getDeltaTime();
-        currentFrame =  currentAnimation.getKeyFrame(stateTime, true);
+        // Prevent death animation from looping
+        if (currentState == STATE.DEATH) {
+            currentFrame = currentAnimation.getKeyFrame(stateTime, false);
+        }
+        else {
+            currentFrame = currentAnimation.getKeyFrame(stateTime, true);
+        }
         batch.draw(currentFrame, position.x, position.y);
     }
 
@@ -83,7 +89,7 @@ public abstract class Enemy {
      * Updates the enemy's position based on its speed and the elapsed time since the last frame.
      * @param f The time in seconds since the last update.
      */
-    public abstract void update(float f, Player player);
+    public abstract void update(float f, Player player, Iterator<Enemy> enemyIter);
 
     public void setState(STATE state) {
         currentState = state;
@@ -169,18 +175,32 @@ public abstract class Enemy {
     }
 
     public void setCurrentState(String state) {
-        if (state == "CHASING") {
+        if (state.equals("CHASING")) {
             currentState = STATE.CHASING;
         }
-        else if (state == "ATTACKING") {
+        else if (state.equals("ATTACKING")) {
             currentState = STATE.ATTACKING;
         }
-        else if (state == "DEATH") {
+        else if (state.equals("DEATH")) {
+            stateTime = 0;
             currentState = STATE.DEATH;
         }
     }
 
-    public void enemyDeath(ArrayList<Enemy> enemies) {
-        enemies.remove(this);
+    public String getCurrentState() {
+        if (currentState == STATE.CHASING) {
+            return "CHASING";
+        }
+        else if (currentState == STATE.ATTACKING) {
+            return "ATTACKING";
+        }
+        else if (currentState == STATE.DEATH) {
+            return "DEATH";
+        }
+        return "CHASING";
+    }
+
+    public void enemyDeath(Iterator<Enemy> enemyIter) {
+        enemyIter.remove();
     }
 }

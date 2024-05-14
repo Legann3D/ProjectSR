@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.Iterator;
+
 
 public class SkeletonEnemy extends Enemy {
 
@@ -33,7 +35,7 @@ public class SkeletonEnemy extends Enemy {
         Texture walkSheet = assetManager.get("Enemy/Skeleton/Walk.png", Texture.class);
         Texture attack1Sheet = assetManager.get("Enemy/Skeleton/Attack.png", Texture.class);
         //Texture attack2Sheet = assetManager.get("Attack2.png", Texture.class);
-        //Texture deathSheet = assetManager.get("Death.png", Texture.class);
+        Texture deathSheet = assetManager.get("Enemy/Skeleton/Death.png", Texture.class);
 
         // Set up the walking frames
         walkFrames = new TextureRegion[4];
@@ -79,16 +81,16 @@ public class SkeletonEnemy extends Enemy {
         // Set up death frames
         deathFrames = new TextureRegion[4];
 
-        //deathFrames[0] = new TextureRegion(deathSheet,0,0,150,150);
-        //deathFrames[1] = new TextureRegion(deathSheet,150,0,150,150);
-        //deathFrames[2] = new TextureRegion(deathSheet,300,0,150,150);
-        //deathFrames[3] = new TextureRegion(deathSheet,450,0,150,150);
+        deathFrames[0] = new TextureRegion(deathSheet,0,0,150,150);
+        deathFrames[1] = new TextureRegion(deathSheet,150,0,150,150);
+        deathFrames[2] = new TextureRegion(deathSheet,300,0,150,150);
+        deathFrames[3] = new TextureRegion(deathSheet,450,0,150,150);
 
         // Create the walking animation at 30 FPS
         deathAnimation = new Animation<>(0.133f, deathFrames);
     }
 
-    public void update(float f, Player player) {
+    public void update(float f, Player player, Iterator<Enemy> enemyIter) {
 
         // Check if the enemy still has health
 
@@ -103,6 +105,7 @@ public class SkeletonEnemy extends Enemy {
                 if (distanceFrom(player) < 50) {
                     // Set state to attacking
                     setState(STATE.ATTACKING);
+                    stateTime = 0;
                 }
                 break;
             case ATTACKING:
@@ -121,9 +124,11 @@ public class SkeletonEnemy extends Enemy {
                 }
                 break;
             case DEATH:
-                // CurrentAnimation = deathAnimation;
+                currentAnimation = deathAnimation;
 
-                enemyDeath(gameScreen.getEnemyArray());
+                if (currentAnimation.isAnimationFinished(stateTime)) {
+                    enemyDeath(enemyIter);
+                }
                 break;
             default:
                 // code block
