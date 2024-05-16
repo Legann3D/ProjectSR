@@ -52,7 +52,11 @@ public class GameScreen implements Screen {
 
         //Level
         TmxMapLoader loader = new TmxMapLoader();
+<<<<<<< HEAD
         this.map = loader.load("Level Design/nc_80x80.tmx");
+=======
+        this.map = loader.load("Level Design/endless.tmx");
+>>>>>>> level_design
 
         renderer = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();

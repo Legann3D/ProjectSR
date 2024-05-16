@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class SkeletonEnemy extends Enemy {
 
-    private TextureRegion[] attack1Frames;
-    private TextureRegion[] attack2Frames;
+    //private TextureRegion[] attack1Frames;
+    //private TextureRegion[] attack2Frames;
     protected Animation<TextureRegion> attack1Animation;
     protected Animation<TextureRegion> attack2Animation;
 
@@ -31,9 +31,9 @@ public class SkeletonEnemy extends Enemy {
 
         // Get the skeleton assets
         Texture walkSheet = assetManager.get("Enemy/Skeleton/Walk.png", Texture.class);
-        Texture attack1Sheet = assetManager.get("Attack1.png", Texture.class);
-        Texture attack2Sheet = assetManager.get("Attack2.png", Texture.class);
-        Texture deathSheet = assetManager.get("Death.png", Texture.class);
+        //Texture attack1Sheet = assetManager.get("Attack1.png", Texture.class);
+        //Texture attack2Sheet = assetManager.get("Attack2.png", Texture.class);
+        //Texture deathSheet = assetManager.get("Death.png", Texture.class);
 
         // Set up the walking frames
         walkFrames = new TextureRegion[4];
@@ -47,45 +47,45 @@ public class SkeletonEnemy extends Enemy {
         walkAnimation = new Animation<>(0.133f, walkFrames);
 
         // Set up attack 1 frames
-        attack1Frames = new TextureRegion[8];
+        //attack1Frames = new TextureRegion[8];
 
-        attack1Frames[0] = new TextureRegion(attack1Sheet,0,0,150,150);
-        attack1Frames[1] = new TextureRegion(attack1Sheet,150,0,150,150);
-        attack1Frames[2] = new TextureRegion(attack1Sheet,300,0,150,150);
-        attack1Frames[3] = new TextureRegion(attack1Sheet,450,0,150,150);
-        attack1Frames[4] = new TextureRegion(attack1Sheet,600,0,150,150);
-        attack1Frames[5] = new TextureRegion(attack1Sheet,750,0,150,150);
-        attack1Frames[6] = new TextureRegion(attack1Sheet,900,0,150,150);
-        attack1Frames[7] = new TextureRegion(attack1Sheet,1050,0,150,150);
+        //attack1Frames[0] = new TextureRegion(attack1Sheet,0,0,150,150);
+        //attack1Frames[1] = new TextureRegion(attack1Sheet,150,0,150,150);
+        //attack1Frames[2] = new TextureRegion(attack1Sheet,300,0,150,150);
+        //attack1Frames[3] = new TextureRegion(attack1Sheet,450,0,150,150);
+        //attack1Frames[4] = new TextureRegion(attack1Sheet,600,0,150,150);
+        //attack1Frames[5] = new TextureRegion(attack1Sheet,750,0,150,150);
+        //attack1Frames[6] = new TextureRegion(attack1Sheet,900,0,150,150);
+        //attack1Frames[7] = new TextureRegion(attack1Sheet,1050,0,150,150);
 
         // Create the attack1 animation at 30 FPS
-        attack1Animation = new Animation<>(0.133f, attack1Frames);
+        //attack1Animation = new Animation<>(0.133f, attack1Frames);
 
         // Set up attack 2 frames
-        attack2Frames = new TextureRegion[8];
+        //attack2Frames = new TextureRegion[8];
 
-        attack2Frames[0] = new TextureRegion(attack2Sheet,0,0,150,150);
-        attack2Frames[1] = new TextureRegion(attack2Sheet,150,0,150,150);
-        attack2Frames[2] = new TextureRegion(attack2Sheet,300,0,150,150);
-        attack2Frames[3] = new TextureRegion(attack2Sheet,450,0,150,150);
-        attack2Frames[4] = new TextureRegion(attack2Sheet,600,0,150,150);
-        attack2Frames[5] = new TextureRegion(attack2Sheet,750,0,150,150);
-        attack2Frames[6] = new TextureRegion(attack2Sheet,900,0,150,150);
-        attack2Frames[7] = new TextureRegion(attack2Sheet,1050,0,150,150);
+        //attack2Frames[0] = new TextureRegion(attack2Sheet,0,0,150,150);
+        //attack2Frames[1] = new TextureRegion(attack2Sheet,150,0,150,150);
+        //attack2Frames[2] = new TextureRegion(attack2Sheet,300,0,150,150);
+        //attack2Frames[3] = new TextureRegion(attack2Sheet,450,0,150,150);
+        //attack2Frames[4] = new TextureRegion(attack2Sheet,600,0,150,150);
+        //attack2Frames[5] = new TextureRegion(attack2Sheet,750,0,150,150);
+        //attack2Frames[6] = new TextureRegion(attack2Sheet,900,0,150,150);
+        //attack2Frames[7] = new TextureRegion(attack2Sheet,1050,0,150,150);
 
         // Create the walking animation at 30 FPS
-        attack2Animation = new Animation<>(0.133f, attack2Frames);
+        //attack2Animation = new Animation<>(0.133f, attack2Frames);
 
         // Set up death frames
-        deathFrames = new TextureRegion[4];
+        //deathFrames = new TextureRegion[4];
 
-        deathFrames[0] = new TextureRegion(deathSheet,0,0,150,150);
-        deathFrames[1] = new TextureRegion(deathSheet,150,0,150,150);
-        deathFrames[2] = new TextureRegion(deathSheet,300,0,150,150);
-        deathFrames[3] = new TextureRegion(deathSheet,450,0,150,150);
+        //deathFrames[0] = new TextureRegion(deathSheet,0,0,150,150);
+        //deathFrames[1] = new TextureRegion(deathSheet,150,0,150,150);
+        //deathFrames[2] = new TextureRegion(deathSheet,300,0,150,150);
+        //deathFrames[3] = new TextureRegion(deathSheet,450,0,150,150);
 
         // Create the walking animation at 30 FPS
-        deathAnimation = new Animation<>(0.133f, deathFrames);
+        //deathAnimation = new Animation<>(0.133f, deathFrames);
     }
 
     /**

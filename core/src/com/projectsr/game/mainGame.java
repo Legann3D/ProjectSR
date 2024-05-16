@@ -14,14 +14,18 @@ public class mainGame extends Game implements ApplicationListener  {
 
 	@Override
 	public void create () {
+<<<<<<< Updated upstream
+		batch = new SpriteBatch();
+		img = new Texture("badlogic.jpg");
+=======
 		assetManager = new AssetManager();
 
 		// Load enemy assets
 		// Skeleton
 		assetManager.load("Enemy/Skeleton/Walk.png", Texture.class);
-		assetManager.load("Attack1.png", Texture.class);
-		assetManager.load("Attack2.png", Texture.class);
-		assetManager.load("Death.png", Texture.class);
+		//assetManager.load("Attack1.png", Texture.class);
+		//assetManager.load("Attack2.png", Texture.class);
+		//assetManager.load("Death.png", Texture.class);
 
 		assetManager.finishLoading(); // Blocks until all assets are loaded
 
@@ -31,6 +35,7 @@ public class mainGame extends Game implements ApplicationListener  {
 		//Uncomment this code once the Main Menu class has been implemented
 		//setScreen(menuScreen);
 		setScreen(gameScreen);
+>>>>>>> Stashed changes
 	}
 
 	@Override
