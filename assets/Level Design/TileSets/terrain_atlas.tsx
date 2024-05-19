@@ -1,6 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.2" name="terrain_atlas" tilewidth="32" tileheight="32" tilecount="1024" columns="32">
  <image source="terrain_atlas.png" width="1024" height="1024"/>
+ <tile id="0">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="21" y="19" width="11" height="13"/>
+  </objectgroup>
+ </tile>
+ <tile id="1">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="15" width="32" height="17"/>
+  </objectgroup>
+ </tile>
+ <tile id="2">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="18" width="13" height="14"/>
+  </objectgroup>
+ </tile>
+ <tile id="3">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="4">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="32">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="15" y="0" width="17" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="33">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32"/>
+   <object id="2" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="34">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="16" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="35">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="36">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="64">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="18" y="0" width="14" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="65">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="66">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="13" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="67">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="68">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="96">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="15" y="0" width="17" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="97">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="98">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="16" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="99">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="100">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="128">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="19" y="0" width="13" height="11"/>
+  </objectgroup>
+ </tile>
+ <tile id="129">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="11"/>
+  </objectgroup>
+ </tile>
+ <tile id="130">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="10" height="12"/>
+  </objectgroup>
+ </tile>
+ <tile id="266">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
  <tile id="295">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="32" height="32"/>
@@ -177,6 +298,8 @@
    <wangcolor name="DirtLight" color="#00e9ff" tile="-1" probability="1"/>
    <wangcolor name="YellowWheat" color="#ffff00" tile="-1" probability="1"/>
    <wangcolor name="GreenWheat" color="#ffff00" tile="-1" probability="1"/>
+   <wangcolor name="DeepGreen" color="#a000ff" tile="-1" probability="1"/>
+   <wangcolor name="GrassDetail" color="#00ffa1" tile="-1" probability="1"/>
    <wangtile tileid="16" wangid="0,5,0,0,0,5,0,5"/>
    <wangtile tileid="17" wangid="0,5,0,5,0,0,0,5"/>
    <wangtile tileid="19" wangid="0,3,0,0,0,3,0,3"/>
@@ -217,11 +340,12 @@
    <wangtile tileid="150" wangid="0,1,0,0,0,0,0,1"/>
    <wangtile tileid="151" wangid="0,0,0,0,0,0,0,1"/>
    <wangtile tileid="177" wangid="0,5,0,5,0,5,0,5"/>
-   <wangtile tileid="181" wangid="0,1,0,1,0,1,0,1"/>
-   <wangtile tileid="182" wangid="0,1,0,1,0,1,0,1"/>
-   <wangtile tileid="183" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="181" wangid="0,9,0,9,0,9,0,9"/>
+   <wangtile tileid="182" wangid="0,9,0,9,0,9,0,9"/>
+   <wangtile tileid="183" wangid="0,9,0,9,0,9,0,9"/>
    <wangtile tileid="295" wangid="0,2,0,1,0,2,0,2"/>
    <wangtile tileid="296" wangid="0,2,0,2,0,1,0,2"/>
+   <wangtile tileid="310" wangid="0,9,0,9,0,9,0,9"/>
    <wangtile tileid="327" wangid="0,1,0,2,0,2,0,2"/>
    <wangtile tileid="328" wangid="0,2,0,2,0,2,0,1"/>
    <wangtile tileid="358" wangid="0,1,0,2,0,1,0,1"/>
@@ -259,13 +383,26 @@
    <wangtile tileid="768" wangid="0,7,0,0,0,0,0,0"/>
    <wangtile tileid="769" wangid="0,7,0,0,0,0,0,7"/>
    <wangtile tileid="770" wangid="0,0,0,0,0,0,0,7"/>
+   <wangtile tileid="775" wangid="0,8,0,0,0,8,0,8"/>
+   <wangtile tileid="776" wangid="0,8,0,8,0,0,0,8"/>
+   <wangtile tileid="807" wangid="0,0,0,8,0,8,0,8"/>
+   <wangtile tileid="808" wangid="0,8,0,8,0,8,0,0"/>
    <wangtile tileid="833" wangid="0,6,0,0,0,6,0,6"/>
    <wangtile tileid="834" wangid="0,6,0,6,0,0,0,6"/>
+   <wangtile tileid="838" wangid="0,0,0,8,0,0,0,0"/>
+   <wangtile tileid="839" wangid="0,0,0,8,0,8,0,0"/>
+   <wangtile tileid="840" wangid="0,0,0,0,0,8,0,0"/>
    <wangtile tileid="865" wangid="0,0,0,6,0,6,0,6"/>
    <wangtile tileid="866" wangid="0,6,0,6,0,6,0,0"/>
+   <wangtile tileid="870" wangid="0,8,0,8,0,0,0,0"/>
+   <wangtile tileid="871" wangid="0,8,0,8,0,8,0,8"/>
+   <wangtile tileid="872" wangid="0,0,0,0,0,8,0,8"/>
    <wangtile tileid="896" wangid="0,0,0,6,0,0,0,0"/>
    <wangtile tileid="897" wangid="0,0,0,6,0,6,0,0"/>
    <wangtile tileid="898" wangid="0,0,0,0,0,6,0,0"/>
+   <wangtile tileid="902" wangid="0,8,0,0,0,0,0,0"/>
+   <wangtile tileid="903" wangid="0,8,0,0,0,0,0,8"/>
+   <wangtile tileid="904" wangid="0,0,0,0,0,0,0,8"/>
    <wangtile tileid="928" wangid="0,6,0,6,0,0,0,0"/>
    <wangtile tileid="929" wangid="0,6,0,6,0,6,0,6"/>
    <wangtile tileid="930" wangid="0,0,0,0,0,6,0,6"/>
