@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.Iterator;
 
@@ -21,8 +22,8 @@ public class SkeletonEnemy extends Enemy {
      *
      * @param assetManager manages assets and loads assets used.
      */
-    public SkeletonEnemy(AssetManager assetManager, Vector2 enemySpawnPos, float health) {
-        super(assetManager, enemySpawnPos, health);
+    public SkeletonEnemy(AssetManager assetManager, Vector2 enemySpawnPos, float health, World world) {
+        super(assetManager, enemySpawnPos, health, world);
     }
 
     /**
@@ -133,14 +134,8 @@ public class SkeletonEnemy extends Enemy {
             default:
                 // code block
         }
-        updateCollision();
-    }
+        body.setTransform(this.position.x - 880, this.position.y - 460, body.getAngle());
 
-    /**
-     * Updates the collision bounds for the enemy
-     */
-    @Override
-    public void updateCollision() {
-
+        logPositions("Update");
     }
 }

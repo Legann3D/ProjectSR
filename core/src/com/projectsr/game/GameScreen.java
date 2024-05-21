@@ -12,6 +12,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -23,6 +25,8 @@ public class GameScreen implements Screen {
     mainGame  game;
     SpriteBatch batch;
     private AssetManager assetManager;
+    private World world;
+    private Box2DDebugRenderer debugRenderer;
 
     // Level
     private TiledMap map;
@@ -43,6 +47,8 @@ public class GameScreen implements Screen {
 
     public GameScreen(mainGame game, AssetManager assetManager) {
         this.assetManager = assetManager;
+        this.world = new World(new Vector2(0, 0), true); // No gravity
+        this.debugRenderer = new Box2DDebugRenderer();
     }
 
     public void create(){
@@ -84,6 +90,8 @@ public class GameScreen implements Screen {
         }
 
         batch.end();
+
+        debugRenderer.render(world, camera.combined);
     }
 
     public Vector2 calculateSpawnPosition() {
@@ -110,11 +118,11 @@ public class GameScreen implements Screen {
                 Vector2 enemySpawnPos = calculateSpawnPosition();
 
                 // For debugging
-                System.out.println("Enemy Spawn Position: " + enemySpawnPos);
-                System.out.println("Player Spawn Position: " + playerCharacter.position);
+                //System.out.println("Enemy Spawn Position: " + enemySpawnPos);
+                //System.out.println("Player Spawn Position: " + playerCharacter.position);
 
                 // Create skeleton enemy
-                skeletonEnemy = new SkeletonEnemy(this.assetManager, enemySpawnPos, enemyHealth);
+                skeletonEnemy = new SkeletonEnemy(this.assetManager, enemySpawnPos, enemyHealth, world);
 
                 skeletonEnemy.create();
                 // Add the enemy to the enemies array
@@ -153,6 +161,9 @@ public class GameScreen implements Screen {
     public void dispose(){
         map.dispose();
         renderer.dispose();
+        world.dispose();
+        debugRenderer.dispose();
+        batch.dispose();
     }
 
     @Override
