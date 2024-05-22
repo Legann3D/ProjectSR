@@ -10,13 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -49,6 +45,7 @@ public class GameScreen implements Screen {
         this.assetManager = assetManager;
         this.world = new World(new Vector2(0, 0), true); // No gravity
         this.debugRenderer = new Box2DDebugRenderer();
+        world.setContactListener(new GameContactListener()); // Collision
     }
 
     public void create(){
@@ -63,6 +60,7 @@ public class GameScreen implements Screen {
 
         renderer = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
+
     }
 
     public void update(float f){
@@ -91,6 +89,7 @@ public class GameScreen implements Screen {
 
         batch.end();
 
+        world.step(1 / 60f, 6, 2);
         debugRenderer.render(world, camera.combined);
     }
 

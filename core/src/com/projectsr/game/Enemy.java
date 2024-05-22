@@ -5,7 +5,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -13,8 +12,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-import java.io.PipedOutputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 
@@ -33,6 +30,7 @@ public abstract class Enemy {
 
     protected STATE currentState = STATE.CHASING;
     protected AssetManager assetManager;
+    protected World world;
 
     // Animations
     protected Animation<TextureRegion> walkAnimation;
@@ -57,10 +55,6 @@ public abstract class Enemy {
     // Collision
     protected Body body;
     public static final float PPM = 100.0f; // Pixels Per Meter conversion
-    public static final short ENEMY_CATEGORY = 0x0002;
-    public static final short PLAYER_CATEGORY = 0x0004;
-    public static final short ENEMY_MASK = PLAYER_CATEGORY | ENEMY_CATEGORY;
-    public static final short PLAYER_MASK = ENEMY_CATEGORY;
 
 
     /**
@@ -74,12 +68,7 @@ public abstract class Enemy {
         this.assetManager = assetManager;
         this.health = health;
         createCollisionBody(world, enemySpawnPos);
-        logPositions("Constructor");
-    }
-
-    public void logPositions(String tag) {
-        System.out.println(tag + " - Enemy position: " + position.toString());
-        System.out.println(tag + " - Body position: " + body.getPosition().toString());
+        this.world = world;
     }
 
     /**
@@ -93,6 +82,7 @@ public abstract class Enemy {
 
         // Initialise the collision body
         BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(position.x - 880, position.y - 460);
         body = world.createBody(bodyDef);
 
@@ -102,13 +92,15 @@ public abstract class Enemy {
         // Initialise the fixture
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.filter.categoryBits = ENEMY_CATEGORY;
-        fixtureDef.filter.maskBits = ENEMY_MASK;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0.3f;
+        fixtureDef.filter.categoryBits = GameContactListener.ENEMY_CATEGORY;
+        fixtureDef.filter.maskBits = GameContactListener.ENEMY_CATEGORY; // Ensure proper collision detection
 
         body.createFixture(fixtureDef);
         shape.dispose();
 
-        logPositions("createCollisionBody");
+        body.setUserData(this);
     }
 
     /**
@@ -173,8 +165,6 @@ public abstract class Enemy {
         // Scale the normalised vector by the speed
         this.position.x += normalisedX * this.speed * f;
         this.position.y += normalisedY * this.speed * f;
-
-        logPositions("chasePlayer");
     }
 
     /**

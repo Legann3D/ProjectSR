@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.Iterator;
@@ -102,6 +105,12 @@ public class SkeletonEnemy extends Enemy {
                 flipEnemy(player);
                 chasePlayer(f, player);
 
+                // Check for collisions and apply repelling force
+                applyRepellingForce();
+
+                Vector2 desiredPosition = new Vector2(this.position.x - 880, this.position.y - 460);
+                body.setTransform(desiredPosition, body.getAngle());
+
                 // Check if the enemy is close enough to attack
                 if (distanceFrom(player) < 50) {
                     // Set state to attacking
@@ -134,8 +143,43 @@ public class SkeletonEnemy extends Enemy {
             default:
                 // code block
         }
-        body.setTransform(this.position.x - 880, this.position.y - 460, body.getAngle());
+        //body.setTransform(this.position.x - 880, this.position.y - 460, body.getAngle());
+    }
 
-        logPositions("Update");
+    private void applyRepellingForce() {
+
+        // Loop over the contacted enemies
+        for (Contact contact : world.getContactList()) {
+
+            // Check if the contacted enemies are touching
+            if (contact.isTouching()) {
+
+                Fixture fixtureA = contact.getFixtureA();
+                Fixture fixtureB = contact.getFixtureB();
+
+                System.out.println("Enemies touching");
+
+                // Check if the both fixtures colliding are enemies
+                if (GameContactListener.isEnemyFixture(fixtureA) && GameContactListener.isEnemyFixture(fixtureB)) {
+
+                    Body bodyA = fixtureA.getBody();
+                    Body bodyB = fixtureB.getBody();
+
+                    Enemy enemyA = (Enemy) bodyA.getUserData();
+                    Enemy enemyB = (Enemy) bodyB.getUserData();
+
+                    Vector2 positionA = bodyA.getPosition();
+                    Vector2 positionB = bodyB.getPosition();
+
+                    Vector2 repellingForce = new Vector2(positionA).sub(positionB).nor().scl(0.5f); // Adjust scalar for velocity
+
+                    // Apply the force to the enemy positions
+                    enemyA.position.add(repellingForce.scl(1));
+                    enemyB.position.add(repellingForce.scl(-1));
+
+                    System.out.println("Repelling force applied between enemies");
+                }
+            }
+        }
     }
 }
