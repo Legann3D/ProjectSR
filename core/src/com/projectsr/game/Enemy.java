@@ -57,6 +57,11 @@ public abstract class Enemy {
     // Collision
     protected Body body;
     public static final float PPM = 100.0f; // Pixels Per Meter conversion
+    public static final short ENEMY_CATEGORY = 0x0002;
+    public static final short PLAYER_CATEGORY = 0x0004;
+    public static final short ENEMY_MASK = PLAYER_CATEGORY | ENEMY_CATEGORY;
+    public static final short PLAYER_MASK = ENEMY_CATEGORY;
+
 
     /**
      * Initialises the enemy character, setting its initial position and movement speed.
@@ -97,6 +102,8 @@ public abstract class Enemy {
         // Initialise the fixture
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = ENEMY_CATEGORY;
+        fixtureDef.filter.maskBits = ENEMY_MASK;
 
         body.createFixture(fixtureDef);
         shape.dispose();
