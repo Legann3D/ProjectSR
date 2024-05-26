@@ -14,10 +14,6 @@ public class mainGame extends Game implements ApplicationListener  {
 
 	@Override
 	public void create () {
-<<<<<<< Updated upstream
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
-=======
 		assetManager = new AssetManager();
 
 		// Load enemy assets
@@ -35,7 +31,6 @@ public class mainGame extends Game implements ApplicationListener  {
 		//Uncomment this code once the Main Menu class has been implemented
 		//setScreen(menuScreen);
 		setScreen(gameScreen);
->>>>>>> Stashed changes
 	}
 
 	@Override
