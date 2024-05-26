@@ -27,7 +27,7 @@ public class GameScreen implements Screen {
     // Level
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
-    private OrthographicCamera camera;
+    private OrthographicCamera gameCam, camera;
 
     // Player
     Texture playerTex;
@@ -59,11 +59,12 @@ public class GameScreen implements Screen {
         this.map = loader.load("Level Design/endless.tmx");
 
         renderer = new OrthogonalTiledMapRenderer(map);
-        camera = new OrthographicCamera();
+        gameCam = new OrthographicCamera();
 
     }
 
     public void update(float f){
+        gameCam.update();
         spawnEnemies(f);
     }
 
@@ -73,7 +74,7 @@ public class GameScreen implements Screen {
         update(delta);
 
         playerCharacter.update(delta);
-        renderer.setView(camera);
+        renderer.setView(playerCharacter.camera);
         renderer.render();
 
         /*
@@ -90,7 +91,7 @@ public class GameScreen implements Screen {
         batch.end();
 
         world.step(1 / 60f, 6, 2);
-        debugRenderer.render(world, camera.combined);
+        //debugRenderer.render(world, camera.combined);
     }
 
     public Vector2 calculateSpawnPosition() {
@@ -129,7 +130,7 @@ public class GameScreen implements Screen {
                 timeSinceEnemyWave = 0; // Reset the timer
             }
             // Check the spawn count, it should not exceed the maximum
-            if (enemySpawnCount < 50) {
+            if (enemySpawnCount < 5) {
                 // Add slightly more enemies each wave that spawns
                 enemySpawnCount = Math.round(enemySpawnCount * 1.25f);
             }
@@ -167,9 +168,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height){
-        camera.viewportWidth = width;
-        camera.viewportHeight = height;
-        camera.update();
+        gameCam.viewportWidth = width;
+        gameCam.viewportHeight = height;
     }
 
     @Override

@@ -20,7 +20,7 @@ public class Player {
 
     boolean facingRight = true;
 
-    OrthographicCamera camera;
+    public OrthographicCamera camera;
 
     enum State {
         IDLE, WALKING, ATTACKING, HURT
