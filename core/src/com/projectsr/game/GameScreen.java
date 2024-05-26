@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
 
         //Level
         TmxMapLoader loader = new TmxMapLoader();
-        this.map = loader.load("Level Design/nc_80x80.tmx");
+        this.map = loader.load("Level Design/endless.tmx");
 
         renderer = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();

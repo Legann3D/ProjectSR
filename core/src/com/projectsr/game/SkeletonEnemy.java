@@ -68,7 +68,7 @@ public class SkeletonEnemy extends Enemy {
         attack1Animation = new Animation<>(0.133f, attack1Frames);
 
         // Set up attack 2 frames
-        attack2Frames = new TextureRegion[8];
+        //attack2Frames = new TextureRegion[8];
 
         //attack2Frames[0] = new TextureRegion(attack2Sheet,0,0,150,150);
         //attack2Frames[1] = new TextureRegion(attack2Sheet,150,0,150,150);
@@ -80,7 +80,7 @@ public class SkeletonEnemy extends Enemy {
         //attack2Frames[7] = new TextureRegion(attack2Sheet,1050,0,150,150);
 
         // Create the walking animation at 30 FPS
-        attack2Animation = new Animation<>(0.133f, attack2Frames);
+        //attack2Animation = new Animation<>(0.133f, attack2Frames);
 
         // Set up death frames
         deathFrames = new TextureRegion[4];
