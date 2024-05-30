@@ -100,6 +100,9 @@ public class SkeletonEnemy extends Enemy {
 
         switch (this.currentState) {
             case CHASING:
+                fixtureDef.isSensor = false;
+                attackFixtureDef.isSensor = true;
+
                 currentAnimation = walkAnimation;
 
                 flipEnemy(player);
@@ -109,7 +112,7 @@ public class SkeletonEnemy extends Enemy {
                 applyRepellingForce();
 
                 Vector2 desiredPosition = new Vector2(this.position.x + 74, this.position.y + 75);
-                body.setTransform(desiredPosition, body.getAngle());
+                body.setTransform(desiredPosition, body.getAngle()); // Update main body collision
 
                 // Check if the enemy is close enough to attack
                 if (distanceFrom(player) < 50) {
@@ -123,6 +126,22 @@ public class SkeletonEnemy extends Enemy {
 
                 flipEnemy(player);
                 applyRepellingForce();
+
+                // TODO: Double check collisions work as expected when player can take dmg
+                // TODO: Remove this stuff if it doesn't or becomes cumbersome
+                // Check if the animation is almost completed
+                if (currentAnimation.getKeyFrameIndex(f) > currentAnimation.getKeyFrameIndex(f) % 6) {
+                    // Enable and disable collision accordingly
+                    fixtureDef.isSensor = true;
+                    attackFixtureDef.isSensor = false;
+                }
+                else {
+                    fixtureDef.isSensor = false;
+                    attackFixtureDef.isSensor = true;
+                }
+
+                desiredPosition = new Vector2(this.position.x + 70, this.position.y + 75);
+                attackBody.setTransform(desiredPosition, attackBody.getAngle()); // Update attack collision
 
                 // TODO: Check for collision overlapping
 //              if () {

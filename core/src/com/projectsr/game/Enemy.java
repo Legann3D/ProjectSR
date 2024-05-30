@@ -54,6 +54,9 @@ public abstract class Enemy {
 
     // Collision
     protected Body body;
+    protected Body attackBody;
+    protected FixtureDef fixtureDef;
+    protected FixtureDef attackFixtureDef;
     public static final float PPM = 100.0f; // Pixels Per Meter conversion
 
 
@@ -67,7 +70,7 @@ public abstract class Enemy {
         speed = 50; // Change value as needed
         this.assetManager = assetManager;
         this.health = health;
-        createCollisionBody(world, enemySpawnPos);
+        createCollisionBody(world);
         this.world = world;
     }
 
@@ -76,9 +79,7 @@ public abstract class Enemy {
      */
     public abstract void create();
 
-    public void createCollisionBody(World world, Vector2 enemySpawnPos) {
-
-        Vector2 physicsSpawnPos = new Vector2(enemySpawnPos.x / PPM, enemySpawnPos.y / PPM);
+    public void createCollisionBody(World world) {
 
         // Initialise the collision body
         BodyDef bodyDef = new BodyDef();
@@ -90,7 +91,7 @@ public abstract class Enemy {
         shape.setAsBox(enemyWidth / 8.5f, enemyHeight / 8.5f); // Set size
 
         // Initialise the fixture
-        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.3f;
@@ -101,6 +102,28 @@ public abstract class Enemy {
         shape.dispose();
 
         body.setUserData(this);
+
+        // Initialise the attacking collision body
+        BodyDef attackBodyDef = new BodyDef();
+        attackBodyDef.type = BodyDef.BodyType.DynamicBody;
+        attackBodyDef.position.set(position.x + 70, position.y + 75);
+        attackBody = world.createBody(attackBodyDef);
+
+        PolygonShape attackShape = new PolygonShape();
+        attackShape.setAsBox(enemyWidth / 5.5f, enemyHeight / 8.5f); // Set size
+
+        // Initialise the fixture
+        attackFixtureDef = new FixtureDef();
+        attackFixtureDef.shape = attackShape;
+        attackFixtureDef.density = 1.0f;
+        attackFixtureDef.friction = 0.3f;
+        attackFixtureDef.filter.categoryBits = GameContactListener.ENEMY_CATEGORY;
+        attackFixtureDef.filter.maskBits = GameContactListener.ENEMY_CATEGORY; // Ensure proper collision detection
+
+        attackBody.createFixture(fixtureDef);
+        attackShape.dispose();
+
+        attackBody.setUserData(this);
     }
 
     /**
