@@ -90,8 +90,8 @@ public class GameScreen implements Screen {
 
         batch.end();
 
-        world.step(1 / 60f, 6, 2);
-        //debugRenderer.render(world, camera.combined);
+        world.step(1 / 30f, 6, 2);
+        debugRenderer.render(world, playerCharacter.camera.combined);
     }
 
     public Vector2 calculateSpawnPosition() {

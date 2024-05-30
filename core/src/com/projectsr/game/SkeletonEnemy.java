@@ -108,7 +108,7 @@ public class SkeletonEnemy extends Enemy {
                 // Check for collisions and apply repelling force
                 applyRepellingForce();
 
-                Vector2 desiredPosition = new Vector2(this.position.x - 880, this.position.y - 460);
+                Vector2 desiredPosition = new Vector2(this.position.x + 74, this.position.y + 75);
                 body.setTransform(desiredPosition, body.getAngle());
 
                 // Check if the enemy is close enough to attack
@@ -120,6 +120,9 @@ public class SkeletonEnemy extends Enemy {
                 break;
             case ATTACKING:
                 currentAnimation = attack1Animation;
+
+                flipEnemy(player);
+                applyRepellingForce();
 
                 // TODO: Check for collision overlapping
 //              if () {
@@ -143,7 +146,6 @@ public class SkeletonEnemy extends Enemy {
             default:
                 // code block
         }
-        //body.setTransform(this.position.x - 880, this.position.y - 460, body.getAngle());
     }
 
     private void applyRepellingForce() {
@@ -171,11 +173,11 @@ public class SkeletonEnemy extends Enemy {
                     Vector2 positionA = bodyA.getPosition();
                     Vector2 positionB = bodyB.getPosition();
 
-                    Vector2 repellingForce = new Vector2(positionA).sub(positionB).nor().scl(0.5f); // Adjust scalar for velocity
+                    Vector2 repellingForce = new Vector2(positionA).sub(positionB).nor().scl(1f); // Adjust scalar for velocity
 
                     // Apply the force to the enemy positions
-                    enemyA.position.add(repellingForce.scl(1));
-                    enemyB.position.add(repellingForce.scl(-1));
+                    enemyA.position.add(repellingForce.scl(0.1f));
+                    enemyB.position.add(repellingForce.scl(-0.1f));
 
                     System.out.println("Repelling force applied between enemies");
                 }

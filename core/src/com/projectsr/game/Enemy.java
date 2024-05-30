@@ -83,11 +83,11 @@ public abstract class Enemy {
         // Initialise the collision body
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(position.x - 880, position.y - 460);
+        bodyDef.position.set(position.x + 70, position.y + 75);
         body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(enemyWidth / 4, enemyHeight / 4); // Set size
+        shape.setAsBox(enemyWidth / 8.5f, enemyHeight / 8.5f); // Set size
 
         // Initialise the fixture
         FixtureDef fixtureDef = new FixtureDef();
@@ -141,9 +141,11 @@ public abstract class Enemy {
         if (currentFrame != null) {
             // Check if the texture needs to be flipped
             if (currentFrame.isFlipX() && shouldFaceRight) {
+                // Flip the enemy
                 currentFrame.flip(true, false);
             }
             else if (!currentFrame.isFlipX() && shouldFaceLeft) {
+                // Flip the enemy
                 currentFrame.flip(true, false);
             }
         }
