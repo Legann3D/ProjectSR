@@ -112,7 +112,7 @@ public class GameScreen implements Screen {
         timeSinceEnemyWave += f;
 
         // Check the time since the last enemy spawned
-        if (timeSinceEnemyWave >= 10) {
+        if (timeSinceEnemyWave >= 10 && enemies.size() < 30) {
             for (int i = 0; i < enemySpawnCount; i++) {
                 // Calculate the spawn position
                 Vector2 enemySpawnPos = calculateSpawnPosition();
