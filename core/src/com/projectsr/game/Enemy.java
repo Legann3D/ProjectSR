@@ -67,7 +67,7 @@ public abstract class Enemy {
      */
     public Enemy(AssetManager assetManager, Vector2 enemySpawnPos, float health, World world) {
         position = enemySpawnPos;
-        speed = 50; // Change value as needed
+        speed = 25; // Change value as needed
         this.assetManager = assetManager;
         this.health = health;
         createCollisionBody(world);

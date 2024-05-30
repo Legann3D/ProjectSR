@@ -115,7 +115,7 @@ public class SkeletonEnemy extends Enemy {
                 body.setTransform(desiredPosition, body.getAngle()); // Update main body collision
 
                 // Check if the enemy is close enough to attack
-                if (distanceFrom(player) < 50) {
+                if (distanceFrom(player) < 25) {
                     // Set state to attacking
                     setState(STATE.ATTACKING);
                     stateTime = 0;
