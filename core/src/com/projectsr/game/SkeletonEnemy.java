@@ -159,7 +159,8 @@ public class SkeletonEnemy extends Enemy {
                 currentAnimation = deathAnimation;
 
                 if (currentAnimation.isAnimationFinished(stateTime)) {
-                    world.destroyBody(body); // Dispose of collision
+                    world.destroyBody(this.body); // Dispose of collision
+                    world.destroyBody(this.attackBody);
                     spawnEssence();
                     enemyDeath(enemyIter);
                 }
@@ -199,9 +200,6 @@ public class SkeletonEnemy extends Enemy {
                     // Apply the force to the enemy positions
                     enemyA.position.add(repellingForce.scl(0.1f));
                     enemyB.position.add(repellingForce.scl(-0.1f));
-
-                    enemyA.setState(STATE.DEATH);
-                    enemyB.setState(STATE.DEATH);
 
                     System.out.println("Repelling force applied between enemies");
                 }

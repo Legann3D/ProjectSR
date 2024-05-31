@@ -11,6 +11,7 @@ public class GameContactListener implements ContactListener {
 
     public static final short ENEMY_CATEGORY = 0x0002;
     public static final short ENEMY_ATTACK_CATEGORY = 0x0004;
+    public static final short ESSENCE_CATEGORY = 0x0001;
 
     @Override
     public void beginContact(Contact contact) {

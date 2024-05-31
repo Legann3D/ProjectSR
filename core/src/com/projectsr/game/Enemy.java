@@ -274,7 +274,7 @@ public abstract class Enemy {
         }
 
         // Create essence object
-        Essence essence = new Essence(assetManager, position, essenceType);
+        Essence essence = new Essence(assetManager, position, essenceType, this.world);
         // Ensure its created and assigned texture
         essence.create();
 
