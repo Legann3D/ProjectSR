@@ -65,13 +65,14 @@ public abstract class Enemy {
      *
      * @param assetManager manages assets and loads assets used.
      */
-    public Enemy(AssetManager assetManager, Vector2 enemySpawnPos, float health, World world) {
+    public Enemy(AssetManager assetManager, Vector2 enemySpawnPos, float health, World world, GameScreen gameScreen) {
         position = enemySpawnPos;
         speed = 25; // Change value as needed
         this.assetManager = assetManager;
         this.health = health;
         createCollisionBody(world);
         this.world = world;
+        this.gameScreen = gameScreen;
     }
 
     /**
@@ -273,7 +274,9 @@ public abstract class Enemy {
         }
 
         // Create essence object
-        Essence essence = new Essence(assetManager, this.position, essenceType);
+        Essence essence = new Essence(assetManager, position, essenceType);
+        // Ensure its created and assigned texture
+        essence.create();
 
         // Add to essence array to game screen class
         gameScreen.addEssence(essence);

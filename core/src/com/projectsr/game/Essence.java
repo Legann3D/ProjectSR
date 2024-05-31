@@ -41,11 +41,16 @@ public class Essence {
     }
 
     public void render(SpriteBatch batch) {
-
-        batch.draw(texture, position.x, position.y);
+        batch.draw(texture, position.x + 65, position.y + 65, 20, 20);
     }
 
     public void setType(Type type) {
         this.type = type;
     }
+
+    public void dispose() {
+        // Dispose of resources
+        assetManager.dispose();
+    }
+
 }

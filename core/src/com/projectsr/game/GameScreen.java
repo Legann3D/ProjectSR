@@ -129,7 +129,7 @@ public class GameScreen implements Screen {
                 //System.out.println("Player Spawn Position: " + playerCharacter.position);
 
                 // Create skeleton enemy
-                skeletonEnemy = new SkeletonEnemy(this.assetManager, enemySpawnPos, enemyHealth, world);
+                skeletonEnemy = new SkeletonEnemy(this.assetManager, enemySpawnPos, enemyHealth, world, this);
 
                 skeletonEnemy.create();
                 // Add the enemy to the enemies array

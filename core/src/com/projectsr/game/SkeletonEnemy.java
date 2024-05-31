@@ -25,8 +25,8 @@ public class SkeletonEnemy extends Enemy {
      *
      * @param assetManager manages assets and loads assets used.
      */
-    public SkeletonEnemy(AssetManager assetManager, Vector2 enemySpawnPos, float health, World world) {
-        super(assetManager, enemySpawnPos, health, world);
+    public SkeletonEnemy(AssetManager assetManager, Vector2 enemySpawnPos, float health, World world, GameScreen gameScreen) {
+        super(assetManager, enemySpawnPos, health, world, gameScreen);
     }
 
     /**
@@ -159,6 +159,7 @@ public class SkeletonEnemy extends Enemy {
                 currentAnimation = deathAnimation;
 
                 if (currentAnimation.isAnimationFinished(stateTime)) {
+                    world.destroyBody(body); // Dispose of collision
                     spawnEssence();
                     enemyDeath(enemyIter);
                 }
@@ -198,6 +199,9 @@ public class SkeletonEnemy extends Enemy {
                     // Apply the force to the enemy positions
                     enemyA.position.add(repellingForce.scl(0.1f));
                     enemyB.position.add(repellingForce.scl(-0.1f));
+
+                    enemyA.setState(STATE.DEATH);
+                    enemyB.setState(STATE.DEATH);
 
                     System.out.println("Repelling force applied between enemies");
                 }
