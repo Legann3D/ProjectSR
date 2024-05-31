@@ -233,4 +233,24 @@ public abstract class Enemy {
     public void enemyDeath(Iterator<Enemy> enemyIter) {
         enemyIter.remove();
     }
+
+    public void spawnEssence() {
+
+        // Calculate random number between 0 or 1
+        int randNum = (int) (Math.random() * 2);
+
+        Essence.Type essenceType;
+        if (randNum == 0) {
+            essenceType = Essence.Type.GREEN;
+        }
+        else {
+            essenceType = Essence.Type.RED;
+        }
+
+        // Create essence object
+        Essence essence = new Essence(assetManager, this.position, essenceType);
+
+        // Add to essence array to game screen class
+        gameScreen.addEssence(essence);
+    }
 }

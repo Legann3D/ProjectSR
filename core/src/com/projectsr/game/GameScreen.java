@@ -41,6 +41,8 @@ public class GameScreen implements Screen {
     private float spawnDistance = 500;
     private float enemyHealth = 50;
 
+    private ArrayList<Essence> essences = new ArrayList<>();
+
     public GameScreen(mainGame game, AssetManager assetManager) {
         this.assetManager = assetManager;
         this.world = new World(new Vector2(0, 0), true); // No gravity
@@ -85,6 +87,11 @@ public class GameScreen implements Screen {
         // Loop through each enemy and render it
         for (Enemy enemy : enemies) {
             enemy.render(batch);
+        }
+
+        // Loop through each essence and render it
+        for (Essence essence : essences) {
+            essence.render(batch);
         }
 
         batch.end();
@@ -154,6 +161,14 @@ public class GameScreen implements Screen {
 
     public Iterator<Enemy> getEnemyIter(Iterator<Enemy> enemyIter) {
         return enemyIter;
+    }
+
+    public void addEssence(Essence essence) {
+        essences.add(essence);
+    }
+
+    public void removeEssence(Essence essence) {
+        essences.remove(essence);
     }
 
     @Override

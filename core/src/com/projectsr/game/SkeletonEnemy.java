@@ -137,6 +137,7 @@ public class SkeletonEnemy extends Enemy {
                 currentAnimation = deathAnimation;
 
                 if (currentAnimation.isAnimationFinished(stateTime)) {
+                    spawnEssence();
                     enemyDeath(enemyIter);
                 }
                 break;
