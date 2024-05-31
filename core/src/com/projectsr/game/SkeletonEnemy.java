@@ -68,7 +68,7 @@ public class SkeletonEnemy extends Enemy {
         attack1Animation = new Animation<>(0.133f, attack1Frames);
 
         // Set up attack 2 frames
-        attack2Frames = new TextureRegion[8];
+        //attack2Frames = new TextureRegion[8];
 
         //attack2Frames[0] = new TextureRegion(attack2Sheet,0,0,150,150);
         //attack2Frames[1] = new TextureRegion(attack2Sheet,150,0,150,150);
@@ -80,7 +80,7 @@ public class SkeletonEnemy extends Enemy {
         //attack2Frames[7] = new TextureRegion(attack2Sheet,1050,0,150,150);
 
         // Create the walking animation at 30 FPS
-        attack2Animation = new Animation<>(0.133f, attack2Frames);
+        //attack2Animation = new Animation<>(0.133f, attack2Frames);
 
         // Set up death frames
         deathFrames = new TextureRegion[4];
@@ -100,6 +100,9 @@ public class SkeletonEnemy extends Enemy {
 
         switch (this.currentState) {
             case CHASING:
+                fixtureDef.isSensor = false;
+                attackFixtureDef.isSensor = true;
+
                 currentAnimation = walkAnimation;
 
                 flipEnemy(player);
@@ -108,11 +111,11 @@ public class SkeletonEnemy extends Enemy {
                 // Check for collisions and apply repelling force
                 applyRepellingForce();
 
-                Vector2 desiredPosition = new Vector2(this.position.x - 880, this.position.y - 460);
-                body.setTransform(desiredPosition, body.getAngle());
+                Vector2 desiredPosition = new Vector2(this.position.x + 74, this.position.y + 75);
+                body.setTransform(desiredPosition, body.getAngle()); // Update main body collision
 
                 // Check if the enemy is close enough to attack
-                if (distanceFrom(player) < 50) {
+                if (distanceFrom(player) < 25) {
                     // Set state to attacking
                     setState(STATE.ATTACKING);
                     stateTime = 0;
@@ -120,6 +123,25 @@ public class SkeletonEnemy extends Enemy {
                 break;
             case ATTACKING:
                 currentAnimation = attack1Animation;
+
+                flipEnemy(player);
+                applyRepellingForce();
+
+                // TODO: Double check collisions work as expected when player can take dmg
+                // TODO: Remove this stuff if it doesn't or becomes cumbersome
+                // Check if the animation is almost completed
+                if (currentAnimation.getKeyFrameIndex(f) > currentAnimation.getKeyFrameIndex(f) % 6) {
+                    // Enable and disable collision accordingly
+                    fixtureDef.isSensor = true;
+                    attackFixtureDef.isSensor = false;
+                }
+                else {
+                    fixtureDef.isSensor = false;
+                    attackFixtureDef.isSensor = true;
+                }
+
+                desiredPosition = new Vector2(this.position.x + 70, this.position.y + 75);
+                attackBody.setTransform(desiredPosition, attackBody.getAngle()); // Update attack collision
 
                 // TODO: Check for collision overlapping
 //              if () {
@@ -144,7 +166,6 @@ public class SkeletonEnemy extends Enemy {
             default:
                 // code block
         }
-        //body.setTransform(this.position.x - 880, this.position.y - 460, body.getAngle());
     }
 
     private void applyRepellingForce() {
@@ -172,11 +193,11 @@ public class SkeletonEnemy extends Enemy {
                     Vector2 positionA = bodyA.getPosition();
                     Vector2 positionB = bodyB.getPosition();
 
-                    Vector2 repellingForce = new Vector2(positionA).sub(positionB).nor().scl(0.5f); // Adjust scalar for velocity
+                    Vector2 repellingForce = new Vector2(positionA).sub(positionB).nor().scl(1f); // Adjust scalar for velocity
 
                     // Apply the force to the enemy positions
-                    enemyA.position.add(repellingForce.scl(1));
-                    enemyB.position.add(repellingForce.scl(-1));
+                    enemyA.position.add(repellingForce.scl(0.1f));
+                    enemyB.position.add(repellingForce.scl(-0.1f));
 
                     System.out.println("Repelling force applied between enemies");
                 }
