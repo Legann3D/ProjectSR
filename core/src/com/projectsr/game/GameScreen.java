@@ -33,6 +33,10 @@ public class GameScreen implements Screen {
     Texture playerTex;
     Player playerCharacter;
 
+    // Skills
+    private BombSkill bomb;
+    private float timeSinceBombDrop = 15;
+
     // Enemies
     private Enemy skeletonEnemy;
     private ArrayList<Enemy> enemies = new ArrayList<>();
@@ -68,6 +72,12 @@ public class GameScreen implements Screen {
     public void update(float f){
         gameCam.update();
         spawnEnemies(f);
+        spawnBomb(f);
+
+        // Check that there is a bomb
+        if (bomb != null) {
+            bomb.update(f, enemies);
+        }
     }
 
     public void render(float delta) {
@@ -93,6 +103,11 @@ public class GameScreen implements Screen {
         // Loop through each essence and render it
         for (Essence essence : essences) {
             essence.render(batch);
+        }
+
+        // Check that there is a bomb
+        if (bomb != null) {
+            bomb.render(batch, delta);
         }
 
         batch.end();
@@ -157,6 +172,23 @@ public class GameScreen implements Screen {
             if (enemy.getHealth() <= 0 && !enemy.getCurrentState().equals("DEATH")) {
                 enemy.setCurrentState("DEATH");
             }
+        }
+    }
+
+    // TODO: Move to the player class
+    public void spawnBomb(float f) {
+
+        // Update the time since the last enemy wave
+        timeSinceBombDrop += f;
+
+        // Check the time since the last bomb spawned
+        if (timeSinceBombDrop >= 15) {
+
+            // Create the bomb
+            bomb = new BombSkill(assetManager, new Vector2(playerCharacter.position));
+            bomb.create();
+
+            timeSinceBombDrop = 0; // Reset the timer
         }
     }
 

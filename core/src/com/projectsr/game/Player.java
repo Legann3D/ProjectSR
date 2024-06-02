@@ -19,7 +19,6 @@ public class Player {
     float frame = 0;
 
     boolean facingRight = true;
-
     public OrthographicCamera camera;
 
     enum State {
@@ -131,5 +130,4 @@ public class Player {
             }
         }
     }
-
 }

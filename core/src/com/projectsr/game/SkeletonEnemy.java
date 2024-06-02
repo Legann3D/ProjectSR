@@ -181,7 +181,7 @@ public class SkeletonEnemy extends Enemy {
                 Fixture fixtureA = contact.getFixtureA();
                 Fixture fixtureB = contact.getFixtureB();
 
-                System.out.println("Enemies touching");
+                //System.out.println("Enemies touching");
 
                 // Check if the both fixtures colliding are enemies
                 if (GameContactListener.isEnemyFixture(fixtureA) && GameContactListener.isEnemyFixture(fixtureB)) {
@@ -201,7 +201,7 @@ public class SkeletonEnemy extends Enemy {
                     enemyA.position.add(repellingForce.scl(0.1f));
                     enemyB.position.add(repellingForce.scl(-0.1f));
 
-                    System.out.println("Repelling force applied between enemies");
+                    //System.out.println("Repelling force applied between enemies");
                 }
             }
         }

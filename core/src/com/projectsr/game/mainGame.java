@@ -27,6 +27,10 @@ public class mainGame extends Game implements ApplicationListener  {
 		assetManager.load("Essences/red_essence.png", Texture.class);
 		assetManager.load("Essences/green_essence.png", Texture.class);
 
+		// Bomb
+		assetManager.load("Skills/bomb.png", Texture.class);
+		assetManager.load("Skills/explosion.png", Texture.class);
+
 		assetManager.finishLoading(); // Blocks until all assets are loaded
 
 		gameScreen = new GameScreen(this, assetManager);

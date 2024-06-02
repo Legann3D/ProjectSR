@@ -281,4 +281,8 @@ public abstract class Enemy {
         // Add to essence array to game screen class
         gameScreen.addEssence(essence);
     }
+
+    public Vector2 getPosition() {
+        return position;
+    }
 }
