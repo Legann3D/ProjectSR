@@ -12,7 +12,7 @@ public class Player {
     Vector2 velocity;
     float width = 100;
     float height = 55;
-    float speed = 90;
+    float speed = 2;
 
     TextureRegion[][] animations;
     int[] frameCounts;
@@ -25,8 +25,12 @@ public class Player {
     enum State {
         IDLE, WALKING, ATTACKING, HURT
     }
-
     State currentState = State.IDLE;
+
+    private Vector2 joystickOrigin;
+    private Vector2 joystickCurrent;
+    private float joystickRadius;
+    private float deadZoneRadius;
 
     public Player() {
 
@@ -70,6 +74,12 @@ public class Player {
         for (int i = 0; i < frameCounts[3]; i++) {
             animations[3][i] = new TextureRegion(new Texture("Character/HeroKnight/Hurt/HeroKnight_Hurt_" + i + ".png"));
         }
+
+        // Initialize joystick variables
+        joystickOrigin = new Vector2();
+        joystickCurrent = new Vector2();
+        joystickRadius = 70;
+        deadZoneRadius = 50;
     }
 
     public void update(float deltaTime) {
@@ -91,7 +101,32 @@ public class Player {
     public void controls() {
         if (Gdx.input.isTouched()) {
             Vector2 touchPos = new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-            velocity = touchPos.sub(position).nor().scl(speed);
+
+
+            // If this is the first touch, set the joystick origin
+            if (joystickOrigin.isZero()) {
+                joystickOrigin.set(touchPos);
+            }
+
+            joystickCurrent.set(touchPos);
+            Vector2 direction = joystickCurrent.cpy().sub(joystickOrigin).nor();
+            float physicalTouchDistance = joystickCurrent.dst(joystickOrigin);
+
+            // Check if the touch is within the dead zone
+            if (physicalTouchDistance < deadZoneRadius) {
+                velocity.set(0, 0);
+                currentState = State.IDLE;
+                return;
+            }
+
+            // Check if the touch distance is greater than joystick radius:
+            if (physicalTouchDistance > joystickRadius) {
+                // limits the joystick to the specified radius
+                joystickCurrent.set(joystickOrigin.cpy().add(direction.scl(joystickRadius)));
+                physicalTouchDistance = joystickRadius;
+            }
+
+            velocity.set(direction.scl(speed * (physicalTouchDistance / joystickRadius)));
 
             // check if the player is moving to the left or right
             if (velocity.x > 0) {
@@ -100,9 +135,17 @@ public class Player {
                 facingRight = false;
             }
 
-            currentState = State.WALKING;
+            // check to see if th player is moving
+            if (velocity.len() > 0) {
+                currentState = State.WALKING;
+            } else {
+                currentState = State.IDLE;
+            }
+
 
         } else {
+            // Reset joystick origin when touch is released
+            joystickOrigin.setZero();
             velocity.set(0, 0);
             currentState = State.IDLE;
         }
