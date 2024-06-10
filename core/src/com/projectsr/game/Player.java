@@ -37,7 +37,13 @@ public class Player {
     private int maxHeart = 3;
     private int currentHeart;
     private int attackBaseDamage = 10;
+    private int damageModifier;
     private float attackBaseRange = 80;
+
+    private int greenEsences;
+    private int redEssences;
+
+    private int enemiesKilled;
 
 
     public Player() {
@@ -113,7 +119,6 @@ public class Player {
         // update camera position
         camera.position.set(position.x + width / 2, position.y + height / 2, 0);
         camera.update();
-
 
 
     }
@@ -207,6 +212,43 @@ public class Player {
         return  maxHeart;
     }
 
+    // This section keeps track of the players essence
+    public void removeEssence(int amount, String essence){
+        if (essence == "red"){
+            redEssences -= amount;
+            if (redEssences < 0 ) {
+                redEssences = 0;
+            }
+        }
+
+        if (essence == "green"){
+            greenEsences -= amount;
+            if (greenEsences < 0 ) {
+                greenEsences = 0;
+            }
+        }
+    }
+    public void addEssence(int amount, String essence){
+        if (essence == "red"){
+            redEssences += amount;
+        }
+
+        if (essence == "green"){
+            greenEsences += amount;
+        }
+    }
+    public int getEssences(String essence) {
+        if (essence == "red"){
+            return redEssences;
+        }
+        else if (essence == "green"){
+            return greenEsences;
+        }
+        else{
+            return 0;
+        }
+
+    }
 
     // Finding the nearest enemy in front of the player to be used for auto attacking them
     public Enemy findNearestEnemyInFront(List<Enemy> enemies) {
@@ -224,7 +266,21 @@ public class Player {
         return nearestEnemy;
     }
     public void attack(Enemy enemy){
-        enemy.takeDamage(attackBaseDamage);
+        enemy.takeDamage(attackBaseDamage + damageModifier);
+
+        if (enemy.getCurrentState().equals("DEATH")){
+            enemiesKilled++;
+        }
+    }
+    public void setDamageModifier(int amount) {
+        this.damageModifier = amount;
+    }
+    public int getDamageModifier() {
+        return damageModifier;
+    }
+
+    public int getEnemiesKilled(){
+        return enemiesKilled;
     }
 
     public void dispose(){
