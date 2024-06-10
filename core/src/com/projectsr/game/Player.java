@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.List;
+
 public class Player {
     Vector2 position;
     Vector2 velocity;
@@ -32,18 +34,24 @@ public class Player {
     private float joystickRadius;
     private float deadZoneRadius;
 
+    private int maxHeart = 3;
+    private int currentHeart;
+    private int attackBaseDamage = 10;
+    private float attackBaseRange = 80;
+
+
     public Player() {
 
         position = new Vector2(880, 500);
         velocity = new Vector2(0,0);
 
-        // initialize camera
+        // initialise camera
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w / h * 250, 250);
 
-        // initialize animations and frame counts
+        // initialise animations and frame counts
         animations = new TextureRegion[4][];
         frameCounts = new int[4];
 
@@ -75,17 +83,27 @@ public class Player {
             animations[3][i] = new TextureRegion(new Texture("Character/HeroKnight/Hurt/HeroKnight_Hurt_" + i + ".png"));
         }
 
-        // Initialize joystick variables
+        // initialise joystick variables
         joystickOrigin = new Vector2();
         joystickCurrent = new Vector2();
         joystickRadius = 70;
         deadZoneRadius = 50;
+
+        // initialise heart
+        currentHeart = maxHeart;
+
     }
 
-    public void update(float deltaTime) {
+    public void update(float deltaTime, List<Enemy> enemies) {
         controls();
         position.add(velocity.x * deltaTime, velocity.y * deltaTime);
 
+        // Nearest enemy withing attack range in front of player
+        Enemy nearestEnemy = findNearestEnemyInFront(enemies);
+        if (nearestEnemy != null) {
+            currentState = State.ATTACKING;
+            attack(nearestEnemy);
+        }
         // update animation frame
         this.frame += 20 * deltaTime;
         if (this.frame >= frameCounts[currentState.ordinal()]) {
@@ -95,6 +113,8 @@ public class Player {
         // update camera position
         camera.position.set(position.x + width / 2, position.y + height / 2, 0);
         camera.update();
+
+
 
     }
 
@@ -164,7 +184,47 @@ public class Player {
         }
 
         batch.draw(frameTexture, position.x, position.y, width, height);
+    }
 
+    // This section tracks the health for the player
+    public void takeDamage(int amount){
+        currentHeart -= amount;
+        if (currentHeart < 0 ) {
+            currentHeart = 0;
+        }
+        currentState = State.HURT;
+    }
+    public void heal(int amount){
+        currentHeart += amount;
+        if (currentHeart > maxHeart) {
+            currentHeart = maxHeart;
+        }
+    }
+    public int getCurrentHeart() {
+        return currentHeart;
+    }
+    public int getMaxHeart() {
+        return  maxHeart;
+    }
+
+
+    // Finding the nearest enemy in front of the player to be used for auto attacking them
+    public Enemy findNearestEnemyInFront(List<Enemy> enemies) {
+        Enemy nearestEnemy = null;
+
+        for (Enemy enemy : enemies) {
+            float distance = position.dst(enemy.position);
+            boolean isInFront = (facingRight && enemy.position.x > position.x) ||
+                    (!facingRight && enemy.position.x < position.x);
+
+            if (distance <= attackBaseRange && isInFront) {
+                nearestEnemy = enemy;
+            }
+        }
+        return nearestEnemy;
+    }
+    public void attack(Enemy enemy){
+        enemy.takeDamage(attackBaseDamage);
     }
 
     public void dispose(){

@@ -73,7 +73,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         update(delta);
 
-        playerCharacter.update(delta);
+        playerCharacter.update(delta, enemies);
         renderer.setView(playerCharacter.camera);
         renderer.render();
 
