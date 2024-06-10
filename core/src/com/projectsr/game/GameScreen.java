@@ -7,12 +7,24 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,17 +33,20 @@ public class GameScreen implements Screen {
     mainGame  game;
     SpriteBatch batch;
     private AssetManager assetManager;
-    private World world;
     private Box2DDebugRenderer debugRenderer;
 
     // Level
+    private World world;
     private TiledMap map;
-    private OrthogonalTiledMapRenderer renderer;
-    private OrthographicCamera gameCam, camera;
+    private int tileSize;
+    private OrthogonalTiledMapRenderer mapRenderer;
+    private Viewport viewport;
 
     // Player
     Texture playerTex;
     Player playerCharacter;
+
+    OrthographicCamera gameCam;
 
     // Enemies
     private Enemy skeletonEnemy;
@@ -54,14 +69,15 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
 
         //Player
-        playerCharacter = new Player();
+        playerCharacter = new Player(world);
 
         //Level
-        TmxMapLoader loader = new TmxMapLoader();
-        this.map = loader.load("Level Design/endless.tmx");
-
-        renderer = new OrthogonalTiledMapRenderer(map);
+        map = new TmxMapLoader().load("Level Design/endless.tmx");
+        tileSize = ((TiledMapTileLayer) map.getLayers().get(0)).getTileWidth();
+        mapRenderer = new OrthogonalTiledMapRenderer(map, 1f);
+        viewport = new ExtendViewport(30 * tileSize, 20 * tileSize);
         gameCam = new OrthographicCamera();
+        parseMap();
 
     }
 
@@ -76,9 +92,8 @@ public class GameScreen implements Screen {
         update(delta);
 
         playerCharacter.update(delta);
-        renderer.setView(playerCharacter.camera);
-        renderer.render();
-
+        mapRenderer.setView(playerCharacter.camera);
+        mapRenderer.render();
         /*
         BATCH BEGIN DRAW
          */
@@ -164,27 +179,69 @@ public class GameScreen implements Screen {
         return enemyIter;
     }
 
+<<<<<<< Updated upstream
     public void addEssence(Essence essence) {
         essences.add(essence);
     }
 
     public void removeEssence(Essence essence) {
         essences.remove(essence);
+=======
+    private void parseMap() {
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
+        for (int x = 0; x < layer.getWidth(); x++) {
+            for (int y = 0; y < layer.getHeight(); y++) {
+                TiledMapTileLayer.Cell cell = layer.getCell(x, y);
+                if (cell == null)
+                    continue;
+
+                MapObjects cellObjects = cell.getTile().getObjects();
+                if (cellObjects.getCount() != 1)
+                    continue;
+
+                MapObject mapObject = cellObjects.get(0);
+
+                if (mapObject instanceof RectangleMapObject) {
+                    RectangleMapObject rectangleObject = (RectangleMapObject) mapObject;
+                    Rectangle rectangle = rectangleObject.getRectangle();
+
+                    float centerX = (x + 0.5f) * tileSize;
+                    float centerY = (y + 0.5f) * tileSize;
+
+                    BodyDef bodyDef = new BodyDef();
+                    bodyDef.position.set(centerX, centerY);
+
+                    Body body = world.createBody(bodyDef);
+                    PolygonShape polygonShape = new PolygonShape();
+                    polygonShape.setAsBox(tileSize / 2f, tileSize / 2f);
+                    body.createFixture(polygonShape, 0.0f);
+                    polygonShape.dispose();
+                }
+            }
+        }
+    }
+    private BodyDef getBodyDef(float x, float y)
+    {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x, y);
+
+        return bodyDef;
+>>>>>>> Stashed changes
     }
 
     @Override
     public void dispose(){
         map.dispose();
-        renderer.dispose();
         world.dispose();
+        mapRenderer.dispose();
         debugRenderer.dispose();
         batch.dispose();
     }
 
     @Override
     public void resize(int width, int height){
-        gameCam.viewportWidth = width;
-        gameCam.viewportHeight = height;
+        viewport.update(width, height, true);
     }
 
     @Override

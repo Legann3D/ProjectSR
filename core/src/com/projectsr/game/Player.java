@@ -6,6 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class Player {
     Vector2 position;
@@ -13,6 +18,8 @@ public class Player {
     float width = 100;
     float height = 55;
     float speed = 90;
+    Body body;
+    private World world;
 
     TextureRegion[][] animations;
     int[] frameCounts;
@@ -28,9 +35,9 @@ public class Player {
 
     State currentState = State.IDLE;
 
-    public Player() {
+    public Player(World world) {
 
-        position = new Vector2(880, 500);
+        position = new Vector2(880, 600);
         velocity = new Vector2(0,0);
 
         // initialize camera
@@ -38,6 +45,9 @@ public class Player {
         float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w / h * 250, 250);
+
+        // Initialize the world
+        this.world = world;
 
         // initialize animations and frame counts
         animations = new TextureRegion[4][];
@@ -70,10 +80,35 @@ public class Player {
         for (int i = 0; i < frameCounts[3]; i++) {
             animations[3][i] = new TextureRegion(new Texture("Character/HeroKnight/Hurt/HeroKnight_Hurt_" + i + ".png"));
         }
+
+        //Collision
+        // Create Box2D body
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody; // Player is a dynamic body
+        bodyDef.position.set(position.x, position.y); // Initial position
+        body = world.createBody(bodyDef);
+
+        // Create fixture
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(width / 2, height / 2); // Set box shape based on player dimensions
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f; // Adjust density as needed
+        fixtureDef.friction = 0.5f; // Adjust friction as needed
+        body.createFixture(fixtureDef);
+        fixtureDef.isSensor = true;
+        fixtureDef.filter.categoryBits = GameContactListener.PLAYER_CATEGORY;
+        fixtureDef.filter.maskBits = GameContactListener.PLAYER_CATEGORY; // Ensure proper collision detection
+        shape.dispose();
+
     }
 
     public void update(float deltaTime) {
         controls();
+
+        // Update player position based on Box2D body
+        position.set(body.getPosition().x, body.getPosition().y);
+
         position.add(velocity.x * deltaTime, velocity.y * deltaTime);
 
         // update animation frame
@@ -106,6 +141,15 @@ public class Player {
             velocity.set(0, 0);
             currentState = State.IDLE;
         }
+
+
+    }
+
+    // Method to handle collision events (called from GameContactListener)
+    public void handleCollision() {
+        // Adjust player's velocity based on collision
+        // set velocity to zero to prevent movement
+        velocity.set(0, 0);
     }
 
     public void render (SpriteBatch batch) {
@@ -121,7 +165,6 @@ public class Player {
         }
 
         batch.draw(frameTexture, position.x, position.y, width, height);
-
     }
 
     public void dispose(){
