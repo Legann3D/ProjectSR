@@ -9,13 +9,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -69,7 +67,7 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
 
         //Player
-        playerCharacter = new Player(world);
+        playerCharacter = new Player();
 
         //Level
         map = new TmxMapLoader().load("Level Design/endless.tmx");
@@ -91,7 +89,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         update(delta);
 
-        playerCharacter.update(delta);
+        playerCharacter.update(delta, enemies);
         mapRenderer.setView(playerCharacter.camera);
         mapRenderer.render();
         /*
@@ -179,14 +177,14 @@ public class GameScreen implements Screen {
         return enemyIter;
     }
 
-<<<<<<< Updated upstream
     public void addEssence(Essence essence) {
         essences.add(essence);
     }
 
     public void removeEssence(Essence essence) {
         essences.remove(essence);
-=======
+    }
+
     private void parseMap() {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
         for (int x = 0; x < layer.getWidth(); x++) {
@@ -220,18 +218,16 @@ public class GameScreen implements Screen {
             }
         }
     }
-    private BodyDef getBodyDef(float x, float y)
-    {
+    private BodyDef getBodyDef(float x, float y) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(x, y);
 
         return bodyDef;
->>>>>>> Stashed changes
     }
 
     @Override
-    public void dispose(){
+    public void dispose() {
         map.dispose();
         world.dispose();
         mapRenderer.dispose();
