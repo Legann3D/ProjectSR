@@ -23,6 +23,10 @@ public class mainGame extends Game implements ApplicationListener  {
 		//assetManager.load("Attack2.png", Texture.class);
 		assetManager.load("Enemy/Skeleton/Death.png", Texture.class);
 
+		// Essences
+		assetManager.load("Essences/red_essence.png", Texture.class);
+		assetManager.load("Essences/green_essence.png", Texture.class);
+
 		assetManager.finishLoading(); // Blocks until all assets are loaded
 
 		gameScreen = new GameScreen(this, assetManager);

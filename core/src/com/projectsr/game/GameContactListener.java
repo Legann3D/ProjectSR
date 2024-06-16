@@ -5,12 +5,18 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.World;
 
 
 public class GameContactListener implements ContactListener {
 
     public static final short ENEMY_CATEGORY = 0x0002;
     public static final short ENEMY_ATTACK_CATEGORY = 0x0004;
+    public static final short ESSENCE_CATEGORY = 0x0001;
+
+    public static final short PLAYER_CATEGORY = 0x0006;
+
+    public static final short MAP_CATEGORY = 0x0008;
 
     @Override
     public void beginContact(Contact contact) {

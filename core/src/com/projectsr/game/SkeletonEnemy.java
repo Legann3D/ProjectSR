@@ -25,8 +25,8 @@ public class SkeletonEnemy extends Enemy {
      *
      * @param assetManager manages assets and loads assets used.
      */
-    public SkeletonEnemy(AssetManager assetManager, Vector2 enemySpawnPos, float health, World world) {
-        super(assetManager, enemySpawnPos, health, world);
+    public SkeletonEnemy(AssetManager assetManager, Vector2 enemySpawnPos, float health, World world, GameScreen gameScreen) {
+        super(assetManager, enemySpawnPos, health, world, gameScreen);
     }
 
     /**
@@ -159,6 +159,9 @@ public class SkeletonEnemy extends Enemy {
                 currentAnimation = deathAnimation;
 
                 if (currentAnimation.isAnimationFinished(stateTime)) {
+                    world.destroyBody(this.body); // Dispose of collision
+                    world.destroyBody(this.attackBody);
+                    spawnEssence();
                     enemyDeath(enemyIter);
                 }
                 break;
