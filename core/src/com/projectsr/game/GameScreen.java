@@ -33,6 +33,9 @@ public class GameScreen implements Screen {
     private AssetManager assetManager;
     private Box2DDebugRenderer debugRenderer;
 
+    //HUB
+    private Hub hub;
+
     // Level
     private World world;
     private TiledMap map;
@@ -69,6 +72,10 @@ public class GameScreen implements Screen {
         //Player
         playerCharacter = new Player();
 
+        //HUB
+        hub = new Hub();
+        hub.create();
+
         //Level
         map = new TmxMapLoader().load("Level Design/endless.tmx");
         tileSize = ((TiledMapTileLayer) map.getLayers().get(0)).getTileWidth();
@@ -92,6 +99,9 @@ public class GameScreen implements Screen {
         playerCharacter.update(delta, enemies);
         mapRenderer.setView(playerCharacter.camera);
         mapRenderer.render();
+
+
+
         /*
         BATCH BEGIN DRAW
          */
@@ -112,6 +122,9 @@ public class GameScreen implements Screen {
 
         world.step(1 / 30f, 6, 2);
         debugRenderer.render(world, playerCharacter.camera.combined);
+
+        //Render the Hub
+        hub.render();
     }
 
     public Vector2 calculateSpawnPosition() {
@@ -184,7 +197,6 @@ public class GameScreen implements Screen {
     public void removeEssence(Essence essence) {
         essences.remove(essence);
     }
-
     private void parseMap() {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
         for (int x = 0; x < layer.getWidth(); x++) {
@@ -237,6 +249,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height){
+
         viewport.update(width, height, true);
     }
 
