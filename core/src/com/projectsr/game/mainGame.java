@@ -33,8 +33,8 @@ public class mainGame extends Game implements ApplicationListener  {
 		menuScreen = new MenuScreen(this);
 
 		//Uncomment this code once the Main Menu class has been implemented
-		//setScreen(menuScreen);
-		setScreen(gameScreen);
+		setScreen(menuScreen);
+		//setScreen(gameScreen);
 	}
 
 	@Override
