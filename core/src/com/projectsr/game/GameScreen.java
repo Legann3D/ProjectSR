@@ -3,6 +3,7 @@ package com.projectsr.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -59,6 +60,9 @@ public class GameScreen implements Screen {
 
     private ArrayList<Essence> essences = new ArrayList<>();
 
+    // Audio
+    private Music gameMusic;
+
     public GameScreen(mainGame game, AssetManager assetManager) {
         this.assetManager = assetManager;
         this.world = new World(new Vector2(0, 0), true); // No gravity
@@ -67,6 +71,7 @@ public class GameScreen implements Screen {
     }
 
     public void create(){
+
         batch = new SpriteBatch();
 
         //Player
@@ -84,6 +89,11 @@ public class GameScreen implements Screen {
         gameCam = new OrthographicCamera();
         parseMap();
 
+        // Audio
+        gameMusic = assetManager.get("Music/The Pirate And The Dancer.mp3", Music.class);
+        gameMusic.play();
+        gameMusic.setVolume(1.0f);
+        gameMusic.setLooping(true);
     }
 
     public void update(float f){

@@ -185,7 +185,7 @@ public class SkeletonEnemy extends Enemy {
                     deathSoundPlayed = true;
                 }
 
-                if (currentAnimation.isAnimationFinished(f)) {
+                if (currentAnimation.isAnimationFinished(stateTime)) {
                     world.destroyBody(this.body); // Dispose of collision
                     world.destroyBody(this.attackBody);
                     spawnEssence();

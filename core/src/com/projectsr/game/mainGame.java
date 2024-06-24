@@ -1,11 +1,12 @@
 package com.projectsr.game;
 
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Game;
 
 public class mainGame extends Game implements ApplicationListener  {
 
@@ -32,10 +33,13 @@ public class mainGame extends Game implements ApplicationListener  {
 		assetManager.load("Essences/red_essence.png", Texture.class);
 		assetManager.load("Essences/green_essence.png", Texture.class);
 
+		assetManager.load("Music/The Pirate And The Dancer.mp3", Music.class);
+		assetManager.load("Music/Voxel Revolution.mp3", Music.class);
+
 		assetManager.finishLoading(); // Blocks until all assets are loaded
 
 		gameScreen = new GameScreen(this, assetManager);
-		menuScreen = new MenuScreen(this);
+		menuScreen = new MenuScreen(this, assetManager);
 
 		//Uncomment this code once the Main Menu class has been implemented
 		setScreen(menuScreen);
