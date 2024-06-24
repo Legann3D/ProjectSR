@@ -15,6 +15,7 @@ public class GameContactListener implements ContactListener {
     public static final short ESSENCE_CATEGORY = 0x0001;
 
     public static final short PLAYER_CATEGORY = 0x0006;
+    public static final short PLAYER_ATTACK_CATEGORY = 0x00010;
 
     public static final short MAP_CATEGORY = 0x0008;
 

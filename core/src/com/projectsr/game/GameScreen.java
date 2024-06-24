@@ -70,7 +70,7 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
 
         //Player
-        playerCharacter = new Player();
+        playerCharacter = new Player(world);
 
         //HUB
         hub = new Hub();
@@ -96,7 +96,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         update(delta);
 
-        playerCharacter.update(delta, enemies);
+        playerCharacter.update(delta, enemies, essences);
         mapRenderer.setView(playerCharacter.camera);
         mapRenderer.render();
 

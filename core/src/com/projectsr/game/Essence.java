@@ -21,7 +21,7 @@ public class Essence {
     private AssetManager assetManager;
     private Vector2 position;
     private Texture texture;
-    private Body body;
+    Body body;
     private World world;
 
     public Essence(AssetManager assetManager, Vector2 position, Type type, World world) {
@@ -56,6 +56,11 @@ public class Essence {
         this.type = type;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+
     public void createCollisionBody(World world) {
 
         // Initialise the collision body
@@ -77,6 +82,10 @@ public class Essence {
         shape.dispose();
 
         body.setUserData(this);
+    }
+
+    public Body getBody() {
+        return body;
     }
 
     public void dispose() {
