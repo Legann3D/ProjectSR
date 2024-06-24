@@ -1,6 +1,7 @@
 package com.projectsr.game;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,6 +20,9 @@ public class SkeletonEnemy extends Enemy {
     private TextureRegion[] attack2Frames;
     protected Animation<TextureRegion> attack1Animation;
     protected Animation<TextureRegion> attack2Animation;
+    private Sound attackSound;
+    private Sound takeDamageSound;
+    private Sound deathSound;
 
     /**
      * Initialises the enemy character, setting its initial position and movement speed.
@@ -40,6 +44,10 @@ public class SkeletonEnemy extends Enemy {
         Texture attack1Sheet = assetManager.get("Enemy/Skeleton/Attack.png", Texture.class);
         //Texture attack2Sheet = assetManager.get("Attack2.png", Texture.class);
         Texture deathSheet = assetManager.get("Enemy/Skeleton/Death.png", Texture.class);
+
+        attackSound = assetManager.get("EnemyAudio/skeletonAttack.wav", Sound.class);
+        takeDamageSound = assetManager.get("EnemyAudio/skeletonTakeHit.mp3", Sound.class);
+        deathSound = assetManager.get("EnemyAudio/skeletonDie.mp3", Sound.class);
 
         // Set up the walking frames
         walkFrames = new TextureRegion[4];
@@ -119,6 +127,7 @@ public class SkeletonEnemy extends Enemy {
                     // Set state to attacking
                     setState(STATE.ATTACKING);
                     stateTime = 0;
+                    attackSoundPlayed = false;
                 }
                 break;
             case ATTACKING:
@@ -126,6 +135,18 @@ public class SkeletonEnemy extends Enemy {
 
                 flipEnemy(player);
                 applyRepellingForce();
+
+                // Check if the sound has already played for this attack
+                if (!attackSoundPlayed) {
+                    attackSound.play();
+                    attackSoundPlayed = true;
+                }
+
+                // Reset attack sound boolean after the attack animation completes
+                if (currentAnimation.isAnimationFinished(stateTime)) {
+                    attackSoundPlayed = false;
+                    stateTime = 0;
+                }
 
                 // TODO: Double check collisions work as expected when player can take dmg
                 // TODO: Remove this stuff if it doesn't or becomes cumbersome
@@ -153,12 +174,18 @@ public class SkeletonEnemy extends Enemy {
                 if (distanceFrom(player) > 50) {
                     // Set state to chasing
                     setState(STATE.CHASING);
+
                 }
                 break;
             case DEATH:
                 currentAnimation = deathAnimation;
 
-                if (currentAnimation.isAnimationFinished(stateTime)) {
+                if (!deathSoundPlayed) {
+                    deathSound.play();
+                    deathSoundPlayed = true;
+                }
+
+                if (currentAnimation.isAnimationFinished(f)) {
                     world.destroyBody(this.body); // Dispose of collision
                     world.destroyBody(this.attackBody);
                     spawnEssence();
@@ -204,6 +231,15 @@ public class SkeletonEnemy extends Enemy {
                     System.out.println("Repelling force applied between enemies");
                 }
             }
+        }
+    }
+
+    @Override
+    public void takeDamage(float damage) {
+        if (this.currentState != STATE.DEATH && !takeDamageSoundPlayed) {
+            health -= damage;
+            takeDamageSound.play();
+            takeDamageSoundPlayed = true;
         }
     }
 }

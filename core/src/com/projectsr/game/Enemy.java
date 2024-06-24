@@ -32,6 +32,11 @@ public abstract class Enemy {
     protected AssetManager assetManager;
     protected World world;
 
+    // Audio
+    protected boolean attackSoundPlayed = false;
+    protected boolean deathSoundPlayed = false;
+    protected boolean takeDamageSoundPlayed = false;
+
     // Animations
     protected Animation<TextureRegion> walkAnimation;
     protected Animation<TextureRegion> deathAnimation;
@@ -224,6 +229,10 @@ public abstract class Enemy {
 
     public float getHealth() {
         return health;
+    }
+
+    public void setTakeDamageSoundPlayed(boolean value) {
+        takeDamageSoundPlayed = value;
     }
 
     public void takeDamage(float damage) {

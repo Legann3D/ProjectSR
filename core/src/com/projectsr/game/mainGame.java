@@ -1,6 +1,7 @@
 package com.projectsr.game;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.ApplicationListener;
@@ -22,6 +23,10 @@ public class mainGame extends Game implements ApplicationListener  {
 		assetManager.load("Enemy/Skeleton/Attack.png", Texture.class);
 		//assetManager.load("Attack2.png", Texture.class);
 		assetManager.load("Enemy/Skeleton/Death.png", Texture.class);
+
+		assetManager.load("EnemyAudio/skeletonAttack.wav", Sound.class);
+		assetManager.load("EnemyAudio/skeletonDie.mp3", Sound.class);
+		assetManager.load("EnemyAudio/skeletonTakeHit.mp3", Sound.class);
 
 		// Essences
 		assetManager.load("Essences/red_essence.png", Texture.class);

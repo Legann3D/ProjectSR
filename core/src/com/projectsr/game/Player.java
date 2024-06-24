@@ -114,6 +114,10 @@ public class Player {
         this.frame += 20 * deltaTime;
         if (this.frame >= frameCounts[currentState.ordinal()]) {
             this.frame = 0;
+
+            if (nearestEnemy != null) {
+                nearestEnemy.setTakeDamageSoundPlayed(false);
+            }
         }
 
         // update camera position
