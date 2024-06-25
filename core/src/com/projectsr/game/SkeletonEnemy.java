@@ -174,7 +174,6 @@ public class SkeletonEnemy extends Enemy {
                 if (distanceFrom(player) > 50) {
                     // Set state to chasing
                     setState(STATE.CHASING);
-
                 }
                 break;
             case DEATH:
@@ -183,6 +182,7 @@ public class SkeletonEnemy extends Enemy {
                 if (!deathSoundPlayed) {
                     deathSound.play();
                     deathSoundPlayed = true;
+                    isDead = true;
                 }
 
                 if (currentAnimation.isAnimationFinished(stateTime)) {

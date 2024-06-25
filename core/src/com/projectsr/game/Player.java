@@ -43,6 +43,8 @@ public class Player {
 
     private int maxHeart = 3;
     private int currentHeart;
+    private int defenceValue = 2; // Default 2 to lose life
+    private int maxDefence = 2;
     private boolean isDead = false;
     private int attackBaseDamage = 10;
     private int damageModifier = 0;
@@ -407,12 +409,13 @@ public class Player {
 
 
     public void attack(Enemy enemy){
+
         if (!isBerserk) {
             currentState = State.ATTACKING;
         }
         enemy.takeDamage(attackBaseDamage + damageModifier);
 
-        if (enemy.getCurrentState().equals("DEATH")){
+        if (enemy.isDead()) {
             enemiesKilled++;
             //  increment the count of enemies attacked in time frame
             enemiesAttackedInTimeFrame++;
@@ -446,18 +449,21 @@ public class Player {
                 Fixture fixtureA = contact.getFixtureA();
                 Fixture fixtureB = contact.getFixtureB();
 
-                // Check if the contact is between an enemy and player attack fixture
+                // Check if the contact is between an enemy attack and player fixture
                 if (GameContactListener.isEnemyAttackFixture(fixtureA) && GameContactListener.isPlayerFixture(fixtureB) ||
                         GameContactListener.isPlayerFixture(fixtureA) && GameContactListener.isEnemyAttackFixture(fixtureB)) {
 
                     // Player takes damage
                     collisionDamageWithEnemy();
                 }
-                else if (GameContactListener.isEnemyFixture(fixtureA) && GameContactListener.isPlayerAttackFixture(fixtureB) ||
+                // Check if the contact is  between enemy and player attack fixture
+                if (GameContactListener.isEnemyFixture(fixtureA) && GameContactListener.isPlayerAttackFixture(fixtureB) ||
                         GameContactListener.isPlayerAttackFixture(fixtureA) && GameContactListener.isEnemyFixture(fixtureB)) {
 
+                    System.out.print("Yes, they are colliding here");
+
                     // Get the enemy fixture
-                    Body enemyBody = fixtureA.getBody();
+                    Body enemyBody = fixtureB.getBody();
 
                     // Get the enemy
                     Enemy enemy = (Enemy) enemyBody.getUserData();
@@ -481,10 +487,20 @@ public class Player {
 
     public void collisionDamageWithEnemy() {
 
-        takeDamage(1);
+        // Check if the player no longer has any defence
+        if (defenceValue <= 0) {
+            takeDamage(1);
+            defenceValue = maxDefence;
+        }
+        else {
+            // Just remove a defence
+            defenceValue--;
+        }
+
     }
 
     private void checkAndApplyDamageModifier() {
+
         if (enemiesAttackedInTimeFrame >= attackThreshold) {
             damageModifier += 10;
             currentState = State.BERSERK;
