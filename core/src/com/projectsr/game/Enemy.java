@@ -125,6 +125,7 @@ public abstract class Enemy {
         attackFixtureDef.friction = 0.3f;
         attackFixtureDef.filter.categoryBits = GameContactListener.ENEMY_ATTACK_CATEGORY;
         attackFixtureDef.filter.maskBits = GameContactListener.ENEMY_ATTACK_CATEGORY; // Ensure proper collision detection
+        attackFixtureDef.isSensor = true;
 
         attackBody.createFixture(attackFixtureDef);
         attackShape.dispose();

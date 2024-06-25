@@ -41,6 +41,7 @@ public class Player {
 
     private int maxHeart = 3;
     private int currentHeart;
+    private boolean isDead = false;
     private int attackBaseDamage = 10;
     private int damageModifier = 0;
 
@@ -155,6 +156,7 @@ public class Player {
         fixtureDef.friction = 0.3f;
         fixtureDef.filter.categoryBits = GameContactListener.PLAYER_CATEGORY;
         fixtureDef.filter.maskBits = GameContactListener.ENEMY_CATEGORY | GameContactListener.ENEMY_ATTACK_CATEGORY | GameContactListener.ESSENCE_CATEGORY;
+        fixtureDef.isSensor = true;
 
         body.createFixture(fixtureDef);
         shape.dispose();
@@ -187,6 +189,7 @@ public class Player {
     }
 
     public void update(float deltaTime, List<Enemy> enemies, List<Essence> essences) {
+
         controls();
         position.set(body.getPosition().x - width / 2, body.getPosition().y - height / 2);
         body.setLinearVelocity(velocity);
@@ -236,7 +239,6 @@ public class Player {
         // update camera position
         camera.position.set(position.x + width / 2, position.y + height / 2, 0);
         camera.update();
-
     }
 
     public void controls() {
@@ -308,7 +310,15 @@ public class Player {
             frameTexture.flip(true, false);
         }
 
-        batch.draw(frameTexture, position.x, position.y, width, height);
+        if (currentState == State.DEATH) {
+            // Check if the current frame is the last one
+            if ((int)this.frame >= animations[State.DEATH.ordinal()].length - 1) {
+                isDead = true;
+            }
+        }
+        else {
+            batch.draw(frameTexture, position.x, position.y, width, height);
+        }
     }
 
     // This section tracks the health for the player
@@ -318,18 +328,23 @@ public class Player {
             currentHeart = 0;
             currentState = State.DEATH;
         }
-        currentState = State.HURT;
+        else {
+            currentState = State.HURT;
+        }
     }
+
     public void heal(int amount){
         currentHeart += amount;
         if (currentHeart > maxHeart) {
             currentHeart = maxHeart;
         }
     }
+
     public void addMaxHeart(int amount){
         maxHeart += amount;
 
     }
+
     public void removerMaxHeart(int amount){
         maxHeart -= amount;
         if (maxHeart <= 0){
@@ -337,15 +352,16 @@ public class Player {
             currentState = State.DEATH;
         }
     }
+
     public int getCurrentHeart() {
         return currentHeart;
     }
+
     public int getMaxHeart() {
         return  maxHeart;
     }
 
     // This section keeps track of the players essence
-
     public void addEssence(int amount, Essence.Type essenceType) {
         switch (essenceType) {
             case RED:
@@ -421,7 +437,7 @@ public class Player {
         for (Enemy enemy : enemies) {
 
             // check if the player's body is colliding with the enemy's attackbody
-            if (body.getFixtureList().first().testPoint(enemy.attackBody.getPosition())) {
+            if (body.getFixtureList().first().testPoint(enemy.attackBody.getPosition()) && enemy.getCurrentState() == "ATTACKING") {
                 collisionDamageWithEnemy(enemy);
             }
 
@@ -471,4 +487,7 @@ public class Player {
         }
     }
 
+    public boolean isDead() {
+        return isDead;
+    }
 }

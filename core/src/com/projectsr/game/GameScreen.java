@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
     private float timeSinceEnemyWave = 10;
     private int enemySpawnCount = 5;
     private float spawnDistance = 500;
-    private float enemyHealth = 50;
+    private float enemyHealth = 20;
 
     private ArrayList<Essence> essences = new ArrayList<>();
 
@@ -110,22 +110,25 @@ public class GameScreen implements Screen {
         mapRenderer.setView(playerCharacter.camera);
         mapRenderer.render();
 
-
-
         /*
         BATCH BEGIN DRAW
          */
         batch.begin();
-        playerCharacter.render(batch);
 
-        // Loop through each enemy and render it
-        for (Enemy enemy : enemies) {
-            enemy.render(batch);
-        }
+        // Check if the player is still alive
+        if (!playerCharacter.isDead()) {
 
-        // Loop through each essence and render it
-        for (Essence essence : essences) {
-            essence.render(batch);
+            playerCharacter.render(batch);
+
+            // Loop through each enemy and render it
+            for (Enemy enemy : enemies) {
+                enemy.render(batch);
+            }
+
+            // Loop through each essence and render it
+            for (Essence essence : essences) {
+                essence.render(batch);
+            }
         }
 
         batch.end();
