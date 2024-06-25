@@ -224,7 +224,6 @@ public class Player {
 
         attackBody.setTransform(attackBodyX, attackBodyY, 0);
 
-
         // checking for collision with the enemy
         checkCollision(enemies, essences);
 
@@ -232,10 +231,6 @@ public class Player {
         this.frame += 20 * deltaTime;
         if (this.frame >= frameCounts[currentState.ordinal()]) {
             this.frame = 0;
-
-            if (nearestEnemy != null) {
-                nearestEnemy.setTakeDamageSoundPlayed(false);
-            }
         }
 
         // update camera position
@@ -409,9 +404,8 @@ public class Player {
 
         // check if threshold is met for applying the damage modifier
         checkAndApplyDamageModifier();
-
-
     }
+
     public void setDamageModifier(int amount) {
         this.damageModifier = amount;
     }
@@ -426,14 +420,15 @@ public class Player {
     public void checkCollision(List<Enemy> enemies, List<Essence> essences) {
         for (Enemy enemy : enemies) {
 
-            // check if the player's body is is colliding with the enemy's attackbody
-            if (body.getFixtureList().first().testPoint(enemy.attackBody.getPosition())){
+            // check if the player's body is colliding with the enemy's attackbody
+            if (body.getFixtureList().first().testPoint(enemy.attackBody.getPosition())) {
                 collisionDamageWithEnemy(enemy);
             }
 
             // check if the player attack body is colliding with the enemy body
             if (attackBody.getFixtureList().first().testPoint(enemy.body.getPosition())) {
                 attack(enemy);
+                enemy.setTakeDamageSoundPlayed(true);
             }
         }
 
@@ -446,8 +441,8 @@ public class Player {
             }
 
         }
-
     }
+
     public void collisionDamageWithEnemy(Enemy enemy){
         takeDamage(1);
     }
@@ -467,7 +462,6 @@ public class Player {
             elapsedTime = 0.0f;
         }
     }
-
 
     public void dispose(){
         for (TextureRegion[] animation : animations) {
