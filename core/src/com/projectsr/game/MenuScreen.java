@@ -36,13 +36,13 @@ public class MenuScreen implements Screen {
     }
 
     public void create() {
-        stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
-
         menuMusic = assetManager.get("Music/Voxel Revolution.mp3", Music.class);
         menuMusic.play();
         menuMusic.setVolume(1.0f);
         menuMusic.setLooping(true);
+
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
 
         background = new Texture("Ui/Buttons/main_menu_background.png");
         // Create and add background image
@@ -136,7 +136,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
-
         Gdx.input.setInputProcessor(null);
     }
 }

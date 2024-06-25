@@ -278,6 +278,8 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void hide() { }
+    public void hide() {
+        gameMusic.stop();
+    }
 
 }
