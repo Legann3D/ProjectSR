@@ -31,6 +31,7 @@ public class SettingsScreen implements Screen {
     private Sound buttonPressSound;
     private Texture bgTexture, sliderLine, sliderKnob;
     private Button backButton;
+    private float volume;
 
     public SettingsScreen(mainGame game, Music music, AssetManager assetManager) {
 
@@ -75,7 +76,9 @@ public class SettingsScreen implements Screen {
         volumeSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                music.setVolume(volumeSlider.getValue());
+                volume = volumeSlider.getValue();
+                music.setVolume(volume);
+                Settings.setVolume(volume);
             }
         });
 
@@ -103,7 +106,6 @@ public class SettingsScreen implements Screen {
             public void clicked (InputEvent event, float x, float y) {
                 buttonPressSound.play();
                 game.setScreen(mainGame.menuScreen);
-                music.setVolume(volumeSlider.getValue());
             }
         });
     }

@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class GameScreen implements Screen {
-    mainGame  game;
+    private mainGame  game;
     SpriteBatch batch;
     private AssetManager assetManager;
     private Box2DDebugRenderer debugRenderer;
@@ -64,13 +64,15 @@ public class GameScreen implements Screen {
     private Music gameMusic;
 
     public GameScreen(mainGame game, AssetManager assetManager) {
+        this.game = game;
         this.assetManager = assetManager;
         this.world = new World(new Vector2(0, 0), true); // No gravity
         this.debugRenderer = new Box2DDebugRenderer();
         world.setContactListener(new GameContactListener()); // Collision
+
     }
 
-    public void create(){
+    public void create() {
 
         batch = new SpriteBatch();
 
@@ -92,7 +94,7 @@ public class GameScreen implements Screen {
         // Audio
         gameMusic = assetManager.get("Music/The Pirate And The Dancer.mp3", Music.class);
         gameMusic.play();
-        gameMusic.setVolume(1.0f);
+        gameMusic.setVolume(Settings.getVolume());
         gameMusic.setLooping(true);
     }
 

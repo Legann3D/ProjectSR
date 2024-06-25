@@ -42,7 +42,7 @@ public class MenuScreen implements Screen {
 
         menuMusic = assetManager.get("Music/Voxel Revolution.mp3", Music.class);
         menuMusic.play();
-        menuMusic.setVolume(1.0f);
+        menuMusic.setVolume(Settings.getVolume());
         menuMusic.setLooping(true);
 
         buttonPressSound = assetManager.get("Audio/MiscAudio/buttonPress.wav", Sound.class);
@@ -93,7 +93,6 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked (InputEvent event, float x, float y) {
                 buttonPressSound.play();
-                game.setScreen(mainGame.gameScreen);
                 menuMusic.stop();
                 game.setScreen(mainGame.craftingScreen);
             }
