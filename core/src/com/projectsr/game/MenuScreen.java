@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -24,6 +25,7 @@ public class MenuScreen implements Screen {
     private final int SCREEN_WIDTH = 1920;
     private final int SCREEN_HEIGHT = 1080;
     private Music menuMusic;
+    private Sound buttonPressSound;
     private Texture background;
     private ImageButton startButton, settingsButton, quitButton;
 
@@ -36,10 +38,14 @@ public class MenuScreen implements Screen {
     }
 
     public void create() {
+
         menuMusic = assetManager.get("Music/Voxel Revolution.mp3", Music.class);
         menuMusic.play();
         menuMusic.setVolume(1.0f);
         menuMusic.setLooping(true);
+
+        buttonPressSound = assetManager.get("Audio/MiscAudio/buttonPress.wav", Sound.class);
+        buttonPressSound.setVolume(12345, 100.0f);
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -83,6 +89,7 @@ public class MenuScreen implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
+                buttonPressSound.play();
                 game.setScreen(mainGame.gameScreen);
                 menuMusic.stop();
                 game.setScreen(mainGame.craftingScreen);
@@ -93,12 +100,14 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked (InputEvent event, float x, float y) {
                 // Button clicked code here
+                buttonPressSound.play();
             }
         });
 
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
+                buttonPressSound.play();
                 Gdx.app.exit();
                 System.exit(-1);
             }

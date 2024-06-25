@@ -26,22 +26,26 @@ public class mainGame extends Game implements ApplicationListener  {
 		//assetManager.load("Attack2.png", Texture.class);
 		assetManager.load("Enemy/Skeleton/Death.png", Texture.class);
 
-		assetManager.load("EnemyAudio/skeletonAttack.wav", Sound.class);
-		assetManager.load("EnemyAudio/skeletonDie.mp3", Sound.class);
-		assetManager.load("EnemyAudio/skeletonTakeHit.mp3", Sound.class);
+		assetManager.load("Audio/EnemyAudio/skeletonAttack.wav", Sound.class);
+		assetManager.load("Audio/EnemyAudio/skeletonDie.mp3", Sound.class);
+		assetManager.load("Audio/EnemyAudio/skeletonTakeHit.mp3", Sound.class);
 
 		// Essences
 		assetManager.load("Essences/red_essence.png", Texture.class);
 		assetManager.load("Essences/green_essence.png", Texture.class);
 
+		// Music
 		assetManager.load("Music/The Pirate And The Dancer.mp3", Music.class);
 		assetManager.load("Music/Voxel Revolution.mp3", Music.class);
+
+		// UI
+		assetManager.load("Audio/MiscAudio/buttonPress.wav", Sound.class);
 
 		assetManager.finishLoading(); // Blocks until all assets are loaded
 
 		gameScreen = new GameScreen(this, assetManager);
 		menuScreen = new MenuScreen(this, assetManager);
-		craftingScreen = new CraftingScreen(this);
+		craftingScreen = new CraftingScreen(this, assetManager);
 
 		//Uncomment this code once the Main Menu class has been implemented
 		setScreen(menuScreen);

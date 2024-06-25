@@ -45,9 +45,9 @@ public class SkeletonEnemy extends Enemy {
         //Texture attack2Sheet = assetManager.get("Attack2.png", Texture.class);
         Texture deathSheet = assetManager.get("Enemy/Skeleton/Death.png", Texture.class);
 
-        attackSound = assetManager.get("EnemyAudio/skeletonAttack.wav", Sound.class);
-        takeDamageSound = assetManager.get("EnemyAudio/skeletonTakeHit.mp3", Sound.class);
-        deathSound = assetManager.get("EnemyAudio/skeletonDie.mp3", Sound.class);
+        attackSound = assetManager.get("Audio/EnemyAudio/skeletonAttack.wav", Sound.class);
+        takeDamageSound = assetManager.get("Audio/EnemyAudio/skeletonTakeHit.mp3", Sound.class);
+        deathSound = assetManager.get("Audio/EnemyAudio/skeletonDie.mp3", Sound.class);
 
         // Set up the walking frames
         walkFrames = new TextureRegion[4];
