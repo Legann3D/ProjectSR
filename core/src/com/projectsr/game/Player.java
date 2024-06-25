@@ -67,6 +67,9 @@ public class Player {
     private float berserkDuration = 10.0f;
     private float berserkTimer = 0.0f;
 
+    private boolean hasAttackMedallion = false;
+    private boolean hasDefenceMedallion = false;
+    private boolean hasBerserkMedallion = false;
 
     public Player(World world) {
 
@@ -526,5 +529,31 @@ public class Player {
 
     public boolean isDead() {
         return isDead;
+    }
+
+    public void setDefenceValue(int newValue) {
+        this.defenceValue = newValue;
+    }
+
+    public void craftAttackMedallion() {
+        if (getEssences(Essence.Type.RED) >= 50) {
+            setDamageModifier(10);
+            removeEssence(50, Essence.Type.RED);
+            hasAttackMedallion = true;
+        }
+    }
+
+    public void craftDefenceMedallion() {
+        if (getEssences(Essence.Type.GREEN) >= 50) {
+            setDefenceValue(5);
+            removeEssence(50, Essence.Type.GREEN);
+            hasDefenceMedallion = true;
+        }
+    }
+
+    public void craftBerserkMedallion() {
+        if (hasAttackMedallion && hasDefenceMedallion) {
+            hasBerserkMedallion = true;
+        }
     }
 }
