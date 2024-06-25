@@ -13,6 +13,7 @@ public class mainGame extends Game implements ApplicationListener  {
 	private AssetManager assetManager;
 	public static GameScreen gameScreen;
 	public static MenuScreen menuScreen;
+	public static CraftingScreen craftingScreen;
 
 	@Override
 	public void create () {
@@ -39,7 +40,12 @@ public class mainGame extends Game implements ApplicationListener  {
 		assetManager.finishLoading(); // Blocks until all assets are loaded
 
 		gameScreen = new GameScreen(this, assetManager);
+<<<<<<< Updated upstream
 		menuScreen = new MenuScreen(this, assetManager);
+=======
+		menuScreen = new MenuScreen(this);
+		craftingScreen = new CraftingScreen(this);
+>>>>>>> Stashed changes
 
 		//Uncomment this code once the Main Menu class has been implemented
 		setScreen(menuScreen);

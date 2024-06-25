@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.Scaling;
 public class Hub {
     private Stage stage;
     private Table table;
-    private Skin skin;
     private ImageButton menuButton;
     private Image topMiddleImage, life1, life2, life3, bottomMiddleImage;
 
