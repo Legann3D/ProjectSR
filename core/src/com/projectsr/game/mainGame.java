@@ -39,6 +39,10 @@ public class mainGame extends Game implements ApplicationListener  {
 		assetManager.load("Music/Voxel Revolution.mp3", Music.class);
 
 		// UI
+		assetManager.load("Ui/Buttons/t1.png", Texture.class);
+		assetManager.load("Ui/Buttons/slider_line.png", Texture.class);
+		assetManager.load("Ui/Buttons/blank_icon.png", Texture.class);
+
 		assetManager.load("Audio/MiscAudio/buttonPress.wav", Sound.class);
 
 		assetManager.finishLoading(); // Blocks until all assets are loaded

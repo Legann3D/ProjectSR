@@ -28,6 +28,7 @@ public class MenuScreen implements Screen {
     private Sound buttonPressSound;
     private Texture background;
     private ImageButton startButton, settingsButton, quitButton;
+    public static SettingsScreen settingsScreen;
 
     public MenuScreen(mainGame game, AssetManager assetManager) {
         this.game = game;
@@ -46,6 +47,8 @@ public class MenuScreen implements Screen {
 
         buttonPressSound = assetManager.get("Audio/MiscAudio/buttonPress.wav", Sound.class);
         buttonPressSound.setVolume(12345, 100.0f);
+
+        settingsScreen = new SettingsScreen(game, menuMusic, assetManager);
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -101,6 +104,7 @@ public class MenuScreen implements Screen {
             public void clicked (InputEvent event, float x, float y) {
                 // Button clicked code here
                 buttonPressSound.play();
+                game.setScreen(settingsScreen);
             }
         });
 
