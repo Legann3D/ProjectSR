@@ -66,6 +66,7 @@ public class Player {
     private boolean isBerserk = false;
     private float berserkDuration = 10.0f;
     private float berserkTimer = 0.0f;
+    private boolean hasDealtDamage = false;
 
     private boolean hasAttackMedallion = false;
     private boolean hasDefenceMedallion = false;
@@ -243,6 +244,11 @@ public class Player {
             this.frame = 0;
         }
 
+        // Reset the hasDealtDamage flag when the attack animation is complete
+        if ((int)this.frame >= animations[State.ATTACKING.ordinal()].length - 1 || currentState != State.ATTACKING) {
+            hasDealtDamage = false;
+        }
+
         // update camera position
         camera.position.set(position.x + width / 2, position.y + height / 2, 0);
         camera.update();
@@ -416,9 +422,15 @@ public class Player {
         if (!isBerserk) {
             currentState = State.ATTACKING;
         }
-        enemy.takeDamage(attackBaseDamage + damageModifier);
 
-        if (enemy.isDead()) {
+        // Only damage enemy once per swing
+        if (!hasDealtDamage && (int)this.frame <= animations[State.ATTACKING.ordinal()].length) {
+            enemy.takeDamage(attackBaseDamage + damageModifier);
+            hasDealtDamage = true;
+        }
+
+        // Check if enemy is in death state but not already dead
+        if (enemy.getCurrentState().equals("DEATH") && !enemy.isDead()) {
             enemiesKilled++;
             //  increment the count of enemies attacked in time frame
             enemiesAttackedInTimeFrame++;
@@ -462,8 +474,6 @@ public class Player {
                 // Check if the contact is  between enemy and player attack fixture
                 if (GameContactListener.isEnemyFixture(fixtureA) && GameContactListener.isPlayerAttackFixture(fixtureB) ||
                         GameContactListener.isPlayerAttackFixture(fixtureA) && GameContactListener.isEnemyFixture(fixtureB)) {
-
-                    System.out.print("Yes, they are colliding here");
 
                     // Get the enemy fixture
                     Body enemyBody = fixtureB.getBody();

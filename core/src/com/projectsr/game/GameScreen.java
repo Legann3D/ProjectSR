@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
     private float timeSinceEnemyWave = 10;
     private int enemySpawnCount = 5;
     private float spawnDistance = 500;
-    private float enemyHealth = 20;
+    private float enemyHealth = 30;
 
     private ArrayList<Essence> essences = new ArrayList<>();
 
