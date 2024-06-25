@@ -236,10 +236,14 @@ public class SkeletonEnemy extends Enemy {
 
     @Override
     public void takeDamage(float damage) {
-        if (this.currentState != STATE.DEATH && !takeDamageSoundPlayed) {
+        if (this.currentState != STATE.DEATH) {
+
             health -= damage;
             takeDamageSound.play();
-            takeDamageSoundPlayed = true;
+
+            if (!takeDamageSoundPlayed) {
+                takeDamageSoundPlayed = true;
+            }
         }
     }
 }

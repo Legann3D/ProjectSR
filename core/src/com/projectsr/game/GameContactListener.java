@@ -56,9 +56,20 @@ public class GameContactListener implements ContactListener {
      * @param fixture The fixture that is being checked for collision.
      * @return The fixture category.
      */
-    // TODO: Convert to generic method if planning to use for player
     public static boolean isEnemyFixture(Fixture fixture) {
-        return fixture.getFilterData().categoryBits == ENEMY_CATEGORY; // TODO: Create getter in Enemy class
+        return fixture.getFilterData().categoryBits == ENEMY_CATEGORY;
+    }
+
+    public static boolean isPlayerAttackFixture(Fixture fixture) {
+        return fixture.getFilterData().categoryBits == PLAYER_ATTACK_CATEGORY;
+    }
+
+    public static boolean isPlayerFixture(Fixture fixture) {
+        return fixture.getFilterData().categoryBits == PLAYER_CATEGORY;
+    }
+
+    public static boolean isEnemyAttackFixture(Fixture fixture) {
+        return fixture.getFilterData().categoryBits == ENEMY_ATTACK_CATEGORY;
     }
 }
 

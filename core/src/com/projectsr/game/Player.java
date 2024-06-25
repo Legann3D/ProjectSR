@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -188,7 +190,7 @@ public class Player {
 
     }
 
-    public void update(float deltaTime, List<Enemy> enemies, List<Essence> essences) {
+    public void update(float deltaTime, List<Essence> essences) {
 
         controls();
         position.set(body.getPosition().x - width / 2, body.getPosition().y - height / 2);
@@ -228,7 +230,7 @@ public class Player {
         attackBody.setTransform(attackBodyX, attackBodyY, 0);
 
         // checking for collision with the enemy
-        checkCollision(enemies, essences);
+        checkCollision(essences);
 
         // update animation frame
         this.frame += 20 * deltaTime;
@@ -433,18 +435,37 @@ public class Player {
         return enemiesKilled;
     }
 
-    public void checkCollision(List<Enemy> enemies, List<Essence> essences) {
-        for (Enemy enemy : enemies) {
+    public void checkCollision(List<Essence> essences) {
 
-            // check if the player's body is colliding with the enemy's attackbody
-            if (body.getFixtureList().first().testPoint(enemy.attackBody.getPosition()) && enemy.getCurrentState() == "ATTACKING") {
-                collisionDamageWithEnemy(enemy);
-            }
+        // Get the objects colliding in the world
+        for (Contact contact : world.getContactList()) {
 
-            // check if the player attack body is colliding with the enemy body
-            if (attackBody.getFixtureList().first().testPoint(enemy.body.getPosition())) {
-                attack(enemy);
-                enemy.setTakeDamageSoundPlayed(true);
+            // Check if the contacted objects are touching
+            if (contact.isTouching()) {
+
+                Fixture fixtureA = contact.getFixtureA();
+                Fixture fixtureB = contact.getFixtureB();
+
+                // Check if the contact is between an enemy and player attack fixture
+                if (GameContactListener.isEnemyAttackFixture(fixtureA) && GameContactListener.isPlayerFixture(fixtureB) ||
+                        GameContactListener.isPlayerFixture(fixtureA) && GameContactListener.isEnemyAttackFixture(fixtureB)) {
+
+                    // Player takes damage
+                    collisionDamageWithEnemy();
+                }
+                else if (GameContactListener.isEnemyFixture(fixtureA) && GameContactListener.isPlayerAttackFixture(fixtureB) ||
+                        GameContactListener.isPlayerAttackFixture(fixtureA) && GameContactListener.isEnemyFixture(fixtureB)) {
+
+                    // Get the enemy fixture
+                    Body enemyBody = fixtureA.getBody();
+
+                    // Get the enemy
+                    Enemy enemy = (Enemy) enemyBody.getUserData();
+
+                    // Attack the enemy collided with
+                    attack(enemy);
+                    enemy.setTakeDamageSoundPlayed(true);
+                }
             }
         }
 
@@ -452,14 +473,14 @@ public class Player {
         for (Essence essence : essences){
             if (body.getFixtureList().first().testPoint(essence.body.getPosition())){
                 addEssence(1, essence.getType());
-                // game crashes here
+                // TODO: game crashes here - fix
                 //world.destroyBody(essence.getBody());
             }
-
         }
     }
 
-    public void collisionDamageWithEnemy(Enemy enemy){
+    public void collisionDamageWithEnemy() {
+
         takeDamage(1);
     }
 
