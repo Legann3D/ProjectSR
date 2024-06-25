@@ -21,17 +21,11 @@ public class MenuScreen implements Screen {
     private AssetManager assetManager;
     private Stage stage;
     private Viewport viewport;
-<<<<<<< Updated upstream
-    private Texture startButton;
     private final int SCREEN_WIDTH = 1080;
     private final int SCREEN_HEIGHT = 1920;
     private Music menuMusic;
-=======
     private Texture background;
     private ImageButton startButton, settingsButton, quitButton;
-    private final int SCREEN_WIDTH = 1920;
-    private final int SCREEN_HEIGHT = 1080;
->>>>>>> Stashed changes
 
     public MenuScreen(mainGame game, AssetManager assetManager) {
         this.game = game;
@@ -45,21 +39,15 @@ public class MenuScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-<<<<<<< Updated upstream
         menuMusic = assetManager.get("Music/Voxel Revolution.mp3", Music.class);
         menuMusic.play();
         menuMusic.setVolume(1.0f);
         menuMusic.setLooping(true);
 
-        // TODO: Change texture, and use asset manager
-        startButton = new Texture("badlogic.jpg");
-=======
         background = new Texture("Ui/Buttons/main_menu_background.png");
         // Create and add background image
         Image backgroundImage = new Image(background);
         backgroundImage.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
->>>>>>> Stashed changes
-
 
         // Start Button
         Texture sb = new Texture(Gdx.files.internal("Ui/Buttons/play_button_main_menu.png"));
@@ -95,12 +83,9 @@ public class MenuScreen implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
-<<<<<<< Updated upstream
                 game.setScreen(mainGame.gameScreen);
                 menuMusic.stop();
-=======
                 game.setScreen(mainGame.craftingScreen);
->>>>>>> Stashed changes
             }
         });
 
