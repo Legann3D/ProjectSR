@@ -210,6 +210,7 @@ public class GameScreen implements Screen {
     public void removeEssence(Essence essence) {
         essences.remove(essence);
     }
+
     private void parseMap() {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
         for (int x = 0; x < layer.getWidth(); x++) {

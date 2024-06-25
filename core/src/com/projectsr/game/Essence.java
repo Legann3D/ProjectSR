@@ -76,7 +76,7 @@ public class Essence {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = GameContactListener.ESSENCE_CATEGORY;
-        fixtureDef.filter.maskBits = GameContactListener.ESSENCE_CATEGORY; // Ensure proper collision detection
+        fixtureDef.filter.maskBits = GameContactListener.PLAYER_CATEGORY; // Ensure proper collision detection
 
         body.createFixture(fixtureDef);
         shape.dispose();

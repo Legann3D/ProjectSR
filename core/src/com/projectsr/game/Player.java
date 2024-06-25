@@ -1,5 +1,7 @@
 package com.projectsr.game;
 
+import static com.projectsr.game.mainGame.gameScreen;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,7 +16,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class Player {
     Vector2 position;
@@ -196,7 +198,7 @@ public class Player {
 
     }
 
-    public void update(float deltaTime, List<Essence> essences) {
+    public void update(float deltaTime, ArrayList<Essence> essences) {
 
         controls();
         position.set(body.getPosition().x - width / 2, body.getPosition().y - height / 2);
@@ -453,7 +455,7 @@ public class Player {
         return enemiesKilled;
     }
 
-    public void checkCollision(List<Essence> essences) {
+    public void checkCollision(ArrayList<Essence> essences) {
 
         // Get the objects colliding in the world
         for (Contact contact : world.getContactList()) {
@@ -476,7 +478,7 @@ public class Player {
                         GameContactListener.isPlayerAttackFixture(fixtureA) && GameContactListener.isEnemyFixture(fixtureB)) {
 
                     // Get the enemy fixture
-                    Body enemyBody = fixtureB.getBody();
+                    Body enemyBody = fixtureB.getBody(); // Assumed B
 
                     // Get the enemy
                     Enemy enemy = (Enemy) enemyBody.getUserData();
@@ -485,16 +487,29 @@ public class Player {
                     attack(enemy);
                     enemy.setTakeDamageSoundPlayed(true);
                 }
+                collectEssence(fixtureA, fixtureB);
             }
         }
 
-        // check if the player collides with essence
-        for (Essence essence : essences){
-            if (body.getFixtureList().first().testPoint(essence.body.getPosition())){
-                addEssence(1, essence.getType());
-                // TODO: game crashes here - fix
-                //world.destroyBody(essence.getBody());
-            }
+    }
+
+    public void collectEssence(Fixture fixtureA, Fixture fixtureB) {
+
+        // Check if the contacts are the player and essence fixtures
+        if (GameContactListener.isPlayerFixture(fixtureA) && GameContactListener.isEssenceFixture(fixtureB) ||
+                GameContactListener.isEssenceFixture(fixtureA) && GameContactListener.isPlayerFixture(fixtureB)) {
+
+            // Get the enemy fixture
+            Body essenceBody = fixtureB.getBody(); // Assumed B
+
+            // Get the enemy
+            Essence essence = (Essence) essenceBody.getUserData();
+
+            addEssence(1, essence.getType());
+
+            // Delete the essence from the game
+            world.destroyBody(essence.body);
+            gameScreen.removeEssence(essence);
         }
     }
 
