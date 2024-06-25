@@ -21,8 +21,8 @@ public class MenuScreen implements Screen {
     private AssetManager assetManager;
     private Stage stage;
     private Viewport viewport;
-    private final int SCREEN_WIDTH = 1080;
-    private final int SCREEN_HEIGHT = 1920;
+    private final int SCREEN_WIDTH = 1920;
+    private final int SCREEN_HEIGHT = 1080;
     private Music menuMusic;
     private Texture background;
     private ImageButton startButton, settingsButton, quitButton;
