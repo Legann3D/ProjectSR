@@ -135,6 +135,19 @@ public class GameScreen implements Screen {
             }
         }
         else {
+            // Loop through each essence and destroy the collision
+            for (Essence essence : essences) {
+                world.destroyBody(essence.getBody()); // Dispose of collision
+            }
+            // Loop through each enemy and destroy the collisions
+            for (Enemy enemy : enemies) {
+                world.destroyBody(enemy.body); // Dispose of collision
+                world.destroyBody(enemy.attackBody);
+            }
+            // Clear the arrays
+            essences.clear();
+            enemies.clear();
+
             // Set the game screen to the death screen
             game.setScreen(deathScreen);
         }
