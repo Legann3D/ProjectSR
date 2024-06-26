@@ -80,7 +80,7 @@ public class GameScreen implements Screen {
         playerCharacter = new Player(world);
 
         //HUB
-        hub = new Hub();
+        hub = new Hub(game);
         hub.create();
 
         //Level

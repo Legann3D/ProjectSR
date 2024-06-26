@@ -14,6 +14,7 @@ public class mainGame extends Game implements ApplicationListener  {
 	public static GameScreen gameScreen;
 	public static MenuScreen menuScreen;
 	public static CraftingScreen craftingScreen;
+	public static DeathScreen deathScreen;
 
 	@Override
 	public void create () {
@@ -50,10 +51,12 @@ public class mainGame extends Game implements ApplicationListener  {
 		gameScreen = new GameScreen(this, assetManager);
 		menuScreen = new MenuScreen(this, assetManager);
 		craftingScreen = new CraftingScreen(this, assetManager);
+		deathScreen = new DeathScreen(this,assetManager);
 
 		//Uncomment this code once the Main Menu class has been implemented
-		setScreen(menuScreen);
+		//setScreen(menuScreen);
 		//setScreen(gameScreen);
+		setScreen(deathScreen);
 	}
 
 	@Override
