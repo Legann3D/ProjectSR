@@ -53,10 +53,9 @@ public class mainGame extends Game implements ApplicationListener  {
 		craftingScreen = new CraftingScreen(this, assetManager);
 		deathScreen = new DeathScreen(this,assetManager);
 
-		//Uncomment this code once the Main Menu class has been implemented
-		//setScreen(menuScreen);
+		setScreen(menuScreen);
 		//setScreen(gameScreen);
-		setScreen(deathScreen);
+		//setScreen(deathScreen);
 	}
 
 	@Override

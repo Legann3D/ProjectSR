@@ -477,15 +477,27 @@ public class Player {
                 if (GameContactListener.isEnemyFixture(fixtureA) && GameContactListener.isPlayerAttackFixture(fixtureB) ||
                         GameContactListener.isPlayerAttackFixture(fixtureA) && GameContactListener.isEnemyFixture(fixtureB)) {
 
-                    // Get the enemy fixture
-                    Body enemyBody = fixtureB.getBody(); // Assumed B
+                    Body enemyBody = null;
 
-                    // Get the enemy
-                    Enemy enemy = (Enemy) enemyBody.getUserData();
+                    // Check which fixture is the enemy
+                    if (GameContactListener.isEnemyFixture(fixtureA)) {
+                        // Get the enemy body
+                        enemyBody = fixtureA.getBody();
+                    }
+                    else if (GameContactListener.isEnemyFixture(fixtureB)) {
+                        enemyBody = fixtureB.getBody();
+                    }
 
-                    // Attack the enemy collided with
-                    attack(enemy);
-                    enemy.setTakeDamageSoundPlayed(true);
+                    // Check that the enemy body was defined and is part of Enemy
+                    if (enemyBody != null && enemyBody.getUserData() instanceof Enemy) {
+
+                        // Get the enemy
+                        Enemy enemy = (Enemy) enemyBody.getUserData();
+
+                        // Attack the enemy collided with
+                        attack(enemy);
+                        enemy.setTakeDamageSoundPlayed(true);
+                    }
                 }
                 collectEssence(fixtureA, fixtureB);
             }

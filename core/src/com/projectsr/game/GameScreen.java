@@ -1,5 +1,7 @@
 package com.projectsr.game;
 
+import static com.projectsr.game.mainGame.deathScreen;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
@@ -131,6 +133,10 @@ public class GameScreen implements Screen {
             for (Essence essence : essences) {
                 essence.render(batch);
             }
+        }
+        else {
+            // Set the game screen to the death screen
+            game.setScreen(deathScreen);
         }
 
         batch.end();
