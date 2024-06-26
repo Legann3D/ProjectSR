@@ -1,5 +1,7 @@
 package com.projectsr.game;
 
+import static com.projectsr.game.mainGame.gameScreen;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,11 +10,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class Player {
     Vector2 position;
@@ -41,6 +45,8 @@ public class Player {
 
     private int maxHeart = 3;
     private int currentHeart;
+    private int defenceValue = 2; // Default 2 to lose life
+    private int maxDefence = 2;
     private boolean isDead = false;
     private int attackBaseDamage = 10;
     private int damageModifier = 0;
@@ -62,7 +68,11 @@ public class Player {
     private boolean isBerserk = false;
     private float berserkDuration = 10.0f;
     private float berserkTimer = 0.0f;
+    private boolean hasDealtDamage = false;
 
+    private boolean hasAttackMedallion = false;
+    private boolean hasDefenceMedallion = false;
+    private boolean hasBerserkMedallion = false;
 
     public Player(World world) {
 
@@ -188,7 +198,7 @@ public class Player {
 
     }
 
-    public void update(float deltaTime, List<Enemy> enemies, List<Essence> essences) {
+    public void update(float deltaTime, ArrayList<Essence> essences) {
 
         controls();
         position.set(body.getPosition().x - width / 2, body.getPosition().y - height / 2);
@@ -228,12 +238,17 @@ public class Player {
         attackBody.setTransform(attackBodyX, attackBodyY, 0);
 
         // checking for collision with the enemy
-        checkCollision(enemies, essences);
+        checkCollision(essences);
 
         // update animation frame
         this.frame += 20 * deltaTime;
         if (this.frame >= frameCounts[currentState.ordinal()]) {
             this.frame = 0;
+        }
+
+        // Reset the hasDealtDamage flag when the attack animation is complete
+        if ((int)this.frame >= animations[State.ATTACKING.ordinal()].length - 1 || currentState != State.ATTACKING) {
+            hasDealtDamage = false;
         }
 
         // update camera position
@@ -405,12 +420,19 @@ public class Player {
 
 
     public void attack(Enemy enemy){
+
         if (!isBerserk) {
             currentState = State.ATTACKING;
         }
-        enemy.takeDamage(attackBaseDamage + damageModifier);
 
-        if (enemy.getCurrentState().equals("DEATH")){
+        // Only damage enemy once per swing
+        if (!hasDealtDamage && (int)this.frame <= animations[State.ATTACKING.ordinal()].length) {
+            enemy.takeDamage(attackBaseDamage + damageModifier);
+            hasDealtDamage = true;
+        }
+
+        // Check if enemy is in death state but not already dead
+        if (enemy.getCurrentState().equals("DEATH") && !enemy.isDead()) {
             enemiesKilled++;
             //  increment the count of enemies attacked in time frame
             enemiesAttackedInTimeFrame++;
@@ -433,37 +455,80 @@ public class Player {
         return enemiesKilled;
     }
 
-    public void checkCollision(List<Enemy> enemies, List<Essence> essences) {
-        for (Enemy enemy : enemies) {
+    public void checkCollision(ArrayList<Essence> essences) {
 
-            // check if the player's body is colliding with the enemy's attackbody
-            if (body.getFixtureList().first().testPoint(enemy.attackBody.getPosition()) && enemy.getCurrentState() == "ATTACKING") {
-                collisionDamageWithEnemy(enemy);
-            }
+        // Get the objects colliding in the world
+        for (Contact contact : world.getContactList()) {
 
-            // check if the player attack body is colliding with the enemy body
-            if (attackBody.getFixtureList().first().testPoint(enemy.body.getPosition())) {
-                attack(enemy);
-                enemy.setTakeDamageSoundPlayed(true);
+            // Check if the contacted objects are touching
+            if (contact.isTouching()) {
+
+                Fixture fixtureA = contact.getFixtureA();
+                Fixture fixtureB = contact.getFixtureB();
+
+                // Check if the contact is between an enemy attack and player fixture
+                if (GameContactListener.isEnemyAttackFixture(fixtureA) && GameContactListener.isPlayerFixture(fixtureB) ||
+                        GameContactListener.isPlayerFixture(fixtureA) && GameContactListener.isEnemyAttackFixture(fixtureB)) {
+
+                    // Player takes damage
+                    collisionDamageWithEnemy();
+                }
+                // Check if the contact is  between enemy and player attack fixture
+                if (GameContactListener.isEnemyFixture(fixtureA) && GameContactListener.isPlayerAttackFixture(fixtureB) ||
+                        GameContactListener.isPlayerAttackFixture(fixtureA) && GameContactListener.isEnemyFixture(fixtureB)) {
+
+                    // Get the enemy fixture
+                    Body enemyBody = fixtureB.getBody(); // Assumed B
+
+                    // Get the enemy
+                    Enemy enemy = (Enemy) enemyBody.getUserData();
+
+                    // Attack the enemy collided with
+                    attack(enemy);
+                    enemy.setTakeDamageSoundPlayed(true);
+                }
+                collectEssence(fixtureA, fixtureB);
             }
         }
 
-        // check if the player collides with essence
-        for (Essence essence : essences){
-            if (body.getFixtureList().first().testPoint(essence.body.getPosition())){
-                addEssence(1, essence.getType());
-                // game crashes here
-                //world.destroyBody(essence.getBody());
-            }
+    }
 
+    public void collectEssence(Fixture fixtureA, Fixture fixtureB) {
+
+        // Check if the contacts are the player and essence fixtures
+        if (GameContactListener.isPlayerFixture(fixtureA) && GameContactListener.isEssenceFixture(fixtureB) ||
+                GameContactListener.isEssenceFixture(fixtureA) && GameContactListener.isPlayerFixture(fixtureB)) {
+
+            // Get the enemy fixture
+            Body essenceBody = fixtureB.getBody(); // Assumed B
+
+            // Get the enemy
+            Essence essence = (Essence) essenceBody.getUserData();
+
+            addEssence(1, essence.getType());
+
+            // Delete the essence from the game
+            world.destroyBody(essence.body);
+            gameScreen.removeEssence(essence);
         }
     }
 
-    public void collisionDamageWithEnemy(Enemy enemy){
-        takeDamage(1);
+    public void collisionDamageWithEnemy() {
+
+        // Check if the player no longer has any defence
+        if (defenceValue <= 0) {
+            takeDamage(1);
+            defenceValue = maxDefence;
+        }
+        else {
+            // Just remove a defence
+            defenceValue--;
+        }
+
     }
 
     private void checkAndApplyDamageModifier() {
+
         if (enemiesAttackedInTimeFrame >= attackThreshold) {
             damageModifier += 10;
             currentState = State.BERSERK;
@@ -489,5 +554,31 @@ public class Player {
 
     public boolean isDead() {
         return isDead;
+    }
+
+    public void setDefenceValue(int newValue) {
+        this.defenceValue = newValue;
+    }
+
+    public void craftAttackMedallion() {
+        if (getEssences(Essence.Type.RED) >= 50) {
+            setDamageModifier(10);
+            removeEssence(50, Essence.Type.RED);
+            hasAttackMedallion = true;
+        }
+    }
+
+    public void craftDefenceMedallion() {
+        if (getEssences(Essence.Type.GREEN) >= 50) {
+            setDefenceValue(5);
+            removeEssence(50, Essence.Type.GREEN);
+            hasDefenceMedallion = true;
+        }
+    }
+
+    public void craftBerserkMedallion() {
+        if (hasAttackMedallion && hasDefenceMedallion) {
+            hasBerserkMedallion = true;
+        }
     }
 }

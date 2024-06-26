@@ -45,9 +45,9 @@ public class SkeletonEnemy extends Enemy {
         //Texture attack2Sheet = assetManager.get("Attack2.png", Texture.class);
         Texture deathSheet = assetManager.get("Enemy/Skeleton/Death.png", Texture.class);
 
-        attackSound = assetManager.get("EnemyAudio/skeletonAttack.wav", Sound.class);
-        takeDamageSound = assetManager.get("EnemyAudio/skeletonTakeHit.mp3", Sound.class);
-        deathSound = assetManager.get("EnemyAudio/skeletonDie.mp3", Sound.class);
+        attackSound = assetManager.get("Audio/EnemyAudio/skeletonAttack.wav", Sound.class);
+        takeDamageSound = assetManager.get("Audio/EnemyAudio/skeletonTakeHit.mp3", Sound.class);
+        deathSound = assetManager.get("Audio/EnemyAudio/skeletonDie.mp3", Sound.class);
 
         // Set up the walking frames
         walkFrames = new TextureRegion[4];
@@ -174,7 +174,6 @@ public class SkeletonEnemy extends Enemy {
                 if (distanceFrom(player) > 50) {
                     // Set state to chasing
                     setState(STATE.CHASING);
-
                 }
                 break;
             case DEATH:
@@ -183,6 +182,7 @@ public class SkeletonEnemy extends Enemy {
                 if (!deathSoundPlayed) {
                     deathSound.play();
                     deathSoundPlayed = true;
+                    isDead = true;
                 }
 
                 if (currentAnimation.isAnimationFinished(stateTime)) {
@@ -236,10 +236,14 @@ public class SkeletonEnemy extends Enemy {
 
     @Override
     public void takeDamage(float damage) {
-        if (this.currentState != STATE.DEATH && !takeDamageSoundPlayed) {
+        if (this.currentState != STATE.DEATH) {
+
             health -= damage;
             takeDamageSound.play();
-            takeDamageSoundPlayed = true;
+
+            if (!takeDamageSoundPlayed) {
+                takeDamageSoundPlayed = true;
+            }
         }
     }
 }

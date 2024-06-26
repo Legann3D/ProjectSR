@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class GameScreen implements Screen {
-    mainGame  game;
+    private mainGame  game;
     SpriteBatch batch;
     private AssetManager assetManager;
     private Box2DDebugRenderer debugRenderer;
@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
     private float timeSinceEnemyWave = 10;
     private int enemySpawnCount = 5;
     private float spawnDistance = 500;
-    private float enemyHealth = 20;
+    private float enemyHealth = 30;
 
     private ArrayList<Essence> essences = new ArrayList<>();
 
@@ -64,13 +64,15 @@ public class GameScreen implements Screen {
     private Music gameMusic;
 
     public GameScreen(mainGame game, AssetManager assetManager) {
+        this.game = game;
         this.assetManager = assetManager;
         this.world = new World(new Vector2(0, 0), true); // No gravity
         this.debugRenderer = new Box2DDebugRenderer();
         world.setContactListener(new GameContactListener()); // Collision
+
     }
 
-    public void create(){
+    public void create() {
 
         batch = new SpriteBatch();
 
@@ -92,7 +94,7 @@ public class GameScreen implements Screen {
         // Audio
         gameMusic = assetManager.get("Music/The Pirate And The Dancer.mp3", Music.class);
         gameMusic.play();
-        gameMusic.setVolume(1.0f);
+        gameMusic.setVolume(Settings.getVolume());
         gameMusic.setLooping(true);
     }
 
@@ -106,7 +108,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         update(delta);
 
-        playerCharacter.update(delta, enemies, essences);
+        playerCharacter.update(delta, essences);
         mapRenderer.setView(playerCharacter.camera);
         mapRenderer.render();
 
@@ -210,6 +212,7 @@ public class GameScreen implements Screen {
     public void removeEssence(Essence essence) {
         essences.remove(essence);
     }
+
     private void parseMap() {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
         for (int x = 0; x < layer.getWidth(); x++) {

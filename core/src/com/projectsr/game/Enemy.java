@@ -56,6 +56,7 @@ public abstract class Enemy {
 
     // Stats
     protected float health;
+    protected boolean isDead = false;
 
     // Collision
     protected Body body;
@@ -102,7 +103,7 @@ public abstract class Enemy {
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.3f;
         fixtureDef.filter.categoryBits = GameContactListener.ENEMY_CATEGORY;
-        fixtureDef.filter.maskBits = GameContactListener.ENEMY_CATEGORY; // Ensure proper collision detection
+        fixtureDef.filter.maskBits = GameContactListener.ENEMY_CATEGORY | GameContactListener.PLAYER_ATTACK_CATEGORY; // Ensure proper collision detection
 
         body.createFixture(fixtureDef);
         shape.dispose();
@@ -124,7 +125,7 @@ public abstract class Enemy {
         attackFixtureDef.density = 1.0f;
         attackFixtureDef.friction = 0.3f;
         attackFixtureDef.filter.categoryBits = GameContactListener.ENEMY_ATTACK_CATEGORY;
-        attackFixtureDef.filter.maskBits = GameContactListener.ENEMY_ATTACK_CATEGORY; // Ensure proper collision detection
+        attackFixtureDef.filter.maskBits = GameContactListener.PLAYER_CATEGORY; // Ensure proper collision detection
         attackFixtureDef.isSensor = true;
 
         attackBody.createFixture(attackFixtureDef);
@@ -290,5 +291,9 @@ public abstract class Enemy {
 
         // Add to essence array to game screen class
         gameScreen.addEssence(essence);
+    }
+
+    public boolean isDead() {
+        return isDead;
     }
 }
