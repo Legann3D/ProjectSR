@@ -79,7 +79,7 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
 
         //Player
-        playerCharacter = new Player(world);
+        playerCharacter = new Player(world, this.assetManager);
 
         //HUB
         hub = new Hub(game);

@@ -2,7 +2,9 @@ package com.projectsr.game;
 
 import static com.projectsr.game.mainGame.gameScreen;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,7 +17,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-
+import com.badlogic.gdx.audio.Sound;
 import java.util.ArrayList;
 
 public class Player {
@@ -23,7 +25,7 @@ public class Player {
     Vector2 velocity;
     float width = 100;
     float height = 55;
-    float speed = 2;
+    float speed = 999999999;
 
     TextureRegion[][] animations;
     int[] frameCounts;
@@ -74,7 +76,14 @@ public class Player {
     private boolean hasDefenceMedallion = false;
     private boolean hasBerserkMedallion = false;
 
-    public Player(World world) {
+
+    // Sound effects
+    private Sound damageSound;
+    private Sound deathSound;
+    private Sound berserkSound;
+    private Sound lootingSound;
+
+    public Player(World world, AssetManager assetManager) {
 
         this.world = world;
         position = new Vector2(880, 500);
@@ -144,6 +153,18 @@ public class Player {
         // crating the box2d body
         createCollisionBody();
 
+        assetManager.load("Audio/PlayerAudio/berserk.wav", Sound.class);
+        assetManager.load("Audio/PlayerAudio/damage.wav", Sound.class);
+        assetManager.load("Audio/PlayerAudio/death.wav", Sound.class);
+        assetManager.load("Audio/PlayerAudio/looting.wav", Sound.class);
+        assetManager.finishLoading();
+
+
+        damageSound = assetManager.get("Audio/PlayerAudio/damage.wav", Sound.class);
+        deathSound =  assetManager.get("Audio/PlayerAudio/death.wav", Sound.class);
+        berserkSound = assetManager.get("Audio/PlayerAudio/berserk.wav", Sound.class);
+        lootingSound = assetManager.get("Audio/PlayerAudio/looting.wav", Sound.class);
+
     }
 
     private void createCollisionBody() {
@@ -201,8 +222,8 @@ public class Player {
     public void update(float deltaTime, ArrayList<Essence> essences) {
 
         controls();
-        position.set(body.getPosition().x - width / 2, body.getPosition().y - height / 2);
         body.setLinearVelocity(velocity);
+        position.set(body.getPosition().x - width / 2, body.getPosition().y - height / 2);
 
         // Update the elapsed time
         elapsedTime += deltaTime;
@@ -287,7 +308,8 @@ public class Player {
                 physicalTouchDistance = joystickRadius;
             }
 
-            velocity.set(direction.scl(speed * (physicalTouchDistance / joystickRadius)));
+            velocity.set(direction.scl(speed));
+            System.out.println("Speed: " + speed + " | Velocity: " + velocity);
 
             // check if the player is moving to the left or right
             if (velocity.x > 0) {
@@ -342,9 +364,11 @@ public class Player {
         if (currentHeart < 0 ) {
             currentHeart = 0;
             currentState = State.DEATH;
+            deathSound.play();
         }
         else {
             currentState = State.HURT;
+            damageSound.play();
         }
     }
 
@@ -381,10 +405,12 @@ public class Player {
         switch (essenceType) {
             case RED:
                 redEssences += amount;
+                lootingSound.play();
                 break;
 
             case GREEN:
                 greenEssences += amount;
+                lootingSound.play();
                 break;
         }
     }
@@ -541,10 +567,12 @@ public class Player {
 
     private void checkAndApplyDamageModifier() {
 
-        if (enemiesAttackedInTimeFrame >= attackThreshold) {
+        if (enemiesAttackedInTimeFrame >= attackThreshold && hasBerserkMedallion) {
             damageModifier += 10;
             currentState = State.BERSERK;
             isBerserk = true;
+
+            berserkSound.play();
 
             // reset timer
             berserkTimer = 0.0f;
@@ -562,6 +590,11 @@ public class Player {
                 texRegion.getTexture().dispose();
             }
         }
+
+        damageSound.dispose();
+        berserkSound.dispose();
+        deathSound.dispose();
+        lootingSound.dispose();
     }
 
     public boolean isDead() {
