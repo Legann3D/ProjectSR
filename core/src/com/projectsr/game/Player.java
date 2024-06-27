@@ -572,17 +572,27 @@ public class Player {
         if (GameContactListener.isPlayerFixture(fixtureA) && GameContactListener.isEssenceFixture(fixtureB) ||
                 GameContactListener.isEssenceFixture(fixtureA) && GameContactListener.isPlayerFixture(fixtureB)) {
 
-            // Get the enemy fixture
-            Body essenceBody = fixtureB.getBody(); // Assumed B
+            Body essenceBody = null;
 
-            // Get the enemy
-            //Essence essence = (Essence) essenceBody.getUserData();
+            // Check which fixture is the essence
+            if (GameContactListener.isEssenceFixture(fixtureA)) {
+                // Get the essence body
+                essenceBody = fixtureA.getBody();
+            }
+            else if (GameContactListener.isEssenceFixture(fixtureB)) {
+                essenceBody = fixtureB.getBody();
+            }
 
-            //addEssence(1, essence.getType());
+            // Check that the essence body was defined
+            if (essenceBody != null) {
+                // Get the essence
+                Essence essence = (Essence) essenceBody.getUserData();
 
-            // Delete the essence from the game
-            //world.destroyBody(essence.body);
-            //gameScreen.removeEssence(essence);
+                addEssence(1, essence.getType());
+                // Delete the essence from the game
+                world.destroyBody(essence.body);
+                mainGame.gameScreen.removeEssence(essence);
+            }
         }
     }
 
