@@ -1,6 +1,8 @@
 package com.projectsr.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,7 +23,7 @@ public class Player {
     Vector2 velocity;
     float width = 100;
     float height = 55;
-    float speed = 20;
+    float speed;
 
     TextureRegion[][] animations;
     int[] frameCounts;
@@ -72,11 +74,21 @@ public class Player {
     private boolean hasDefenceMedallion = false;
     private boolean hasBerserkMedallion = false;
 
-    public Player(World world) {
+
+    // Sound effects
+    private Sound damageSound;
+    private Sound deathSound;
+    private Sound berserkSound;
+    private Sound lootingSound;
+
+    public Player(World world, AssetManager assetManager) {
 
         this.world = world;
         position = new Vector2(880, 500);
         velocity = new Vector2(0,0);
+
+        // change speed here
+        speed = 100;
 
         // initialise camera
         float w = Gdx.graphics.getWidth();
@@ -142,6 +154,18 @@ public class Player {
         // crating the box2d body
         createCollisionBody();
 
+        assetManager.load("Audio/PlayerAudio/berserk.wav", Sound.class);
+        assetManager.load("Audio/PlayerAudio/damage.wav", Sound.class);
+        assetManager.load("Audio/PlayerAudio/death.wav", Sound.class);
+        assetManager.load("Audio/PlayerAudio/looting.wav", Sound.class);
+        assetManager.finishLoading();
+
+
+        damageSound = assetManager.get("Audio/PlayerAudio/damage.wav", Sound.class);
+        deathSound =  assetManager.get("Audio/PlayerAudio/death.wav", Sound.class);
+        berserkSound = assetManager.get("Audio/PlayerAudio/berserk.wav", Sound.class);
+        lootingSound = assetManager.get("Audio/PlayerAudio/looting.wav", Sound.class);
+
     }
 
     private void createCollisionBody() {
@@ -163,7 +187,7 @@ public class Player {
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.3f;
         fixtureDef.filter.categoryBits = GameContactListener.PLAYER_CATEGORY;
-        fixtureDef.filter.maskBits = GameContactListener.ENEMY_CATEGORY | GameContactListener.ENEMY_ATTACK_CATEGORY | GameContactListener.ESSENCE_CATEGORY | GameContactListener.MAP_CATEGORY;
+        fixtureDef.filter.maskBits = GameContactListener.ENEMY_CATEGORY | GameContactListener.ENEMY_ATTACK_CATEGORY | GameContactListener.ESSENCE_CATEGORY;
         fixtureDef.isSensor = true;
 
         body.createFixture(fixtureDef);
@@ -199,8 +223,9 @@ public class Player {
     public void update(float deltaTime, ArrayList<Essence> essences) {
 
         controls();
-        position.set(body.getPosition().x - width / 2, body.getPosition().y - height / 2);
-        body.setLinearVelocity(velocity);
+        position.add(velocity.scl(deltaTime));
+        body.setTransform(position.x + width / 2, position.y + height / 2, body.getAngle());
+
 
         // Update the elapsed time
         elapsedTime += deltaTime;
@@ -285,7 +310,8 @@ public class Player {
                 physicalTouchDistance = joystickRadius;
             }
 
-            velocity.set(direction.scl(speed * (physicalTouchDistance / joystickRadius)));
+            direction.nor();
+            velocity.set(direction.scl(speed));
 
             // check if the player is moving to the left or right
             if (velocity.x > 0) {
@@ -340,9 +366,11 @@ public class Player {
         if (currentHeart < 0 ) {
             currentHeart = 0;
             currentState = State.DEATH;
+            deathSound.play();
         }
         else {
             currentState = State.HURT;
+            damageSound.play();
         }
     }
 
@@ -379,10 +407,12 @@ public class Player {
         switch (essenceType) {
             case RED:
                 redEssences += amount;
+                lootingSound.play();
                 break;
 
             case GREEN:
                 greenEssences += amount;
+                lootingSound.play();
                 break;
         }
     }
@@ -612,10 +642,12 @@ public class Player {
 
     private void checkAndApplyDamageModifier() {
 
-        if (enemiesAttackedInTimeFrame >= attackThreshold) {
+        if (enemiesAttackedInTimeFrame >= attackThreshold && hasBerserkMedallion) {
             damageModifier += 10;
             currentState = State.BERSERK;
             isBerserk = true;
+
+            berserkSound.play();
 
             // reset timer
             berserkTimer = 0.0f;
