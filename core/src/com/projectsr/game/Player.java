@@ -25,7 +25,7 @@ public class Player {
     Vector2 velocity;
     float width = 100;
     float height = 55;
-    float speed = 999999999;
+    float speed;
 
     TextureRegion[][] animations;
     int[] frameCounts;
@@ -88,6 +88,9 @@ public class Player {
         this.world = world;
         position = new Vector2(880, 500);
         velocity = new Vector2(0,0);
+
+        // change speed here
+        speed = 100;
 
         // initialise camera
         float w = Gdx.graphics.getWidth();
@@ -222,8 +225,9 @@ public class Player {
     public void update(float deltaTime, ArrayList<Essence> essences) {
 
         controls();
-        body.setLinearVelocity(velocity);
-        position.set(body.getPosition().x - width / 2, body.getPosition().y - height / 2);
+        position.add(velocity.scl(deltaTime));
+        body.setTransform(position.x + width / 2, position.y + height / 2, body.getAngle());
+
 
         // Update the elapsed time
         elapsedTime += deltaTime;
@@ -275,6 +279,8 @@ public class Player {
         // update camera position
         camera.position.set(position.x + width / 2, position.y + height / 2, 0);
         camera.update();
+
+        System.out.println("Body Velocity: " + body.getLinearVelocity());
     }
 
     public void controls() {
@@ -308,6 +314,7 @@ public class Player {
                 physicalTouchDistance = joystickRadius;
             }
 
+            direction.nor();
             velocity.set(direction.scl(speed));
             System.out.println("Speed: " + speed + " | Velocity: " + velocity);
 
@@ -333,6 +340,8 @@ public class Player {
                 currentState = State.IDLE;
             }
         }
+
+        System.out.println("Final Speed: " + speed + " | Final Velocity: " + velocity);
     }
 
     public void render (SpriteBatch batch) {
