@@ -534,7 +534,10 @@ public class Player {
                         enemy.setTakeDamageSoundPlayed(true);
                     }
                 }
-                collectEssence(fixtureA, fixtureB);
+                if (GameContactListener.isPlayerFixture(fixtureA) && GameContactListener.isEssenceFixture(fixtureB) ||
+                        GameContactListener.isEssenceFixture(fixtureA) && GameContactListener.isPlayerFixture(fixtureB)) {
+                    collectEssence(fixtureA, fixtureB);
+                }
             }
         }
 
