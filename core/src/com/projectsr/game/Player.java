@@ -16,8 +16,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-import java.util.ArrayList;
-
 public class Player {
     Vector2 position;
     Vector2 velocity;
@@ -73,7 +71,6 @@ public class Player {
     private boolean hasAttackMedallion = false;
     private boolean hasDefenceMedallion = false;
     private boolean hasBerserkMedallion = false;
-
 
     // Sound effects
     private Sound damageSound;
@@ -160,12 +157,10 @@ public class Player {
         assetManager.load("Audio/PlayerAudio/looting.wav", Sound.class);
         assetManager.finishLoading();
 
-
         damageSound = assetManager.get("Audio/PlayerAudio/damage.wav", Sound.class);
         deathSound =  assetManager.get("Audio/PlayerAudio/death.wav", Sound.class);
         berserkSound = assetManager.get("Audio/PlayerAudio/berserk.wav", Sound.class);
         lootingSound = assetManager.get("Audio/PlayerAudio/looting.wav", Sound.class);
-
     }
 
     private void createCollisionBody() {
@@ -187,7 +182,7 @@ public class Player {
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.3f;
         fixtureDef.filter.categoryBits = GameContactListener.PLAYER_CATEGORY;
-        fixtureDef.filter.maskBits = GameContactListener.ENEMY_CATEGORY | GameContactListener.ENEMY_ATTACK_CATEGORY | GameContactListener.ESSENCE_CATEGORY;
+        fixtureDef.filter.maskBits = GameContactListener.ENEMY_CATEGORY | GameContactListener.ENEMY_ATTACK_CATEGORY | GameContactListener.ESSENCE_CATEGORY | GameContactListener.MAP_CATEGORY;
         fixtureDef.isSensor = true;
 
         body.createFixture(fixtureDef);
@@ -220,12 +215,11 @@ public class Player {
 
     }
 
-    public void update(float deltaTime, ArrayList<Essence> essences) {
+    public void update(float deltaTime) {
 
         controls();
-        position.add(velocity.scl(deltaTime));
-        body.setTransform(position.x + width / 2, position.y + height / 2, body.getAngle());
-
+        position.set(body.getPosition().x - width / 2, body.getPosition().y - height / 2);
+        body.setLinearVelocity(velocity);
 
         // Update the elapsed time
         elapsedTime += deltaTime;
@@ -260,8 +254,8 @@ public class Player {
 
         attackBody.setTransform(attackBodyX, attackBodyY, 0);
 
-        // checking for collision with the enemy
-        checkCollision(essences);
+        // checking for collision with things
+        checkCollision();
 
         // update animation frame
         this.frame += 20 * deltaTime;
@@ -320,7 +314,7 @@ public class Player {
                 facingRight = false;
             }
 
-            // check to see if th player is moving
+            // check to see if the player is moving
             if (velocity.len() > 0 && !isBerserk) {
                 currentState = State.WALKING;
             } else if (!isBerserk) {
@@ -479,11 +473,11 @@ public class Player {
         return damageModifier;
     }
 
-    public int getEnemiesKilled(){
+    public int getEnemiesKilled() {
         return enemiesKilled;
     }
 
-    public void checkCollision(ArrayList<Essence> essences) {
+    public void checkCollision() {
 
         // Get the objects colliding in the world
         for (Contact contact : world.getContactList()) {
