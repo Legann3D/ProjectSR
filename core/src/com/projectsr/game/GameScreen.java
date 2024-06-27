@@ -22,6 +22,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -98,6 +100,45 @@ public class GameScreen implements Screen {
         gameMusic.play();
         gameMusic.setVolume(Settings.getVolume());
         gameMusic.setLooping(true);
+
+        float offset = 15.5f * ((TiledMapTileLayer) map.getLayers().get(0)).getTileWidth();
+        float mapWidth = 180 * ((TiledMapTileLayer) map.getLayers().get(0)).getTileWidth();
+        float mapHeight = 180 * ((TiledMapTileLayer) map.getLayers().get(0)).getTileHeight();
+
+        createMapEdgeCollision(-offset, offset, mapWidth - offset, offset); // Bottom
+        createMapEdgeCollision(-mapWidth + offset, mapHeight - offset, mapWidth - offset, mapHeight - offset); // Top
+        createMapEdgeCollision(offset, offset, offset, mapHeight - offset); // Left
+        createMapEdgeCollision(mapWidth - offset, -offset, mapWidth - offset, mapHeight - offset); // Right
+    }
+
+    public void createMapEdgeCollision(float startX, float startY, float endX, float endY) {
+
+        // Define the body
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(new Vector2(startX, startY));
+
+        // Create the body in the world
+        Body body = world.createBody(bodyDef);
+
+        // Define the shape as an edge
+        EdgeShape edgeShape = new EdgeShape();
+        edgeShape.set(0, 0, endX - startX, endY - startY);
+
+        // Define the fixture
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = edgeShape;
+        fixtureDef.friction = 0.5f;
+        fixtureDef.restitution = 0.5f;
+        fixtureDef.filter.categoryBits = GameContactListener.MAP_CATEGORY;
+        fixtureDef.filter.maskBits = GameContactListener.PLAYER_CATEGORY;
+        fixtureDef.isSensor = false;
+
+        // Create the fixture on the body
+        body.createFixture(fixtureDef);
+
+        // Dispose of the shape
+        edgeShape.dispose();
     }
 
     public void update(float f){

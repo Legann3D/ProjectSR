@@ -1,7 +1,5 @@
 package com.projectsr.game;
 
-import static com.projectsr.game.mainGame.gameScreen;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,7 +21,7 @@ public class Player {
     Vector2 velocity;
     float width = 100;
     float height = 55;
-    float speed = 2;
+    float speed = 20;
 
     TextureRegion[][] animations;
     int[] frameCounts;
@@ -165,7 +163,7 @@ public class Player {
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.3f;
         fixtureDef.filter.categoryBits = GameContactListener.PLAYER_CATEGORY;
-        fixtureDef.filter.maskBits = GameContactListener.ENEMY_CATEGORY | GameContactListener.ENEMY_ATTACK_CATEGORY | GameContactListener.ESSENCE_CATEGORY;
+        fixtureDef.filter.maskBits = GameContactListener.ENEMY_CATEGORY | GameContactListener.ENEMY_ATTACK_CATEGORY | GameContactListener.ESSENCE_CATEGORY | GameContactListener.MAP_CATEGORY;
         fixtureDef.isSensor = true;
 
         body.createFixture(fixtureDef);
@@ -337,7 +335,7 @@ public class Player {
     }
 
     // This section tracks the health for the player
-    public void takeDamage(int amount){
+    public void takeDamage(int amount) {
         currentHeart -= amount;
         if (currentHeart < 0 ) {
             currentHeart = 0;
@@ -500,9 +498,72 @@ public class Player {
                     }
                 }
                 collectEssence(fixtureA, fixtureB);
+
+                checkMapCollision(fixtureA, fixtureB);
             }
         }
+    }
 
+    public void checkMapCollision(Fixture fixtureA, Fixture fixtureB) {
+
+        // Check if the contact is between player and map edge
+        if ((GameContactListener.isPlayerFixture(fixtureA) && GameContactListener.isMapFixture(fixtureB)) ||
+                (GameContactListener.isMapFixture(fixtureA) && GameContactListener.isPlayerFixture(fixtureB))) {
+
+            Vector2 currentVelocity = body.getLinearVelocity();
+
+            Body mapBody = null;
+
+            // Check which fixture is the map
+            if (GameContactListener.isMapFixture(fixtureA)) {
+                // Get the map body
+                mapBody = fixtureA.getBody();
+            }
+            else if (GameContactListener.isMapFixture(fixtureB)) {
+                mapBody = fixtureB.getBody();
+            }
+
+            // Check that the map body was defined
+            if (mapBody != null) {
+
+                boolean xCollision = false;
+                boolean yCollision = false;
+
+                // Check horizontal collisions
+                if (currentVelocity.x > 0 && mapBody.getPosition().x > body.getPosition().x) { // Right wall
+                    body.setLinearVelocity(0, currentVelocity.y);
+                    xCollision = true;
+                }
+                else if (currentVelocity.x < 0 && mapBody.getPosition().x < body.getPosition().x) { // Left wall
+                    body.setLinearVelocity(0, currentVelocity.y);
+                    xCollision = true;
+                }
+
+                // Check vertical collisions
+                if (currentVelocity.y > 0 && mapBody.getPosition().y > body.getPosition().y) { // Top wall
+                    body.setLinearVelocity(currentVelocity.x, 0);
+                    yCollision = true;
+                }
+                else if (currentVelocity.y < 0 && mapBody.getPosition().y < body.getPosition().y) { // Bottom wall
+                    body.setLinearVelocity(currentVelocity.x, 0);
+                    yCollision = true;
+                }
+
+                // Adjust movement based on collisions
+                if (xCollision && yCollision) {
+                    // If both x and y collisions, stop all movement
+                    body.setLinearVelocity(0, 0);
+                }
+                else if (xCollision) {
+                    // If only x collision, stop x movement but allow y movement
+                    body.setLinearVelocity(0, currentVelocity.y);
+                }
+                else if (yCollision) {
+                    // If only y collision, stop y movement but allow x movement
+                    body.setLinearVelocity(currentVelocity.x, 0);
+                }
+            }
+        }
     }
 
     public void collectEssence(Fixture fixtureA, Fixture fixtureB) {
@@ -515,13 +576,13 @@ public class Player {
             Body essenceBody = fixtureB.getBody(); // Assumed B
 
             // Get the enemy
-            Essence essence = (Essence) essenceBody.getUserData();
+            //Essence essence = (Essence) essenceBody.getUserData();
 
-            addEssence(1, essence.getType());
+            //addEssence(1, essence.getType());
 
             // Delete the essence from the game
-            world.destroyBody(essence.body);
-            gameScreen.removeEssence(essence);
+            //world.destroyBody(essence.body);
+            //gameScreen.removeEssence(essence);
         }
     }
 

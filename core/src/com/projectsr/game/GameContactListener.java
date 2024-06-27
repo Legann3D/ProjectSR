@@ -75,5 +75,9 @@ public class GameContactListener implements ContactListener {
     public static boolean isEssenceFixture(Fixture fixture) {
         return fixture.getFilterData().categoryBits == ESSENCE_CATEGORY;
     }
+
+    public static boolean isMapFixture(Fixture fixture) {
+        return fixture.getFilterData().categoryBits == MAP_CATEGORY;
+    }
 }
 
