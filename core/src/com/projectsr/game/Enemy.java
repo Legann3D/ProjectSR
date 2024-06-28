@@ -63,13 +63,16 @@ public abstract class Enemy {
     protected Body attackBody;
     protected FixtureDef fixtureDef;
     protected FixtureDef attackFixtureDef;
-    public static final float PPM = 100.0f; // Pixels Per Meter conversion
 
 
     /**
      * Initialises the enemy character, setting its initial position and movement speed.
      *
      * @param assetManager manages assets and loads assets used.
+     * @param enemySpawnPos The Vector2 location where the enemy will spawn.
+     * @param health The health of the enemy.
+     * @param world The world the collision is in.
+     * @param gameScreen The game screen running the main game loop.
      */
     public Enemy(AssetManager assetManager, Vector2 enemySpawnPos, float health, World world, GameScreen gameScreen) {
         position = enemySpawnPos;
@@ -136,6 +139,7 @@ public abstract class Enemy {
 
     /**
      * Renders the enemy on the screen with updated animation frames.
+     *
      * @param batch The SpriteBatch used for drawing the enemy's current frame.
      */
     public void render(SpriteBatch batch) {
@@ -152,14 +156,18 @@ public abstract class Enemy {
     }
 
     /**
-     * Updates the enemy's position based on its speed and the elapsed time since the last frame.
+     * Updates the enemy's position based on its state, speed, and the elapsed time since the last frame.
+     *
      * @param f The time in seconds since the last update.
+     * @param player The player object.
+     * @param enemyIter The enemy iterator.
      */
     public abstract void update(float f, Player player, Iterator<Enemy> enemyIter);
 
     public void setState(STATE state) {
         currentState = state;
     }
+
 
     public void flipEnemy(Player player) {
 
@@ -181,6 +189,12 @@ public abstract class Enemy {
         }
     }
 
+    /**
+     * Chase the player by moving to the location where the player is at a set speed.
+     *
+     * @param f The delta time of the game.
+     * @param player The player object.
+     */
     public void chasePlayer(float f, Player player) {
 
         // Calculate the direction vector from enemy to player
@@ -236,10 +250,20 @@ public abstract class Enemy {
         takeDamageSoundPlayed = value;
     }
 
+    /**
+     * Take a certain amount of damage from the enemy.
+     *
+     * @param damage The amount of damage to be taken.
+     */
     public void takeDamage(float damage) {
         health -= damage;
     }
 
+    /**
+     * Set the current enemy state.
+     *
+     * @param state The state as a string.
+     */
     public void setCurrentState(String state) {
         if (state.equals("CHASING")) {
             currentState = STATE.CHASING;
@@ -253,6 +277,11 @@ public abstract class Enemy {
         }
     }
 
+    /**
+     * Get the current enemy state.
+     *
+     * @return A string value of the state.
+     */
     public String getCurrentState() {
         if (currentState == STATE.CHASING) {
             return "CHASING";
@@ -266,10 +295,18 @@ public abstract class Enemy {
         return "CHASING";
     }
 
+    /**
+     * Remove the given enemy iterator when the enemy dies.
+     *
+     * @param enemyIter The enemy iterator.
+     */
     public void enemyDeath(Iterator<Enemy> enemyIter) {
         enemyIter.remove();
     }
 
+    /**
+     * Randomise which essence to be spawned, and spawn it at the enemy location.
+     */
     public void spawnEssence() {
 
         // Calculate random number between 0 or 1

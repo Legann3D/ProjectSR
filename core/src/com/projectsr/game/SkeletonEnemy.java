@@ -26,13 +26,17 @@ public class SkeletonEnemy extends Enemy {
      * Initialises the enemy character, setting its initial position and movement speed.
      *
      * @param assetManager manages assets and loads assets used.
+     * @param enemySpawnPos The Vector2 location where the enemy will spawn.
+     * @param health The health of the enemy.
+     * @param world The world the collision is in.
+     * @param gameScreen The game screen running the main game loop.
      */
     public SkeletonEnemy(AssetManager assetManager, Vector2 enemySpawnPos, float health, World world, GameScreen gameScreen) {
         super(assetManager, enemySpawnPos, health, world, gameScreen);
     }
 
     /**
-     * Gets enemy assets, and creates animations and sets up initial game state and positioning.
+     * Gets enemy assets, sets up animations and the audio.
      */
     @Override
     public void create() {
@@ -84,6 +88,13 @@ public class SkeletonEnemy extends Enemy {
         deathAnimation = new Animation<>(0.133f, deathFrames);
     }
 
+    /**
+     * Updates the enemy's position based on its state, speed and the elapsed time since the last frame.
+     *
+     * @param f The time in seconds since the last update.
+     * @param player The player object.
+     * @param enemyIter The enemy iterator.
+     */
     public void update(float f, Player player, Iterator<Enemy> enemyIter) {
 
         // Check if the enemy still has health
@@ -171,6 +182,10 @@ public class SkeletonEnemy extends Enemy {
         }
     }
 
+    /**
+     * A repelling force applied to the enemy to prevent their collisions overlapping.
+     * Essentially causes a very small bounce off other enemy collisions.
+     */
     private void applyRepellingForce() {
 
         // Loop over the contacted enemies
@@ -204,6 +219,11 @@ public class SkeletonEnemy extends Enemy {
         }
     }
 
+    /**
+     * Cause the enemy to take damage when not in the DEATH state.
+     *
+     * @param damage The amount of damage to be taken.
+     */
     @Override
     public void takeDamage(float damage) {
         if (this.currentState != STATE.DEATH) {
