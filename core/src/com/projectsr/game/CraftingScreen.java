@@ -6,7 +6,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -53,9 +52,18 @@ public class CraftingScreen implements Screen {
     }
 
     public void create() {
-        if(this.collectable == null){
+
+        if (mainGame.gameScreen.getHub() == null) {
+            hub = new Hub(game);
+        }
+        else {
+            hub = mainGame.gameScreen.getHub();
+        }
+
+        if (this.collectable == null) {
             this.collectable = new Collectable(hub);
         }
+
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
@@ -288,6 +296,10 @@ public class CraftingScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
+    }
+
+    public Collectable getCollectable() {
+        return collectable;
     }
 
     @Override

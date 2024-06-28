@@ -81,10 +81,10 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
 
         //Player
-        if(this.hub == null ){
+        if (this.hub == null) {
             hub = new Hub(game);
         }
-        playerCharacter = new Player(world, assetManager ,game.craftingScreen, hub);
+        playerCharacter = new Player(world, assetManager, game.craftingScreen);
         //HUB
 
         hub.create();
@@ -149,6 +149,7 @@ public class GameScreen implements Screen {
     }
 
     public void render(float delta) {
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         update(delta);
@@ -315,6 +316,10 @@ public class GameScreen implements Screen {
         bodyDef.position.set(x, y);
 
         return bodyDef;
+    }
+
+    public Hub getHub() {
+        return hub;
     }
 
     @Override

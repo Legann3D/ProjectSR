@@ -77,9 +77,9 @@ public class Player {
     private Sound berserkSound;
     private Sound lootingSound;
 
-    public Player(World world,AssetManager assetManager, CraftingScreen craftingScreen, Hub hub) {
+    public Player(World world,AssetManager assetManager, CraftingScreen craftingScreen) {
         this.craftingScreen = craftingScreen;
-        this.collectable = new Collectable(hub);
+        this.collectable = craftingScreen.getCollectable();
 
         this.world = world;
         position = new Vector2(880, 500);

@@ -3,18 +3,18 @@ package com.projectsr.game;
 public class Collectable {
     mainGame game;
     private Hub hub;
+    private int greenEssences;
+    public int redEssences = 0;
 
-    public Collectable(Hub hub){
+    public Collectable(Hub hub) {
         this.hub = hub;
     }
-    private int greenEssences;
-    private int redEssences;
+
     public void addEssence(int amount, Essence.Type essenceType) {
         switch (essenceType) {
             case RED:
                 redEssences += amount;
                 hub.collectedItems++;
-                hub.counterLabel.setText(String.valueOf(hub.collectedItems));
                 break;
 
             case GREEN:
