@@ -167,7 +167,6 @@ public abstract class Enemy {
         boolean shouldFaceLeft = PosX < -7;
         boolean shouldFaceRight = PosX > 7;
 
-        // TODO: Fix flutter effect when flipping
         // Ensure a frame exists
         if (currentFrame != null) {
             // Check if the texture needs to be flipped

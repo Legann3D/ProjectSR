@@ -17,9 +17,7 @@ import java.util.Iterator;
 public class SkeletonEnemy extends Enemy {
 
     private TextureRegion[] attack1Frames;
-    private TextureRegion[] attack2Frames;
     protected Animation<TextureRegion> attack1Animation;
-    protected Animation<TextureRegion> attack2Animation;
     private Sound attackSound;
     private Sound takeDamageSound;
     private Sound deathSound;
@@ -42,7 +40,6 @@ public class SkeletonEnemy extends Enemy {
         // Get the skeleton assets
         Texture walkSheet = assetManager.get("Enemy/Skeleton/Walk.png", Texture.class);
         Texture attack1Sheet = assetManager.get("Enemy/Skeleton/Attack.png", Texture.class);
-        //Texture attack2Sheet = assetManager.get("Attack2.png", Texture.class);
         Texture deathSheet = assetManager.get("Enemy/Skeleton/Death.png", Texture.class);
 
         attackSound = assetManager.get("Audio/EnemyAudio/skeletonAttack.wav", Sound.class);
@@ -74,21 +71,6 @@ public class SkeletonEnemy extends Enemy {
 
         // Create the attack1 animation at 30 FPS
         attack1Animation = new Animation<>(0.133f, attack1Frames);
-
-        // Set up attack 2 frames
-        //attack2Frames = new TextureRegion[8];
-
-        //attack2Frames[0] = new TextureRegion(attack2Sheet,0,0,150,150);
-        //attack2Frames[1] = new TextureRegion(attack2Sheet,150,0,150,150);
-        //attack2Frames[2] = new TextureRegion(attack2Sheet,300,0,150,150);
-        //attack2Frames[3] = new TextureRegion(attack2Sheet,450,0,150,150);
-        //attack2Frames[4] = new TextureRegion(attack2Sheet,600,0,150,150);
-        //attack2Frames[5] = new TextureRegion(attack2Sheet,750,0,150,150);
-        //attack2Frames[6] = new TextureRegion(attack2Sheet,900,0,150,150);
-        //attack2Frames[7] = new TextureRegion(attack2Sheet,1050,0,150,150);
-
-        // Create the walking animation at 30 FPS
-        //attack2Animation = new Animation<>(0.133f, attack2Frames);
 
         // Set up death frames
         deathFrames = new TextureRegion[4];
@@ -148,8 +130,6 @@ public class SkeletonEnemy extends Enemy {
                     stateTime = 0;
                 }
 
-                // TODO: Double check collisions work as expected when player can take dmg
-                // TODO: Remove this stuff if it doesn't or becomes cumbersome
                 // Check if the animation is almost completed
                 if (currentAnimation.getKeyFrameIndex(f) > currentAnimation.getKeyFrameIndex(f) % 6) {
                     // Enable and disable collision accordingly
@@ -164,12 +144,6 @@ public class SkeletonEnemy extends Enemy {
                 desiredPosition = new Vector2(this.position.x + 70, this.position.y + 75);
                 attackBody.setTransform(desiredPosition, attackBody.getAngle()); // Update attack collision
 
-                // TODO: Check for collision overlapping
-//              if () {
-                    // Might be a good idea to have a counter of 3 in the player before taking a life
-                    // Overlap should not be checked here - maybe in GameScreen or Player class
-//                  player.loseLife(); // TODO: Need method to remove a life from player
-//              }
                 // Check if the enemy is not in reach to attack
                 if (distanceFrom(player) > 50) {
                     // Set state to chasing
@@ -208,8 +182,6 @@ public class SkeletonEnemy extends Enemy {
                 Fixture fixtureA = contact.getFixtureA();
                 Fixture fixtureB = contact.getFixtureB();
 
-                //System.out.println("Enemies touching");
-
                 // Check if the both fixtures colliding are enemies
                 if (GameContactListener.isEnemyFixture(fixtureA) && GameContactListener.isEnemyFixture(fixtureB)) {
 
@@ -227,8 +199,6 @@ public class SkeletonEnemy extends Enemy {
                     // Apply the force to the enemy positions
                     enemyA.position.add(repellingForce.scl(0.1f));
                     enemyB.position.add(repellingForce.scl(-0.1f));
-
-                    //System.out.println("Repelling force applied between enemies");
                 }
             }
         }
