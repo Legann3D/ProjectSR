@@ -2,10 +2,7 @@ package com.projectsr.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-<<<<<<< Updated upstream
 import com.badlogic.gdx.audio.Sound;
-=======
->>>>>>> Stashed changes
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -70,8 +67,6 @@ public class Player {
     private float berserkDuration = 10.0f;
     private float berserkTimer = 0.0f;
     private boolean hasDealtDamage = false;
-
-<<<<<<< Updated upstream
     private boolean hasAttackMedallion = false;
     private boolean hasDefenceMedallion = false;
     private boolean hasBerserkMedallion = false;
@@ -82,13 +77,10 @@ public class Player {
     private Sound berserkSound;
     private Sound lootingSound;
 
-    public Player(World world, AssetManager assetManager) {
-
-=======
-    public Player(World world, CraftingScreen craftingScreen) {
+    public Player(World world,AssetManager assetManager, CraftingScreen craftingScreen, Hub hub) {
         this.craftingScreen = craftingScreen;
-        this.collectable = new Collectable();
->>>>>>> Stashed changes
+        this.collectable = new Collectable(hub);
+
         this.world = world;
         position = new Vector2(880, 500);
         velocity = new Vector2(0,0);
@@ -378,6 +370,7 @@ public class Player {
             deathSound.play();
         }
         else {
+
             currentState = State.HURT;
             damageSound.play();
         }
@@ -410,55 +403,6 @@ public class Player {
     public int getMaxHeart() {
         return  maxHeart;
     }
-
-<<<<<<< Updated upstream
-    // This section keeps track of the players essence
-    public void addEssence(int amount, Essence.Type essenceType) {
-        switch (essenceType) {
-            case RED:
-                redEssences += amount;
-                lootingSound.play();
-                break;
-
-            case GREEN:
-                greenEssences += amount;
-                lootingSound.play();
-                break;
-        }
-    }
-    public void removeEssence(int amount, Essence.Type essenceType) {
-        switch (essenceType) {
-            case RED:
-                redEssences -= amount;
-                if (redEssences < 0) {
-                    redEssences = 0;
-                }
-                break;
-
-            case GREEN:
-                greenEssences -= amount;
-                if (greenEssences < 0) {
-                    greenEssences = 0;
-                }
-                break;
-        }
-    }
-    public int getEssences(Essence.Type essenceType) {
-        switch (essenceType) {
-            case RED:
-                return redEssences;
-
-            case GREEN:
-                return greenEssences;
-
-            default:
-                return 0;
-        }
-    }
-
-=======
->>>>>>> Stashed changes
-
     public void attack(Enemy enemy){
 
         if (!isBerserk) {
@@ -625,16 +569,13 @@ public class Player {
                 essenceBody = fixtureB.getBody();
             }
 
-<<<<<<< Updated upstream
             // Check that the essence body was defined
             if (essenceBody != null) {
+
                 // Get the essence
                 Essence essence = (Essence) essenceBody.getUserData();
-=======
-            collectable.addEssence(1, essence.getType());
->>>>>>> Stashed changes
+                collectable.addEssence(1, essence.getType());
 
-                addEssence(1, essence.getType());
                 // Delete the essence from the game
                 world.destroyBody(essence.body);
                 mainGame.gameScreen.removeEssence(essence);

@@ -1,10 +1,14 @@
 package com.projectsr.game;
 
 public class Collectable {
+    mainGame game;
     private Hub hub;
 
-    private int greenEssences = 10;
-    private int redEssences = 10;
+    public Collectable(Hub hub){
+        this.hub = hub;
+    }
+    private int greenEssences;
+    private int redEssences;
     public void addEssence(int amount, Essence.Type essenceType) {
         switch (essenceType) {
             case RED:
@@ -44,6 +48,7 @@ public class Collectable {
                 return greenEssences;
 
             default:
+                System.out.println("Fuck you!");
                 return 0;
         }
     }

@@ -20,8 +20,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class CraftingScreen implements Screen {
     private mainGame game;
+    private Hub hub;
 
-    private Collectable collectable;
+    public Collectable collectable = null;
     private AssetManager assetManager;
     private Stage stage;
     private Viewport viewport;
@@ -52,7 +53,9 @@ public class CraftingScreen implements Screen {
     }
 
     public void create() {
-        this.collectable = new Collectable();
+        if(this.collectable == null){
+            this.collectable = new Collectable(hub);
+        }
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
@@ -261,6 +264,7 @@ public class CraftingScreen implements Screen {
             collectable.removeEssence(1, Essence.Type.RED);
             hasAttackMedallion = true;
             System.out.println("Crafted Attack Medallion");
+            System.out.println("Essence Amount" + collectable.getEssences(Essence.Type.RED));
         }
     }
 

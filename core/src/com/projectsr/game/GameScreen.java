@@ -39,7 +39,7 @@ public class GameScreen implements Screen {
     private Box2DDebugRenderer debugRenderer;
 
     //HUB
-    private Hub hub;
+    private Hub hub = null;
 
     // Level
     private World world;
@@ -81,14 +81,12 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
 
         //Player
-<<<<<<< Updated upstream
-        playerCharacter = new Player(world, this.assetManager);
-=======
-        playerCharacter = new Player(world, game.craftingScreen);
->>>>>>> Stashed changes
-
+        if(this.hub == null ){
+            hub = new Hub(game);
+        }
+        playerCharacter = new Player(world, assetManager ,game.craftingScreen, hub);
         //HUB
-        hub = new Hub(game);
+
         hub.create();
 
         //Level
@@ -166,7 +164,6 @@ public class GameScreen implements Screen {
 
         // Check if the player is still alive
         if (!playerCharacter.isDead()) {
-
             playerCharacter.render(batch);
 
             // Loop through each enemy and render it
@@ -190,10 +187,12 @@ public class GameScreen implements Screen {
                 world.destroyBody(enemy.attackBody);
             }
             // Clear the arrays
+
             essences.clear();
             enemies.clear();
 
             // Set the game screen to the death screen
+
             game.setScreen(deathScreen);
         }
 

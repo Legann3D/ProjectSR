@@ -74,6 +74,7 @@ public class DeathScreen implements Screen {
             @Override
             public void clicked (InputEvent event, float x, float y) {
                 buttonPressSound.play();
+
                 game.setScreen(mainGame.craftingScreen);
             }
         });
