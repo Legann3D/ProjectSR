@@ -22,14 +22,12 @@ public class GameContactListener implements ContactListener {
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-        System.out.println("Contact began between: " + fixtureA + " and " + fixtureB);
     }
 
     @Override
     public void endContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-        System.out.println("Contact ended between: " + fixtureA + " and " + fixtureB);
     }
 
     @Override
@@ -52,7 +50,6 @@ public class GameContactListener implements ContactListener {
     /**
      * Check if the fixture is part of the enemy category.
      *
-     *
      * @param fixture The fixture that is being checked for collision.
      * @return The fixture category.
      */
@@ -60,22 +57,52 @@ public class GameContactListener implements ContactListener {
         return fixture.getFilterData().categoryBits == ENEMY_CATEGORY;
     }
 
+    /**
+     * Check if the fixture is part of the player attack category.
+     *
+     * @param fixture The fixture that is being checked for collision.
+     * @return The fixture category.
+     */
     public static boolean isPlayerAttackFixture(Fixture fixture) {
         return fixture.getFilterData().categoryBits == PLAYER_ATTACK_CATEGORY;
     }
 
+    /**
+     * Check if the fixture is part of the player category.
+     *
+     * @param fixture The fixture that is being checked for collision.
+     * @return The fixture category.
+     */
     public static boolean isPlayerFixture(Fixture fixture) {
         return fixture.getFilterData().categoryBits == PLAYER_CATEGORY;
     }
 
+    /**
+     * Check if the fixture is part of the enemy attack category.
+     *
+     * @param fixture The fixture that is being checked for collision.
+     * @return The fixture category.
+     */
     public static boolean isEnemyAttackFixture(Fixture fixture) {
         return fixture.getFilterData().categoryBits == ENEMY_ATTACK_CATEGORY;
     }
 
+    /**
+     * Check if the fixture is part of the essence category.
+     *
+     * @param fixture The fixture that is being checked for collision.
+     * @return The fixture category.
+     */
     public static boolean isEssenceFixture(Fixture fixture) {
         return fixture.getFilterData().categoryBits == ESSENCE_CATEGORY;
     }
 
+    /**
+     * Check if the fixture is part of the map category.
+     *
+     * @param fixture The fixture that is being checked for collision.
+     * @return The fixture category.
+     */
     public static boolean isMapFixture(Fixture fixture) {
         return fixture.getFilterData().categoryBits == MAP_CATEGORY;
     }
