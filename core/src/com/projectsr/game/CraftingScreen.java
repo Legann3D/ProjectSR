@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -19,17 +20,28 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class CraftingScreen implements Screen {
     private mainGame game;
+
+    private Collectable collectable;
     private AssetManager assetManager;
     private Stage stage;
     private Viewport viewport;
     private final int SCREEN_WIDTH = 1920;
     private final int SCREEN_HEIGHT = 1080;
 
-    private ImageButton backButton, startButton, craftButton, craftSlot, slot1, slot2, slot3, slot4, slot5, slot6;
+    private ImageButton backButton, startButton, craftButton, slot1, slot2, slot3, slot4, slot5, slot6;
 
-    private Image charView, essenceRed, essenceGreen;
+    private Image charView, essenceRed, essenceGreen, craftSlot;
     private Texture background;
     private Sound buttonPressSound;
+
+    boolean hasAttackMedallion = false;
+    boolean hasDefenceMedallion = false;
+    boolean hasBerserkMedallion = false;
+
+    boolean bPendant = false;
+    boolean aPendant = false;
+    boolean hpPendant = false;
+
 
     public CraftingScreen(mainGame game, AssetManager assetManager) {
         this.game = game;
@@ -40,6 +52,7 @@ public class CraftingScreen implements Screen {
     }
 
     public void create() {
+        this.collectable = new Collectable();
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
@@ -83,7 +96,7 @@ public class CraftingScreen implements Screen {
         // Selected item for crafting
         Texture  cs = new Texture(Gdx.files.internal("Ui/Buttons/blank_icon.png"));
         Drawable csDraw = new TextureRegionDrawable(cs);
-        craftSlot = new ImageButton(csDraw);
+        craftSlot = new Image(csDraw);
 
         // Resources required for crafting specific item
         Texture r1 = new Texture(Gdx.files.internal("Ui/Buttons/blank_icon.png"));
@@ -97,9 +110,9 @@ public class CraftingScreen implements Screen {
 
 
         // Table containing item crafting recipes
-        Texture s1 = new Texture(Gdx.files.internal("Ui/Buttons/blank_icon.png"));
-        Texture s2 = new Texture(Gdx.files.internal("Ui/Buttons/blank_icon.png"));
-        Texture s3 = new Texture(Gdx.files.internal("Ui/Buttons/blank_icon.png"));
+        Texture s1 = new Texture(Gdx.files.internal("Ui/Buttons/berserker_icon.png"));
+        Texture s2 = new Texture(Gdx.files.internal("Ui/Buttons/attack_icon.png"));
+        Texture s3 = new Texture(Gdx.files.internal("Ui/Buttons/defence_icon.png"));
         Texture s4 = new Texture(Gdx.files.internal("Ui/Buttons/blank_icon.png"));
         Texture s5 = new Texture(Gdx.files.internal("Ui/Buttons/blank_icon.png"));
         Texture s6 = new Texture(Gdx.files.internal("Ui/Buttons/blank_icon.png"));
@@ -166,10 +179,104 @@ public class CraftingScreen implements Screen {
         craftButton.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
-                // Button clicked code here
+                if(aPendant == true){
+                    craftAttackMedallion();
+                } else if (hpPendant == true) {
+                    craftDefenceMedallion();
+                } else if (bPendant == true){
+                    craftBerserkMedallion();
+                }
                 buttonPressSound.play();
             }
         });
+        slot1.addListener(new ClickListener() {
+            @Override
+            public void clicked (InputEvent event, float x, float y) {
+                bPendant = true;
+                // Load new textures
+                Texture newRedEssenceTexture = new Texture(Gdx.files.internal("Ui/Buttons/attack_icon.png"));
+                Texture newGreenEssenceTexture = new Texture(Gdx.files.internal("Ui/Buttons/defence_icon.png"));
+                Texture newCraftSlotTexture = new Texture(Gdx.files.internal("Ui/Buttons/berserker_icon.png"));
+
+                // Create new Drawable instances
+                Drawable newRedEssenceDrawable = new TextureRegionDrawable(newRedEssenceTexture);
+                Drawable newGreenEssenceDrawable = new TextureRegionDrawable(newGreenEssenceTexture);
+                Drawable newCraftSlotDrawable = new TextureRegionDrawable(newCraftSlotTexture);
+
+                // Set new drawables to the ImageButton instances
+                craftSlot.setDrawable(newCraftSlotDrawable);
+                essenceRed.setDrawable(newRedEssenceDrawable);
+                essenceGreen.setDrawable(newGreenEssenceDrawable);
+            }
+        });
+
+        slot2.addListener(new ClickListener() {
+            @Override
+            public void clicked (InputEvent event, float x, float y) {
+                aPendant = true;
+
+                // Load new textures
+                Texture newRedEssenceTexture1 = new Texture(Gdx.files.internal("Ui/Buttons/red_essence_icon.png"));
+                Texture newGreenEssenceTexture1 = new Texture(Gdx.files.internal("Ui/Buttons/blank_icon.png"));
+                Texture newCraftSlotTexture1 = new Texture(Gdx.files.internal("Ui/Buttons/attack_icon.png"));
+
+                // Create new Drawable instances
+                Drawable newRedEssenceDrawable1 = new TextureRegionDrawable(newRedEssenceTexture1);
+                Drawable newGreenEssenceDrawable1 = new TextureRegionDrawable(newGreenEssenceTexture1);
+                Drawable newCraftSlotDrawable1 = new TextureRegionDrawable(newCraftSlotTexture1);
+
+                // Set new drawables to the ImageButton instances
+                craftSlot.setDrawable(newCraftSlotDrawable1);
+                essenceRed.setDrawable(newRedEssenceDrawable1);
+                essenceGreen.setDrawable(newGreenEssenceDrawable1);
+            }
+        });
+
+        slot3.addListener(new ClickListener() {
+            @Override
+            public void clicked (InputEvent event, float x, float y) {
+                hpPendant = true;
+
+                // Load new textures
+                Texture newRedEssenceTexture2 = new Texture(Gdx.files.internal("Ui/Buttons/blank_icon.png"));
+                Texture newGreenEssenceTexture2 = new Texture(Gdx.files.internal("Ui/Buttons/green_essence_icon.png"));
+                Texture newCraftSlotTexture2 = new Texture(Gdx.files.internal("Ui/Buttons/defence_icon.png"));
+
+                // Create new Drawable instances
+                Drawable newRedEssenceDrawable2 = new TextureRegionDrawable(newRedEssenceTexture2);
+                Drawable newGreenEssenceDrawable2 = new TextureRegionDrawable(newGreenEssenceTexture2);
+                Drawable newCraftSlotDrawable2 = new TextureRegionDrawable(newCraftSlotTexture2);
+
+                // Set new drawables to the ImageButton instances
+                craftSlot.setDrawable(newCraftSlotDrawable2);
+                essenceRed.setDrawable(newRedEssenceDrawable2);
+                essenceGreen.setDrawable(newGreenEssenceDrawable2);
+            }
+        });
+
+    }
+
+    public void craftAttackMedallion() {
+        if (collectable.getEssences(Essence.Type.RED) >= 1) {
+            collectable.removeEssence(1, Essence.Type.RED);
+            hasAttackMedallion = true;
+            System.out.println("Crafted Attack Medallion");
+        }
+    }
+
+    public void craftDefenceMedallion() {
+        if (collectable.getEssences(Essence.Type.GREEN) >= 1) {
+            collectable.removeEssence(1, Essence.Type.GREEN);
+            hasDefenceMedallion = true;
+            System.out.println("Crafted Defence Medallion");
+        }
+    }
+
+    public void craftBerserkMedallion() {
+        if (hasAttackMedallion && hasDefenceMedallion) {
+            hasBerserkMedallion = true;
+            System.out.println("Crafted Berserk Medallion");
+        }
     }
 
     @Override

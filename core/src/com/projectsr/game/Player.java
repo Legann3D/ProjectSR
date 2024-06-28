@@ -2,7 +2,10 @@ package com.projectsr.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+<<<<<<< Updated upstream
 import com.badlogic.gdx.audio.Sound;
+=======
+>>>>>>> Stashed changes
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,12 +20,15 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Player {
+    mainGame game;
     Vector2 position;
     Vector2 velocity;
     float width = 100;
     float height = 55;
     float speed;
 
+    private Collectable collectable;
+    private CraftingScreen craftingScreen;
     TextureRegion[][] animations;
     int[] frameCounts;
     float frame = 0;
@@ -48,9 +54,6 @@ public class Player {
     private boolean isDead = false;
     private int attackBaseDamage = 10;
     private int damageModifier = 0;
-
-    private int greenEssences;
-    private int redEssences;
     private int enemiesKilled;
 
     private World world;
@@ -68,6 +71,7 @@ public class Player {
     private float berserkTimer = 0.0f;
     private boolean hasDealtDamage = false;
 
+<<<<<<< Updated upstream
     private boolean hasAttackMedallion = false;
     private boolean hasDefenceMedallion = false;
     private boolean hasBerserkMedallion = false;
@@ -80,6 +84,11 @@ public class Player {
 
     public Player(World world, AssetManager assetManager) {
 
+=======
+    public Player(World world, CraftingScreen craftingScreen) {
+        this.craftingScreen = craftingScreen;
+        this.collectable = new Collectable();
+>>>>>>> Stashed changes
         this.world = world;
         position = new Vector2(880, 500);
         velocity = new Vector2(0,0);
@@ -216,6 +225,12 @@ public class Player {
     }
 
     public void update(float deltaTime) {
+
+        if (craftingScreen.hasAttackMedallion) {
+            setDamageModifier(10);
+        } else if (craftingScreen.hasDefenceMedallion){
+            setDefenceValue(5);
+        }
 
         controls();
         position.set(body.getPosition().x - width / 2, body.getPosition().y - height / 2);
@@ -396,6 +411,7 @@ public class Player {
         return  maxHeart;
     }
 
+<<<<<<< Updated upstream
     // This section keeps track of the players essence
     public void addEssence(int amount, Essence.Type essenceType) {
         switch (essenceType) {
@@ -440,6 +456,8 @@ public class Player {
         }
     }
 
+=======
+>>>>>>> Stashed changes
 
     public void attack(Enemy enemy){
 
@@ -607,10 +625,14 @@ public class Player {
                 essenceBody = fixtureB.getBody();
             }
 
+<<<<<<< Updated upstream
             // Check that the essence body was defined
             if (essenceBody != null) {
                 // Get the essence
                 Essence essence = (Essence) essenceBody.getUserData();
+=======
+            collectable.addEssence(1, essence.getType());
+>>>>>>> Stashed changes
 
                 addEssence(1, essence.getType());
                 // Delete the essence from the game
@@ -669,25 +691,5 @@ public class Player {
         this.defenceValue = newValue;
     }
 
-    public void craftAttackMedallion() {
-        if (getEssences(Essence.Type.RED) >= 50) {
-            setDamageModifier(10);
-            removeEssence(50, Essence.Type.RED);
-            hasAttackMedallion = true;
-        }
-    }
 
-    public void craftDefenceMedallion() {
-        if (getEssences(Essence.Type.GREEN) >= 50) {
-            setDefenceValue(5);
-            removeEssence(50, Essence.Type.GREEN);
-            hasDefenceMedallion = true;
-        }
-    }
-
-    public void craftBerserkMedallion() {
-        if (hasAttackMedallion && hasDefenceMedallion) {
-            hasBerserkMedallion = true;
-        }
-    }
 }

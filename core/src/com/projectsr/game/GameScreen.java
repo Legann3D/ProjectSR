@@ -81,7 +81,11 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
 
         //Player
+<<<<<<< Updated upstream
         playerCharacter = new Player(world, this.assetManager);
+=======
+        playerCharacter = new Player(world, game.craftingScreen);
+>>>>>>> Stashed changes
 
         //HUB
         hub = new Hub(game);
