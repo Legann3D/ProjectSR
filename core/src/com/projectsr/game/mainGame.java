@@ -16,6 +16,11 @@ public class mainGame extends Game implements ApplicationListener  {
 	public static CraftingScreen craftingScreen;
 	public static DeathScreen deathScreen;
 
+	/**
+	 * This loads all the files for texture and audio into asset manager.
+	 *
+	 * Credit to https://mixkit.co/ for the free audio for the player
+	 */
 	@Override
 	public void create () {
 		assetManager = new AssetManager();
@@ -30,6 +35,12 @@ public class mainGame extends Game implements ApplicationListener  {
 		assetManager.load("Audio/EnemyAudio/skeletonAttack.wav", Sound.class);
 		assetManager.load("Audio/EnemyAudio/skeletonDie.mp3", Sound.class);
 		assetManager.load("Audio/EnemyAudio/skeletonTakeHit.mp3", Sound.class);
+
+		 // Load Player Sounds
+		assetManager.load("Audio/PlayerAudio/berserk.wav", Sound.class);
+		assetManager.load("Audio/PlayerAudio/damage.wav", Sound.class);
+		assetManager.load("Audio/PlayerAudio/death.wav", Sound.class);
+		assetManager.load("Audio/PlayerAudio/looting.wav", Sound.class);
 
 		// Essences
 		assetManager.load("Essences/red_essence.png", Texture.class);
