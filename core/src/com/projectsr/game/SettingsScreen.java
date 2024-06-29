@@ -33,6 +33,13 @@ public class SettingsScreen implements Screen {
     private Button backButton;
     private float volume;
 
+    /**
+     * Set up the UI and buttons for the settings screen.
+     *
+     * @param game The main game instance.
+     * @param music The music that is currently playing
+     * @param assetManager The asset manager instance used.
+     */
     public SettingsScreen(mainGame game, Music music, AssetManager assetManager) {
 
         this.music = music;
@@ -110,6 +117,11 @@ public class SettingsScreen implements Screen {
         });
     }
 
+    /**
+     * Render the stage, which includes the UI.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         // Clear the screen
@@ -120,30 +132,52 @@ public class SettingsScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * Resize the viewport with the set screen size.
+     *
+     * @param width The width of the screen.
+     * @param height The height of the screen.
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
+    /**
+     * Show is called when the screen is set to this one.
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * Hide is called when the screen is set to another screen from this one.
+     */
     @Override
     public void hide() {
         // Clear the input processor
         Gdx.input.setInputProcessor(null);
     }
 
+    /**
+     * Called when the game is paused, not implemented.
+     */
     @Override
     public void pause() {
     }
 
+    /**
+     * Called when the game is resumed after being paused, not implemented.
+     */
     @Override
     public void resume() {
     }
 
+    /**
+     * Called automatically when the class goes out of scope.
+     * Disposes of the stage.
+     */
     @Override
     public void dispose() {
         stage.dispose();
