@@ -14,11 +14,12 @@ public class Collectable {
         switch (essenceType) {
             case RED:
                 redEssences += amount;
-                hub.collectedItems++;
+                hub.collectedRedEssence++;
                 break;
 
             case GREEN:
                 greenEssences += amount;
+                hub.collectedGreenEssence++;
                 break;
         }
     }
@@ -48,7 +49,6 @@ public class Collectable {
                 return greenEssences;
 
             default:
-                System.out.println("Fuck you!");
                 return 0;
         }
     }

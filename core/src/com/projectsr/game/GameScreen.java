@@ -36,7 +36,7 @@ public class GameScreen implements Screen {
     private mainGame  game;
     SpriteBatch batch;
     private AssetManager assetManager;
-    private Box2DDebugRenderer debugRenderer;
+    //private Box2DDebugRenderer debugRenderer;
 
     //HUB
     private Hub hub = null;
@@ -71,7 +71,7 @@ public class GameScreen implements Screen {
         this.game = game;
         this.assetManager = assetManager;
         this.world = new World(new Vector2(0, 0), true); // No gravity
-        this.debugRenderer = new Box2DDebugRenderer();
+        //this.debugRenderer = new Box2DDebugRenderer();
         world.setContactListener(new GameContactListener()); // Collision
 
     }
@@ -200,10 +200,10 @@ public class GameScreen implements Screen {
         batch.end();
 
         world.step(1 / 30f, 6, 2);
-        debugRenderer.render(world, playerCharacter.camera.combined);
+        //debugRenderer.render(world, playerCharacter.camera.combined);
 
         //Render the Hub
-        hub.render();
+        hub.render(delta);
     }
 
     public Vector2 calculateSpawnPosition() {
@@ -327,7 +327,7 @@ public class GameScreen implements Screen {
         map.dispose();
         world.dispose();
         mapRenderer.dispose();
-        debugRenderer.dispose();
+        //debugRenderer.dispose();
         batch.dispose();
     }
 

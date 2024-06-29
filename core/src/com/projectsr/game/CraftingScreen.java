@@ -267,15 +267,23 @@ public class CraftingScreen implements Screen {
 
     }
 
+    /**
+     * This will craft an attack medallion if there is enough red essence
+     * and it will add 10 to damage modifier
+     */
+
     public void craftAttackMedallion() {
         if (collectable.getEssences(Essence.Type.RED) >= 1) {
             collectable.removeEssence(1, Essence.Type.RED);
             hasAttackMedallion = true;
-            System.out.println("Crafted Attack Medallion");
-            System.out.println("Essence Amount" + collectable.getEssences(Essence.Type.RED));
+            //System.out.println("Crafted Attack Medallion");
+            //System.out.println("Essence Amount" + collectable.getEssences(Essence.Type.RED));
         }
     }
-
+    /**
+     * THis will craft a defence medallion if there is enough green essence
+     * and it will add 5 to defence
+     */
     public void craftDefenceMedallion() {
         if (collectable.getEssences(Essence.Type.GREEN) >= 1) {
             collectable.removeEssence(1, Essence.Type.GREEN);
@@ -283,7 +291,10 @@ public class CraftingScreen implements Screen {
             System.out.println("Crafted Defence Medallion");
         }
     }
-
+    /**
+     * This will craft the berserk medallion and it will allow the player
+     * to go berserk if they have this medallion
+     */
     public void craftBerserkMedallion() {
         if (hasAttackMedallion && hasDefenceMedallion) {
             hasBerserkMedallion = true;

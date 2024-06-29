@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -23,14 +24,16 @@ public class Hub {
     private Table table;
     private ImageButton menuButton;
     private Image life1, life2, life3, bottomMiddleImage, skill1, skill2, skill3;
-    public int collectedItems;
-    public Label counterLabel;
+    public int collectedRedEssence, collectedGreenEssence;
+    private Label counterLabelRed, counterLabelGreen;
 
     public Hub(mainGame game){
         this.game = game;
     }
     public void create () {
-        this.collectedItems = 0;
+        this.collectedRedEssence = 0;
+        this.collectedGreenEssence = 0;
+
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         craftingScreen = new CraftingScreen(game,assetManager);
@@ -41,7 +44,8 @@ public class Hub {
         BitmapFont font = new BitmapFont(); // Use your own font here
         font.getData().setScale(3);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
-        this.counterLabel = new Label("0", labelStyle);
+        this.counterLabelRed = new Label(" ", labelStyle);
+        this.counterLabelGreen = new Label(" ", labelStyle);
 
         mainTable.setDebug(false); // This is optional, but enables debug lines for tables.
 
@@ -58,7 +62,9 @@ public class Hub {
         Drawable s3Draw = new TextureRegionDrawable(s3);
 
         skill1 = new Image(s1Draw);
+
         skill2 = new Image(s2Draw);
+
         skill3 = new Image(s3Draw);
 
         // Load the images for the top-left position
@@ -81,23 +87,26 @@ public class Hub {
         bottomMiddleImage = new Image(new TextureRegionDrawable(bottomMiddleTexture));
 
         Table firstColumn = new Table();
-        firstColumn.top();
+        firstColumn.top().left();
         firstColumn.add(life1).left().padTop(20);
         firstColumn.add(life2).left().padTop(20);
         firstColumn.add(life3).left().padTop(20);
 
         // Second Column
         Table secondColumn = new Table();
-        secondColumn.add(counterLabel).top().left();
+        secondColumn.top().left();
+        secondColumn.add(counterLabelRed).top().left().pad(20);
+        secondColumn.add(counterLabelGreen).top().left().pad(20);
         secondColumn.row();
-        secondColumn.add(skill1).bottom().padBottom(20).expandY();
-        secondColumn.add(skill2).bottom().padBottom(20);
-        secondColumn.add(skill3).bottom().padBottom(20);
+        secondColumn.bottom().left();
+        secondColumn.add(skill1).center().bottom().pad(20).expandY();
+        secondColumn.add(skill2).center().bottom().pad(20);
+        secondColumn.add(skill3).center().bottom().pad(20);
 
         // Third Column
         Table thirdColumn = new Table();
-        thirdColumn.top();
-        thirdColumn.add(menuButton).right().padTop(20);
+        thirdColumn.top().right();
+        thirdColumn.add(menuButton).right().pad(20);
 
         // Adding columns to the main table
         mainTable.add(firstColumn).expand().fill().pad(10);
@@ -144,13 +153,20 @@ public class Hub {
             }
         });
     }
+    public void updateRedLabel(){
+        this.counterLabelRed.setText(collectedRedEssence);
+    }
+
+    public void updateGreenLabel(){
+        this.counterLabelGreen.setText(collectedGreenEssence);
+    }
 
     public void resize (int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
-    public void render () {
-        //stage.act(Gdx.graphics.getDeltaTime());
+    public void render (float delta) {
+        stage.act(delta);
         stage.draw();
     }
 

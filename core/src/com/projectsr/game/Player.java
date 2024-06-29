@@ -85,9 +85,9 @@ public class Player {
     private boolean hasDealtDamage = false;
 
     // Player properties for Medallions
-    private boolean hasAttackMedallion = false;
-    private boolean hasDefenceMedallion = false;
-    private boolean hasBerserkMedallion = false;
+    //public boolean hasAttackMedallion = true;
+    //public boolean hasDefenceMedallion = true;
+    //public boolean hasBerserkMedallion = true;
 
     // Player properties for sound effects
     private Sound damageSound;
@@ -307,6 +307,7 @@ public class Player {
         // Update camera position
         camera.position.set(position.x + width / 2, position.y + height / 2, 0);
         camera.update();
+
     }
 
     /**
@@ -643,6 +644,7 @@ public class Player {
                 }
                 collectEssence(fixtureA, fixtureB);
 
+
                 checkMapCollision(fixtureA, fixtureB);
             }
         }
@@ -776,7 +778,7 @@ public class Player {
      */
     private void checkAndApplyDamageModifier() {
 
-        if (enemiesAttackedInTimeFrame >= attackThreshold && hasBerserkMedallion) {
+        if (enemiesAttackedInTimeFrame >= attackThreshold && craftingScreen.hasBerserkMedallion) {
             damageModifier += 10;
             currentState = State.BERSERK;
             isBerserk = true;
@@ -821,39 +823,5 @@ public class Player {
      */
     public void setDefenceValue(int newValue) {
         this.defenceValue = newValue;
-    }
-
-    /**
-     * This will craft an attack medallion if there is enough red essence
-     * and it will add 10 to damage modifier
-     */
-    public void craftAttackMedallion() {
-        if (getEssences(Essence.Type.RED) >= 50) {
-            setDamageModifier(10);
-            removeEssence(50, Essence.Type.RED);
-            hasAttackMedallion = true;
-        }
-    }
-
-    /**
-     * THis will craft a defence medallion if there is enough green essence
-     * and it will add 5 to defence
-     */
-    public void craftDefenceMedallion() {
-        if (getEssences(Essence.Type.GREEN) >= 50) {
-            setDefenceValue(5);
-            removeEssence(50, Essence.Type.GREEN);
-            hasDefenceMedallion = true;
-        }
-    }
-
-    /**
-     * This will craft the berserk medallion and it will allow the player
-     * to go berserk if they have this medallion
-     */
-    public void craftBerserkMedallion() {
-        if (hasAttackMedallion && hasDefenceMedallion) {
-            hasBerserkMedallion = true;
-        }
     }
 }
