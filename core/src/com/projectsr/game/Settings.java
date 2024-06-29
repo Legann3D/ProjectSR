@@ -10,7 +10,7 @@ public class Settings {
     /**
      * Set the volume for the music in the game.
      *
-     * @param volume
+     * @param volume The given volume to set.
      */
     public static void setVolume(float volume) {
         Settings.volume = volume;

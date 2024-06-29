@@ -24,6 +24,15 @@ public class Essence {
     Body body;
     private World world;
 
+    /**
+     * Set up and initialise the essence class attributes and type.
+     * Collision is created on set up.
+     *
+     * @param assetManager The asset manager instance being used in the game.
+     * @param position The position the essence spawns
+     * @param type The type of essence to be spawned.
+     * @param world The world instance being used in the game for collision.
+     */
     public Essence(AssetManager assetManager, Vector2 position, Type type, World world) {
         this.assetManager = assetManager;
         this.position = position;
@@ -32,6 +41,9 @@ public class Essence {
         createCollisionBody(this.world);
     }
 
+    /**
+     * Create the collision depending on the type passed to the constructor.
+     */
     public void create() {
 
         switch(type) {
@@ -48,10 +60,20 @@ public class Essence {
         }
     }
 
+    /**
+     * Render the essence texture at the set position with slight offset, at set size.
+     *
+     * @param batch The batch used by the game.
+     */
     public void render(SpriteBatch batch) {
         batch.draw(texture, position.x + 65, position.y + 65, 20, 20);
     }
 
+    /**
+     * Set the type of essence, either red or green.
+     *
+     * @param type The type that it will be set to.
+     */
     public void setType(Type type) {
         this.type = type;
     }
@@ -60,7 +82,11 @@ public class Essence {
         return type;
     }
 
-
+    /**
+     * The collision for the essence set up, at set position with correct filters.
+     *
+     * @param world The world instance being used by the game.
+     */
     public void createCollisionBody(World world) {
 
         // Initialise the collision body
@@ -88,6 +114,9 @@ public class Essence {
         return body;
     }
 
+    /**
+     * Dispose of resources.
+     */
     public void dispose() {
         // Dispose of resources
         assetManager.dispose();
