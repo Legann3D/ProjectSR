@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -177,4 +176,5 @@ public class Hub {
         ((TextureRegionDrawable) life3.getDrawable()).getRegion().getTexture().dispose();
         ((TextureRegionDrawable) bottomMiddleImage.getDrawable()).getRegion().getTexture().dispose();
     }
+    // assetManager.dispose(); // Dispose of if assigned to class attribute
 }

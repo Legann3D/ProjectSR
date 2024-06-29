@@ -178,7 +178,7 @@ public class Player {
         // Creating the box2d body
         createCollisionBody();
 
-        // Get the sound from assest manager
+        // Get the sound from asset manager
         damageSound = assetManager.get("Audio/PlayerAudio/damage.wav", Sound.class);
         deathSound =  assetManager.get("Audio/PlayerAudio/death.wav", Sound.class);
         berserkSound = assetManager.get("Audio/PlayerAudio/berserk.wav", Sound.class);
@@ -797,7 +797,7 @@ public class Player {
 
     /**
      * This disposes of the player's assets
-     * (mainly the texture which is not in assest manager)
+     * (mainly the texture which is not in asset manager)
      */
     public void dispose(){
         for (TextureRegion[] animation : animations) {
@@ -805,6 +805,7 @@ public class Player {
                 texRegion.getTexture().dispose();
             }
         }
+
     }
 
     /**

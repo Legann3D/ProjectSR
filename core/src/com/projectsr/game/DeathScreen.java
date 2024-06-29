@@ -91,6 +91,7 @@ public class DeathScreen implements Screen {
     public void dispose() {
         stage.dispose();
         background.dispose();
+        assetManager.dispose();
     }
 
     @Override
