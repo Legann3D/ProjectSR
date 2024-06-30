@@ -42,7 +42,12 @@ public class CraftingScreen implements Screen {
     boolean aPendant = false;
     boolean hpPendant = false;
 
-
+    /**
+     * Set up and initialise the CraftingScreen class attributes and type.
+     *
+     * @param game The world instance of the Game.
+     * @param assetManager The asset manager instance being used in the game.
+     */
     public CraftingScreen(mainGame game, AssetManager assetManager) {
         this.game = game;
         this.viewport = new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -50,7 +55,11 @@ public class CraftingScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         this.assetManager = assetManager;
     }
-
+    /**
+     * Initialize only one instance of Hub.
+     * Initialize Textures, Drawables, and Table Rows and Columns for the UI.
+     * Initialize new Textures, Drawables if specific ImageButtons are presses.
+     */
     public void create() {
 
         if (mainGame.gameScreen.getHub() == null) {
@@ -71,14 +80,17 @@ public class CraftingScreen implements Screen {
         Texture bgTexture = new Texture(Gdx.files.internal("Ui/Buttons/t1.png"));
         Drawable bgDraw = new TextureRegionDrawable(bgTexture);
 
+        // Load button audio
         buttonPressSound = assetManager.get("Audio/MiscAudio/buttonPress.wav", Sound.class);
         buttonPressSound.setVolume(12345, 3.0f);
 
+        // Initializes the Main Table
         Table mainTable = new Table();
         mainTable.setFillParent(true);
         stage.addActor(mainTable);
 
-        mainTable.setDebug(false); // This is optional, but enables debug lines for tables.
+        // Enables debug lines for tables.
+        mainTable.setDebug(false);
 
         // Set the background drawable for the main table
         mainTable.setBackground(bgDraw);
@@ -112,13 +124,10 @@ public class CraftingScreen implements Screen {
         // Resources required for crafting specific item
         Texture r1 = new Texture(Gdx.files.internal("Ui/Buttons/blank_icon.png"));
         Texture r2 = new Texture(Gdx.files.internal("Ui/Buttons/blank_icon.png"));
-
         Drawable r1Draw = new TextureRegionDrawable(r1);
         Drawable r2Draw = new TextureRegionDrawable(r2);
-
         essenceRed = new Image(r1Draw);
         essenceGreen = new Image(r2Draw);
-
 
         // Table containing item crafting recipes
         Texture s1 = new Texture(Gdx.files.internal("Ui/Buttons/berserker_icon.png"));
@@ -142,12 +151,13 @@ public class CraftingScreen implements Screen {
         slot5 = new ImageButton(s5Draw);
         slot6 = new ImageButton(s6Draw);
 
+        // First Column of the Table
         Table firstColumn = new Table();
         firstColumn.add(backButton).center().row();
         firstColumn.add(charView).expandY().center().row();
         firstColumn.add(startButton).center();
 
-        // Second Column
+        // Second Column of the Table
         Table secondColumn = new Table();
         secondColumn.add(craftSlot).center().row();
         Table secondColumnBottom = new Table();
@@ -157,7 +167,7 @@ public class CraftingScreen implements Screen {
         secondColumn.row();
         secondColumn.add(craftButton).bottom().padTop(50);
 
-        // Third Column
+        // Third Column of the Table
         Table thirdColumn = new Table();
         thirdColumn.add(slot1).pad(5);
         thirdColumn.add(slot2).pad(5);
@@ -187,6 +197,8 @@ public class CraftingScreen implements Screen {
                 game.setScreen(mainGame.menuScreen);
             }
         });
+
+        // Check if player has selected a specific item to craft and calls that items crafting method
         craftButton.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
@@ -200,6 +212,8 @@ public class CraftingScreen implements Screen {
                 buttonPressSound.play();
             }
         });
+
+        // If berserk item is selected, update the crafting slot and items required slots
         slot1.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
@@ -221,6 +235,7 @@ public class CraftingScreen implements Screen {
             }
         });
 
+        // If Attack item is selected, update the crafting slot and items required slots
         slot2.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
@@ -243,6 +258,7 @@ public class CraftingScreen implements Screen {
             }
         });
 
+        // If Defence item is selected, update the crafting slot and items required slots
         slot3.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
@@ -269,7 +285,7 @@ public class CraftingScreen implements Screen {
 
     /**
      * This will craft an attack medallion if there is enough red essence
-     * and it will add 10 to damage modifier
+     * and it will add 10 to damage modifier.
      */
 
     public void craftAttackMedallion() {
@@ -281,8 +297,8 @@ public class CraftingScreen implements Screen {
         }
     }
     /**
-     * THis will craft a defence medallion if there is enough green essence
-     * and it will add 5 to defence
+     * This will craft a defence medallion if there is enough green essence
+     * and it will add 5 to defence.
      */
     public void craftDefenceMedallion() {
         if (collectable.getEssences(Essence.Type.GREEN) >= 1) {
@@ -293,7 +309,7 @@ public class CraftingScreen implements Screen {
     }
     /**
      * This will craft the berserk medallion and it will allow the player
-     * to go berserk if they have this medallion
+     * to go berserk if they have this medallion.
      */
     public void craftBerserkMedallion() {
         if (hasAttackMedallion && hasDefenceMedallion) {
@@ -302,6 +318,9 @@ public class CraftingScreen implements Screen {
         }
     }
 
+    /**
+     * Render the stage.
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -313,6 +332,9 @@ public class CraftingScreen implements Screen {
         return collectable;
     }
 
+    /**
+     * Dispose of resources.
+     */
     @Override
     public void dispose() {
         stage.dispose();
@@ -336,6 +358,9 @@ public class CraftingScreen implements Screen {
         create();
     }
 
+    /**
+     * Disable user input if the screen is hidden.
+     */
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);

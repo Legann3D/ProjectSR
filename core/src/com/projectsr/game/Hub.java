@@ -20,15 +20,25 @@ public class Hub {
     private CraftingScreen craftingScreen;
     private AssetManager assetManager;
     private Stage stage;
-    private Table table;
     private ImageButton menuButton;
     private Image life1, life2, life3, bottomMiddleImage, skill1, skill2, skill3;
     public int collectedRedEssence, collectedGreenEssence;
     private Label counterLabelRed, counterLabelGreen;
 
+    /**
+     * Set up and initialise the Hub class attributes and type.
+     *
+     * @param game The world instance of the Game.
+     */
     public Hub(mainGame game){
         this.game = game;
     }
+
+    /**
+     * Loads a font.
+     * Initialize Textures, Drawables, and Table Rows and Columns for the UI.
+     * Initialize new Textures, Drawables if specific ImageButtons are presses.
+     */
     public void create () {
         this.collectedRedEssence = 0;
         this.collectedGreenEssence = 0;
@@ -40,13 +50,15 @@ public class Hub {
         mainTable.setFillParent(true);
         stage.addActor(mainTable);
 
-        BitmapFont font = new BitmapFont(); // Use your own font here
+
+        BitmapFont font = new BitmapFont();
         font.getData().setScale(3);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
         this.counterLabelRed = new Label(" ", labelStyle);
         this.counterLabelGreen = new Label(" ", labelStyle);
 
-        mainTable.setDebug(false); // This is optional, but enables debug lines for tables.
+        // This enables debug lines for tables.
+        mainTable.setDebug(false);
 
         // Load the button image
         Texture buttonTexture = new Texture(Gdx.files.internal("Ui/Buttons/menu_icon.png"));
@@ -59,11 +71,8 @@ public class Hub {
         Drawable s1Draw = new TextureRegionDrawable(s1);
         Drawable s2Draw = new TextureRegionDrawable(s2);
         Drawable s3Draw = new TextureRegionDrawable(s3);
-
         skill1 = new Image(s1Draw);
-
         skill2 = new Image(s2Draw);
-
         skill3 = new Image(s3Draw);
 
         // Load the images for the top-left position
@@ -85,13 +94,14 @@ public class Hub {
         life3 = new Image(new TextureRegionDrawable(lifeT3));
         bottomMiddleImage = new Image(new TextureRegionDrawable(bottomMiddleTexture));
 
+        // First Column of the Table
         Table firstColumn = new Table();
         firstColumn.top().left();
         firstColumn.add(life1).left().padTop(20);
         firstColumn.add(life2).left().padTop(20);
         firstColumn.add(life3).left().padTop(20);
 
-        // Second Column
+        // Second Column of the Table
         Table secondColumn = new Table();
         secondColumn.top().left();
         secondColumn.add(counterLabelRed).top().left().pad(20);
@@ -102,7 +112,7 @@ public class Hub {
         secondColumn.add(skill2).center().bottom().pad(20);
         secondColumn.add(skill3).center().bottom().pad(20);
 
-        // Third Column
+        // Third Column of the Table
         Table thirdColumn = new Table();
         thirdColumn.top().right();
         thirdColumn.add(menuButton).right().pad(20);
@@ -152,10 +162,16 @@ public class Hub {
             }
         });
     }
+    /**
+     * Updates the Collected Red Essence Ui Label element
+     */
     public void updateRedLabel(){
         this.counterLabelRed.setText(collectedRedEssence);
     }
 
+    /**
+     * Updates the Collected Green Essence Ui Label element
+     */
     public void updateGreenLabel(){
         this.counterLabelGreen.setText(collectedGreenEssence);
     }
@@ -169,6 +185,9 @@ public class Hub {
         stage.draw();
     }
 
+    /**
+     * Dispose of resources.
+     */
     public void dispose() {
         stage.dispose();
         ((TextureRegionDrawable) life1.getDrawable()).getRegion().getTexture().dispose();

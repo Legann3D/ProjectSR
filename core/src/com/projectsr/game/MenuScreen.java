@@ -30,6 +30,12 @@ public class MenuScreen implements Screen {
     private ImageButton startButton, settingsButton, quitButton;
     public static SettingsScreen settingsScreen;
 
+    /**
+     * Set up and initialise the MenuScreen class attributes and type.
+     *
+     * @param game The world instance of the Game.
+     * @param assetManager The asset manager instance being used in the game.
+     */
     public MenuScreen(mainGame game, AssetManager assetManager) {
         this.game = game;
         this.viewport = new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -38,23 +44,30 @@ public class MenuScreen implements Screen {
         this.assetManager = assetManager;
     }
 
+    /**
+     * Loads all the necessary music assets with the use of AssetManager
+     * Initialize Textures, Drawables that will be used for the UI.
+     * Handles the input of the Buttons
+     */
     public void create() {
-
+        // Loads the music
         menuMusic = assetManager.get("Music/Voxel Revolution.mp3", Music.class);
         menuMusic.play();
         menuMusic.setVolume(Settings.getVolume());
         menuMusic.setLooping(true);
 
+        // Loads the sound
         buttonPressSound = assetManager.get("Audio/MiscAudio/buttonPress.wav", Sound.class);
         buttonPressSound.setVolume(12345, 100.0f);
 
+        // Initializes a SettingScreen
         settingsScreen = new SettingsScreen(game, menuMusic, assetManager);
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        background = new Texture("Ui/Buttons/main_menu_background.png");
         // Create and add background image
+        background = new Texture("Ui/Buttons/main_menu_background.png");
         Image backgroundImage = new Image(background);
         backgroundImage.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -84,6 +97,7 @@ public class MenuScreen implements Screen {
         quitButton.setHeight(140f);
         quitButton.setPosition(SCREEN_WIDTH / 2 + 272f, SCREEN_HEIGHT - quitButton.getWidth()  - 400f);
 
+        // Adds UI elements to the stage
         stage.addActor(backgroundImage);
         stage.addActor(startButton);
         stage.addActor(settingsButton);
@@ -117,6 +131,9 @@ public class MenuScreen implements Screen {
         });
     }
 
+    /**
+     * Render the stage.
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -124,6 +141,9 @@ public class MenuScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * Dispose of resources.
+     */
     @Override
     public void dispose() {
         stage.dispose();
@@ -147,6 +167,9 @@ public class MenuScreen implements Screen {
         create();
     }
 
+    /**
+     * Disable user input if the screen is hidden.
+     */
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
