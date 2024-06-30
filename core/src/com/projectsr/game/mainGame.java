@@ -8,6 +8,10 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+/**
+ * This is the main game class which is the central class for the game,
+ * it manages loading assets and different screens
+ */
 public class mainGame extends Game implements ApplicationListener  {
 
 	private AssetManager assetManager;
@@ -20,6 +24,8 @@ public class mainGame extends Game implements ApplicationListener  {
 	 * This loads all the files for texture and audio into asset manager.
 	 *
 	 * Credit to https://mixkit.co/ for the free audio for the player
+	 * Credit to https://luizmelo.itch.io/monsters-creatures-fantasy for the free enemy assets
+	 *
 	 */
 	@Override
 	public void create () {
@@ -69,27 +75,45 @@ public class mainGame extends Game implements ApplicationListener  {
 		//setScreen(deathScreen);
 	}
 
+	/**
+	 * This renders the game by first clearing the screen and the then delegating to active screen
+	 */
 	@Override
 	public void render () {
 		ScreenUtils.clear(1, 0, 0, 1);
 		super.render();
 	}
-	
+
+	/**
+	 * This disposes of the game resources
+	 */
 	@Override
 	public void dispose () {
 		super.dispose();
 	}
 
+	/**
+	 * This just resizes the game screen to the width and height
+	 *
+	 * @param width the new width in pixels
+	 * @param height the new height in pixels
+	 */
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
 	}
 
+	/**
+	 * This pauses the game
+	 */
 	@Override
 	public void pause() {
 		super.pause();
 	}
 
+	/**
+	 * This resumes the game
+	 */
 	@Override
 	public void resume() {
 		super.resume();

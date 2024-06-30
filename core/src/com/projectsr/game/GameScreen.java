@@ -31,6 +31,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * This gamescreen class is used for rendering the gameplay screen,
+ * managing the player, enemies and the game world
+ */
 public class GameScreen implements Screen {
     private mainGame  game;
     SpriteBatch batch;
@@ -66,6 +70,12 @@ public class GameScreen implements Screen {
     // Audio
     private Music gameMusic;
 
+    /**
+     * This constructs a game screen  with game and asset manager
+     *
+     * @param game which is the main game instance
+     * @param assetManager which is the asset manager for loading the assets
+     */
     public GameScreen(mainGame game, AssetManager assetManager) {
         this.game = game;
         this.assetManager = assetManager;
@@ -75,6 +85,10 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     * This initialises the game screen by setting up the game world, player,
+     * enemies, map and audio
+     */
     public void create() {
 
         batch = new SpriteBatch();
@@ -112,6 +126,14 @@ public class GameScreen implements Screen {
         createMapEdgeCollision(mapWidth - offset, -offset, mapWidth - offset, mapHeight - offset); // Right
     }
 
+    /**
+     * This creates the collision boundaries for the map
+     *
+     * @param startX  which is the starting x cord of the edge
+     * @param startY which is the starting y cord of the edge
+     * @param endX which is the ending x cord of the edge
+     * @param endY which is the ending y cord of the edge
+     */
     public void createMapEdgeCollision(float startX, float startY, float endX, float endY) {
 
         // Define the body
@@ -142,11 +164,21 @@ public class GameScreen implements Screen {
         edgeShape.dispose();
     }
 
+    /**
+     * This updates the game state  and spawn the enemies
+     *
+     * @param f which is the delta the seconds since last update
+     */
     public void update(float f){
         gameCam.update();
         spawnEnemies(f);
     }
 
+    /**
+     * This renders the game screen
+     *
+     * @param delta The time in seconds since the last render.
+     */
     public void render(float delta) {
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -205,6 +237,11 @@ public class GameScreen implements Screen {
         hub.render(delta);
     }
 
+    /**
+     * This calculates the spawn position for the enemies based on the player's position
+     *
+     * @return the spawn position as Verctor2
+     */
     public Vector2 calculateSpawnPosition() {
 
         // Calculate the random angle
@@ -217,6 +254,11 @@ public class GameScreen implements Screen {
         return new Vector2(spawnX, spawnY);
     }
 
+    /**
+     * This spawns the enemies at regular intervals
+     *
+     * @param f which is the the seconds since last update
+     */
     public void spawnEnemies(float f) {
 
         // Update the time since the last enemy wave
@@ -264,18 +306,38 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * This gets the iterator for the enemies
+     *
+     *
+     * @param enemyIter which is the iterator for the enemies
+     * @return the iterator for the enemies
+     */
     public Iterator<Enemy> getEnemyIter(Iterator<Enemy> enemyIter) {
         return enemyIter;
     }
 
+    /**
+     * This adds an essence to the list of essences
+     *
+     * @param essence which is the essence to add
+     */
     public void addEssence(Essence essence) {
         essences.add(essence);
     }
 
+    /**
+     * This removes an essence from the list of essences
+     *
+     * @param essence which is the essence to remove
+     */
     public void removeEssence(Essence essence) {
         essences.remove(essence);
     }
 
+    /**
+     * This parses the map to create collision objects
+     */
     private void parseMap() {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
         for (int x = 0; x < layer.getWidth(); x++) {
@@ -309,6 +371,14 @@ public class GameScreen implements Screen {
             }
         }
     }
+
+    /**
+     * This creates a body definition for the coordinates
+     *
+     * @param x  which is the x -cord
+     * @param y  which is the y -cord
+     * @return the body definition
+     */
     private BodyDef getBodyDef(float x, float y) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -317,10 +387,18 @@ public class GameScreen implements Screen {
         return bodyDef;
     }
 
+    /**
+     * This gets the hun instance
+     *
+     * @return the hub's instance
+     */
     public Hub getHub() {
         return hub;
     }
 
+    /**
+     * This disposes of the game screen resources
+     */
     @Override
     public void dispose() {
         map.dispose();
@@ -331,22 +409,40 @@ public class GameScreen implements Screen {
         assetManager.dispose();
     }
 
+    /**
+     * This resizes the viewport to the width and height
+     *
+     * @param width
+     * @param height
+     */
     @Override
     public void resize(int width, int height){
         viewport.update(width, height, true);
     }
 
+    /**
+     * This pauses the game screen
+     */
     @Override
     public void pause() { }
 
+    /**
+     * This resumes the game screen
+     */
     @Override
     public void resume() { }
 
+    /**
+     * This shows the game screen
+     */
     @Override
     public void show() {
         create();
     }
 
+    /**
+     * This hides the game screen
+     */
     @Override
     public void hide() {
         gameMusic.stop();

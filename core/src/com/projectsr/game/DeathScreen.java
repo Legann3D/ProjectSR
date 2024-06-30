@@ -16,6 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+/**
+ * The death screen class is used for when the player dies and then a screen a displayed
+ */
 public class DeathScreen implements Screen {
 
     private mainGame game;
@@ -28,6 +31,13 @@ public class DeathScreen implements Screen {
     private ImageButton menuButton;
     private Texture background;
     private Sound buttonPressSound;
+
+    /**
+     * This constructs the death screen with the game and asset manager
+     *
+     * @param game which is the game instance
+     * @param assetManager which is the asset manager for loading the assets
+     */
     public DeathScreen(mainGame game, AssetManager assetManager) {
         this.game = game;
         this.viewport = new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -36,6 +46,9 @@ public class DeathScreen implements Screen {
         this.assetManager = assetManager;
     }
 
+    /**
+     * This initialises the death screen, setting up the stage, background and menu ui buttons
+     */
     public void create() {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -80,6 +93,11 @@ public class DeathScreen implements Screen {
         });
     }
 
+    /**
+     * This renders the death screen
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -87,6 +105,9 @@ public class DeathScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * This disposes of the death screen resources
+     */
     @Override
     public void dispose() {
         stage.dispose();
@@ -94,22 +115,40 @@ public class DeathScreen implements Screen {
         assetManager.dispose();
     }
 
+    /**
+     * This resizes the viewport to width and height
+     *
+     * @param width
+     * @param height
+     */
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
     }
 
+    /**
+     * This pauses the death screen
+     */
     @Override
     public void pause() { }
 
+    /**
+     * This resumes the death screen
+     */
     @Override
     public void resume() { }
 
+    /**
+     * This shows the death screen
+     */
     @Override
     public void show() {
         create();
     }
 
+    /**
+     * This hides the death screen
+     */
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
